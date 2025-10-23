@@ -1,4 +1,6 @@
 import { createClient } from "next-sanity";
+import imageUrlBuilder from "@sanity/image-url";
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
 export const client = createClient({
   projectId: "l269b46l",
@@ -6,3 +8,15 @@ export const client = createClient({
   apiVersion: "2024-01-01",
   useCdn: false,
 });
+
+// Image URL builder
+const builder = imageUrlBuilder(client)
+export function urlFor(source: SanityImageSource) {
+  return builder.image(source)
+}
+
+// 🏠 Homepage fetch function
+export async function getHomePage() {
+  const query = `*[_type == "homepage"][0]`;
+  return client.fetch(query);
+}

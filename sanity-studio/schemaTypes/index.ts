@@ -1,3 +1,4 @@
 import {postType} from './postType'
+import {homePage} from './homePage'
 
-export const schemaTypes = [postType]
+export const schemaTypes = [postType, homePage]
