@@ -1,6 +1,5 @@
 import {defineField, defineType} from 'sanity'
 
-// enforce that there should only be one homePage
 export const homePage = defineType({
   name: 'homepage',
   title: 'Home Page',
@@ -16,6 +15,12 @@ export const homePage = defineType({
       },
       validation: (rule) => rule.required(),
     }),
+    defineField({
+        name: 'sections',
+        title: 'Sections',
+        type: 'array',
+        of: [{ type: 'reference', to: { type: 'section' } }],
+    })
   ],
   preview: {
     select: {},

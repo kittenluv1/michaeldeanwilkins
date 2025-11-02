@@ -17,6 +17,16 @@ export function urlFor(source: SanityImageSource) {
 
 // 🏠 Homepage fetch function
 export async function getHomePage() {
-  const query = `*[_type == "homepage"][0]`;
+  const query = `
+    *[_type == "homepage"][0]{
+      ...,
+      sections[]->{
+        _id,
+        title,
+        text,
+        image{ asset-> }
+      }
+    }{heroImage, sections}
+  `;
   return client.fetch(query);
 }

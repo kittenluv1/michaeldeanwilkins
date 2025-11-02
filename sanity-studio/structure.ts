@@ -9,7 +9,7 @@ export const structure: StructureResolver = (S) =>
         .child(
           S.document()
             .schemaType("homepage")
-            .documentId("homePage") // fixed ID for singleton
+            .documentId("27b8827a-7dba-4c47-b9d3-86af75c01064") // fixed ID for singleton
         ),
       // add other lists/items like Posts, Events, etc.
 
