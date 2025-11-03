@@ -55,10 +55,16 @@ export const gridSection = defineType({
       ],
     }),
   ],
-  preview: {
+    preview: {
     select: {
-      title: 'title',
-      media: 'images.0',
+        title: 'title',
+        media: 'images.0.asset',
     },
-  },
+    prepare({ title, media }) {
+        return {
+            title,
+            media: media || RiLayoutGrid2Fill,
+        };
+    },
+    },
 })

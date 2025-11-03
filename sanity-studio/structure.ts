@@ -1,4 +1,5 @@
 import type {StructureResolver} from 'sanity/structure';
+import { FaHome } from "react-icons/fa";
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -6,6 +7,7 @@ export const structure: StructureResolver = (S) =>
     .items([
       S.listItem()
         .title("Home Page")
+        .icon(FaHome)
         .child(
           S.document()
             .schemaType("homepage")
