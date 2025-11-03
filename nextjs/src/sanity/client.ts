@@ -1,12 +1,18 @@
 import { createClient } from "next-sanity";
 import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import { defineQuery } from "next-sanity";
+import { draftMode } from "next/headers";
 
 export const client = createClient({
-  projectId: "l269b46l",
-  dataset: "production",
-  apiVersion: "2024-01-01",
-  useCdn: false,
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+  apiVersion: "2024-12-01",
+  useCdn: true,
+  token: process.env.SANITY_VIEWER_TOKEN,
+  stega: {
+    studioUrl: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL,
+  },
 });
 
 // Image URL builder
@@ -15,18 +21,18 @@ export function urlFor(source: SanityImageSource) {
   return builder.image(source)
 }
 
-// 🏠 Homepage fetch function
+// Homepage fetch function
 export async function getHomePage() {
-  const query = `
-    *[_type == "homepage"][0]{
-      ...,
-      sections[]->{
-        _id,
-        title,
-        text,
-        image{ asset-> }
-      }
-    }{heroImage, sections}
-  `;
-  return client.fetch(query);
+  const query = defineQuery(`*[_type == "homepage"][0]{images}`);
+  const { isEnabled } = await draftMode();
+
+  return client.fetch(
+    query, 
+    undefined,
+    isEnabled ? {
+      perspective: "drafts",
+      useCdn: false,
+      stega: true,
+    } : undefined
+  );
 }

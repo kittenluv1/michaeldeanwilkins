@@ -7,19 +7,10 @@ export const homePage = defineType({
   description: 'Edit the homepage content',
   fields: [
     defineField({
-      name: 'heroImage',
-      title: 'Hero Image',
-      type: 'image',
-      options: {
-        hotspot: true
-      },
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-        name: 'sections',
-        title: 'Sections',
+        name: 'images',
+        title: 'Images',
         type: 'array',
-        of: [{ type: 'reference', to: { type: 'section' } }],
+        of: [{ type: 'image' }],
     })
   ],
   preview: {

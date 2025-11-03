@@ -6,42 +6,37 @@ export default async function Home() {
   if (!data) {
     return <p>Homepage data not found.</p>;
   }
-  const heroImage = data.heroImage;
-  const sections = data.sections;
+  const images = data.images;
 
   return (
     <main className="w-full flex flex-col items-center justify-center">
-      {/* header */}
-      <div className="w-full top-0 absolute">
+      {/* title */}
+      <div className="w-full flex flex-col items-center justify-center">
         <img 
-         className="m-6"
-          src="/logo_white.svg"
-          alt="Logo"
+         className="h-7 m-20 mb-15"
+          src="/logo.svg"
+          alt="Michael Dean Wilkins logo"
         />
+        <nav>
+          <ul className="flex space-x-10 text-lg">
+            <li><a href="#" className="hover:underline">Selected Work</a></li>
+            <li><a href="#" className="hover:underline">Fashion</a></li>
+            <li><a href="#" className="hover:underline">Editorial</a></li>
+            <li><a href="#" className="hover:underline">About</a></li>
+            <li><a href="#" className="hover:underline">Contact</a></li>
+          </ul>
+        </nav>
       </div>
-      <div className="w-full h-100">
-        <img
-          src={urlFor(heroImage).url()}
-          alt="hero image"
-          className="w-full h-full object-cover"
-        />
+      <div className="w-full columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-8 p-8">
+        {images.map((image) => (
+          <img
+            key={image._key}
+            src={urlFor(image).url()}
+            className="w-full mb-8 break-inside-avoid"
+            alt=""
+          />
+        ))}
       </div>
-      {/* sections */}
-      {sections?.map((section: any) => (
-        <div key={section._id} className="w-full flex flex-col items-center m-10 p-20">
-          <h1 className="text-4xl m-10">{section.title}</h1>
-          <hr className="w-full" />
-          <div className="flex p-5 gap-9">
-            <div className="flex flex-col items-center justify-center my-20 ml-20 w-80 flex-none">
-              <img
-                src={urlFor(section.image).url()}
-                className="object-cover"
-              />
-            </div>
-            <p className="text-2xl flex-auto m-20">{section.text}</p>
-          </div>
-        </div>
-      ))}
     </main>
   );
 }
