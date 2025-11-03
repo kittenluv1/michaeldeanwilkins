@@ -3,8 +3,7 @@ import {structureTool} from 'sanity/structure'
 import {structure} from './structure';
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
-import { presentationTool } from "sanity/presentation";
-import { locate } from './presentation/locate';
+import { defineDocuments, presentationTool } from "sanity/presentation";
 
 export default defineConfig({
   name: 'default',
@@ -14,10 +13,15 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [
-    structureTool({structure}), 
-    visionTool(),
     presentationTool({
-      locate,
+      resolve: {
+        mainDocuments: defineDocuments([
+          {
+            route: '/',
+            filter: `_type == "homepage"`,
+          },
+        ]),
+      },
       previewUrl: {
         initial: process.env.SANITY_STUDIO_PREVIEW_ORIGIN,
         preview: "/",
@@ -26,6 +30,8 @@ export default defineConfig({
         },
       },
     }),
+    structureTool({structure}), 
+    visionTool(),
   ],
 
   schema: {

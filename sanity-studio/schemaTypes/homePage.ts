@@ -1,17 +1,24 @@
 import {defineField, defineType} from 'sanity'
+import { FaHome } from "react-icons/fa";
 
 export const homePage = defineType({
   name: 'homepage',
   title: 'Home Page',
   type: 'document',
-  description: 'Edit the homepage content',
+  icon: FaHome,
   fields: [
     defineField({
-        name: 'images',
-        title: 'Images',
-        type: 'array',
-        of: [{ type: 'image' }],
-    })
+      name: 'sections',
+      title: 'Sections',
+      description: 'Order sections by dragging; used for site navigation and preview',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'gridSection' }],
+        },
+      ],
+    }),
   ],
   preview: {
     select: {},

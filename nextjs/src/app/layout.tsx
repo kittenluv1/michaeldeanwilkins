@@ -2,6 +2,7 @@ import "./globals.css";
 import { VisualEditing } from "next-sanity";
 import { draftMode } from "next/headers";
 import { DisableDraftMode } from "@/components/DisableDraftMode";
+import { SanityLive } from "@/sanity/live";
 
 export const metadata = {
   title: "Michael Dean Wilkins",
@@ -17,6 +18,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         {children}
+        <SanityLive />
         {(await draftMode()).isEnabled && (
           <>
             <VisualEditing />
