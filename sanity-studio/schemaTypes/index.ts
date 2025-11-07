@@ -1,5 +1,6 @@
 import { gridSection } from './gridSection'
 import {homePage} from './homePage'
-import {section} from './sectionType'
+import {about} from './aboutSection'
+import {photoType} from './photoType'
 
-export const schemaTypes = [homePage, gridSection, section]
+export const schemaTypes = [homePage, gridSection, about, photoType]

@@ -13,9 +13,10 @@ export const homePage = defineType({
       of: [
         {
           type: 'reference',
-          to: [{ type: 'gridSection' }],
+          to: [{ type: 'gridSection' }, { type: 'about' }],
         },
       ],
+      validation: (rule) => rule.required(),
     }),
   ],
   preview: {

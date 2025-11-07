@@ -15,56 +15,16 @@ export const gridSection = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug', 
-      description: 'appears in the URL when this section is selected',
-      options: { 
-        source: 'title', 
-        maxLength: 50,
-        slugify: (input: string) => input
-          .toLowerCase()
-          .replace(/\s+/g, '-')     // Replace spaces with -
-          .replace(/[&]/g, '-and-')   // Replace & with 'and'
-          .replace(/[^\w\-]+/g, '') // Remove all non-word chars except hyphens
-          .replace(/\-\-+/g, '-')   // Replace multiple - with single -
-          .replace(/^-+/, '')       // Trim - from start
-          .replace(/-+$/, '')       // Trim - from end
-      },
-      validation: (rule) => rule.required().custom((slug: any) => {
-        if (!slug?.current) return true;
-        // Only allow lowercase letters, numbers, and hyphens
-        if (!/^[a-z0-9-]+$/.test(slug.current)) {
-          return 'slug can only contain lowercase letters, numbers, and hyphens';
-        }
-        return true;
-      }),
-      hidden: ({ document }) => !document?.title, // Hide until title exists
-    }),
-    defineField({
-      name: 'images',
-      title: 'Images',
+      name: 'photos',
+      title: 'Photos',
       type: 'array',
       of: [
         {
-          type: 'image',
-          options: {
-            hotspot: true, 
-          },
+          type: 'reference',
+          to: [{ type: 'photo' }],
         },
       ],
+      validation: (rule) => rule.required(),
     }),
   ],
-    preview: {
-    select: {
-        title: 'title',
-        media: 'images.0.asset',
-    },
-    prepare({ title, media }) {
-        return {
-            title,
-            media: media || RiLayoutGrid2Fill,
-        };
-    },
-    },
 })

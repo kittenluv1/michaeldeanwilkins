@@ -1,44 +1,61 @@
-import { urlFor } from "@/sanity/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { sanityFetch } from "@/sanity/live";
 import { defineQuery } from "next-sanity";
+import GridSection from "@/components/gridSection";
+import ImagePopup from "@/components/imagePopup";
+import AboutSection from "@/components/aboutSection";
 
-const homepageQuery = defineQuery(`*[_type == "homepage"][0]{sections[]->}`);
+function slugify(title: string) {
+  return title
+  .toLowerCase()
+  .replace(/\s+/g, '-')     // Replace spaces with -
+  .replace(/[&]/g, '-and-')   // Replace & with 'and'
+  .replace(/[^\w\-]+/g, '') // Remove all non-word chars except hyphens
+  .replace(/\-\-+/g, '-')   // Replace multiple - with single -
+  .replace(/^-+/, '')       // Trim - from start
+  .replace(/-+$/, '')       // Trim - from end
+}
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Promise<{ section?: string }>;
+const homepageQuery = defineQuery(`*[_type == "homepage"][0]{
+  sections[]->{
+    _id,
+    _type,
+    title,
+    photos[]->{
+      _id,
+      title,
+      mainImage,
+      altText,
+      relatedPhotos
+    },
+    image, 
+    text
+  }
+}`);
+
+export default async function Home({ searchParams} : {
+  searchParams?: { section?: string, photo?: string }
 }) {
+  const { section, photo } = await searchParams;
   const { data: homepage } = await sanityFetch({ query: homepageQuery, stega: true });
+  const sections = homepage?.sections ?? [];
 
-  const sections = homepage.sections?.filter(
-    (s: any) => s?.slug?.current
-  )
-
-  // Get the active section slug from the query parameters
-  const { section: activeSlug } = await searchParams;
-  if (!activeSlug && sections.length > 0 && sections[0].slug?.current) {
-    redirect(`/?section=${sections[0].slug.current}`);
+  // If no section is found, redirect to the first section
+  if (!section) {
+    redirect(`/?section=${slugify(sections[0].title)}`);
   }
+
+  // Determine the active section based on the slug from the query parameters
   const activeSection =
-    sections.find((s: any) => s.slug?.current === activeSlug) || sections[0];
-  
-  // If there are no sections, render a friendly empty state
-  if (!sections.length) {
-    return (
-      <main className="w-full flex flex-col items-center justify-center p-16">
-        <p className="text-xl">No sections yet. Add a “Grid Section” in Sanity Studio.</p>
-      </main>
-    );
-  }
+    (section ? sections.find((s: any) => slugify(s.title) === section) : null) ||
+    sections[0];
 
   return (
     <main className="w-full flex flex-col items-center justify-center">
       <div className="w-full flex flex-col items-center justify-center">
         <img
-          className="h-7 m-20 mb-15"
+          className="h-7 mt-15 mb-10"
           src="/logo.svg"
           alt="Michael Dean Wilkins logo"
         />
@@ -46,26 +63,22 @@ export default async function Home({
           {sections.map((s: any) => (
               <Link
                 key={s._id}
-                href={`/?section=${s.slug.current}`}
-                className={`mx-4 underline ${s._id === activeSection._id ? 'font-bold' : ''}`}
+                href={`/?section=${slugify(s.title)}`}
+                className={`mx-4 text-lg underline ${slugify(s.title) === section && 'font-bold'}`}
               >
                 {s.title}
               </Link>
             ))}
         </nav>
       </div>
-      <section>
-        <div className="w-full columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-8 p-8">
-          {activeSection.images?.map((image: any) => (
-            <img
-              key={image._key}
-              src={urlFor(image).url()}
-              className="w-full mb-8 break-inside-avoid"
-              alt=""
-            />
-          ))}
-        </div>
-      </section>
+         <section>
+          {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
+          {activeSection?._type === "gridSection" ? (
+             <GridSection photos={activeSection.photos} />
+           ) : activeSection?._type === "about" ? (
+              <AboutSection image={activeSection.image} text={activeSection.text} />
+           ) : null }
+        </section>
     </main>
   );
 }
