@@ -7,7 +7,7 @@ export default function GridSection({ photos }) {
     const router = useRouter();
 
     return (
-        <div className="w-full columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-8 p-8">
+        <div className="w-full columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-8 p-8 pt-0">
             {photos.map((photo: any) => (
                 <div 
                     key={photo._id} 

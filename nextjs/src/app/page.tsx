@@ -52,33 +52,31 @@ export default async function Home({ searchParams} : {
     sections[0];
 
   return (
-    <main className="w-full flex flex-col items-center justify-center">
-      <div className="w-full flex flex-col items-center justify-center">
-        <img
-          className="h-7 mt-15 mb-10"
-          src="/logo.svg"
-          alt="Michael Dean Wilkins logo"
-        />
-        <nav>
-          {sections.map((s: any) => (
-              <Link
-                key={s._id}
-                href={`/?section=${slugify(s.title)}`}
-                className={`mx-4 text-lg underline ${slugify(s.title) === section && 'font-bold'}`}
-              >
-                {s.title}
-              </Link>
-            ))}
-        </nav>
-      </div>
-         <section>
-          {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
-          {activeSection?._type === "gridSection" ? (
-             <GridSection photos={activeSection.photos} />
-           ) : activeSection?._type === "about" ? (
-              <AboutSection image={activeSection.image} text={activeSection.text} />
-           ) : null }
-        </section>
+    <main className="w-full flex flex-col items-center">
+      <img
+        className="h-7 mt-15 mb-4"
+        src="/logo.svg"
+        alt="Michael Dean Wilkins logo"
+      />
+      <nav className="bg-white/95 w-full p-6 flex justify-center sticky top-0 z-10 backdrop-blur-md">
+        {sections.map((s: any) => (
+            <Link
+              key={s._id}
+              href={`/?section=${slugify(s.title)}`}
+              className={`mx-4 text-lg hover:underline ${slugify(s.title) === section && 'font-bold'}`}
+            >
+              {s.title}
+            </Link>
+          ))}
+      </nav>
+        <section className="relative">
+        {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
+        {activeSection?._type === "gridSection" ? (
+            <GridSection photos={activeSection.photos} />
+          ) : activeSection?._type === "about" ? (
+            <AboutSection image={activeSection.image} text={activeSection.text} />
+          ) : null }
+      </section>
     </main>
   );
 }

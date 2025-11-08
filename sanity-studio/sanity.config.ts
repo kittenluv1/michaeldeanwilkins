@@ -9,8 +9,8 @@ export default defineConfig({
   name: 'default',
   title: 'michaeldeanwilkins',
 
-  projectId: 'l269b46l',
-  dataset: 'production',
+  projectId: process.env.SANITY_STUDIO_API_PROJECT_ID!,
+  dataset: process.env.SANITY_STUDIO_API_DATASET!,
 
   plugins: [
     presentationTool({
@@ -31,7 +31,7 @@ export default defineConfig({
       },
     }),
     structureTool({structure}), 
-    visionTool(),
+    ...(process.env.NODE_ENV === 'development' ? [visionTool()] : []),
   ],
 
   schema: {
