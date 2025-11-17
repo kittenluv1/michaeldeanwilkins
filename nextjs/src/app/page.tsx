@@ -34,6 +34,8 @@ const homepageQuery = defineQuery(`*[_type == "homepage"][0]{
   }
 }`);
 
+export const dynamic = "force-dynamic"; // SSR for production
+
 export default async function Home({ searchParams} : {
   searchParams?: { section?: string, photo?: string }
 }) {
