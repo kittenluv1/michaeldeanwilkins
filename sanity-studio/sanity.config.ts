@@ -4,6 +4,7 @@ import {structure} from './structure';
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 import { defineDocuments, presentationTool } from "sanity/presentation";
+// import { linkField } from "sanity-plugin-link-field";
 
 export default defineConfig({
   name: 'default',
@@ -32,6 +33,9 @@ export default defineConfig({
     }),
     structureTool({structure}), 
     ...(process.env.NODE_ENV === 'development' ? [visionTool()] : []),
+    // linkField({
+    //   linkableSchemaTypes: ['homepage'],
+    // }) as any,
   ],
 
   schema: {

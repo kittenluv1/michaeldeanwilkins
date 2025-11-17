@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import { MdFormatColorText } from 'react-icons/md';
+// import { linkField } from 'sanity-plugin-link-field';
 
 export const about = defineType({
   name: 'about',
@@ -31,9 +32,43 @@ export const about = defineType({
       },
     }),
     defineField({
-        name: 'text',
-        title: 'Text',
-        type: 'text',
-    })
+      name: 'content',
+      title: 'Content',
+      type: 'array',
+      of: [
+        { 
+          type: 'block',
+          styles: [
+            { title: 'Heading 1', value: 'h1' },
+            { title: 'Heading 2', value: 'h2' },
+            { title: 'Normal', value: 'normal' },
+          ],
+          marks: {
+            decorators: []
+          },
+          lists: [],
+        },
+      ],
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'contact',
+      title: 'Contact',
+      type: 'array',
+      of: [
+        { 
+          type: 'block',
+          styles: [
+            { title: 'Heading 1', value: 'h1' },
+            { title: 'Heading 2', value: 'h2' },
+            { title: 'Normal', value: 'normal' },
+          ],
+          marks: {
+            decorators: []
+          },
+          lists: [],
+        },
+      ],
+    }),
   ],
 });

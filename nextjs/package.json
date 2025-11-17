@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@portabletext/react": "^5.0.0",
     "@sanity/image-url": "^1.2.0",
     "@sanity/visual-editing": "^2.15.4",
     "next": "15.5.6",

@@ -29,8 +29,9 @@ const homepageQuery = defineQuery(`*[_type == "homepage"][0]{
       altText,
       relatedPhotos
     },
-    image, 
-    text
+    content,
+    image,
+    contact,
   }
 }`);
 
@@ -54,31 +55,39 @@ export default async function Home({ searchParams} : {
     sections[0];
 
   return (
-    <main className="w-full flex flex-col items-center">
-      <img
-        className="h-7 mt-15 mb-4"
-        src="/logo.svg"
-        alt="Michael Dean Wilkins logo"
-      />
-      <nav className="bg-white/95 w-full p-6 flex justify-center sticky top-0 z-10 backdrop-blur-md">
-        {sections.map((s: any) => (
-            <Link
-              key={s._id}
-              href={`/?section=${slugify(s.title)}`}
-              className={`mx-4 text-lg hover:underline ${slugify(s.title) === section && 'font-bold'}`}
-            >
-              {s.title}
-            </Link>
-          ))}
-      </nav>
-        <section className="relative">
-        {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
-        {activeSection?._type === "gridSection" ? (
-            <GridSection photos={activeSection.photos} />
-          ) : activeSection?._type === "about" ? (
-            <AboutSection image={activeSection.image} text={activeSection.text} />
-          ) : null }
-      </section>
-    </main>
+    <>
+      <main className="w-full flex flex-col items-center">
+        <img
+          className="h-7 mt-15 mb-4"
+          src="/logo.svg"
+          alt="Michael Dean Wilkins logo"
+        />
+        <nav className="bg-white/95 w-full p-6 flex justify-center sticky top-0 z-10 backdrop-blur-md">
+          {sections.map((s: any) => (
+              <Link
+                key={s._id}
+                href={`/?section=${slugify(s.title)}`}
+                className={`mx-4 text-lg hover:underline ${slugify(s.title) === section && 'font-bold'}`}
+              >
+                {s.title}
+              </Link>
+            ))}
+        </nav>
+          <section className="relative">
+          {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
+          {activeSection?._type === "gridSection" ? (
+              <GridSection photos={activeSection.photos} />
+            ) : activeSection?._type === "about" ? (
+              <AboutSection image={activeSection.image} content={activeSection.content} contact={activeSection.contact} />
+            ) : null }
+        </section>
+      </main>
+      <footer className="w-full flex justify-between pb-10 px-8">
+            <span className="text-lg font-bold">&copy; 2025 Michael Dean Wilkins</span>
+            <a href="https://www.instagram.com/michaeldean__/" target="_blank" rel="noopener noreferrer">
+              <img src="/instagram-icon.svg" alt="Instagram" className="h-8 w-8"/>
+            </a>
+      </footer>
+    </>
   );
 }
