@@ -32,6 +32,39 @@ export const about = defineType({
       },
     }),
     defineField({
+      name: 'contact',
+      title: 'Contact',
+      type: 'array',
+      of: [
+        { 
+          type: 'block',
+          styles: [
+            { title: 'Heading 1', value: 'h1' },
+            { title: 'Heading 2', value: 'h2' },
+            { title: 'Normal', value: 'normal' },
+          ],
+          marks: {
+            decorators: [],
+            annotations: [
+              {
+                name: 'link',
+                type: 'object',
+                title: 'Link',
+                fields: [
+                  {
+                    name: 'href',
+                    type: 'url',
+                    title: 'URL'
+                  }
+                ]
+              }
+            ]
+          },
+          lists: [],
+        },
+      ],
+    }),
+    defineField({
       name: 'content',
       title: 'Content',
       type: 'array',
@@ -50,25 +83,6 @@ export const about = defineType({
         },
       ],
       validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'contact',
-      title: 'Contact',
-      type: 'array',
-      of: [
-        { 
-          type: 'block',
-          styles: [
-            { title: 'Heading 1', value: 'h1' },
-            { title: 'Heading 2', value: 'h2' },
-            { title: 'Normal', value: 'normal' },
-          ],
-          marks: {
-            decorators: []
-          },
-          lists: [],
-        },
-      ],
     }),
   ],
 });

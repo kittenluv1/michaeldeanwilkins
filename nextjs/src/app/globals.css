@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-body: "EB Garamond", sans-serif;
 }
 
 /* @theme inline {
@@ -23,5 +23,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Roboto Condensed', 'Times New Roman', serif, sans-serif;
+  font-family: var(--font-body), 'Times New Roman', Times, serif;
 }

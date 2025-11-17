@@ -58,32 +58,46 @@ export default async function Home({ searchParams} : {
     <>
       <main className="w-full flex flex-col items-center">
         <img
-          className="h-7 mt-15 mb-4"
+          className="h-7 max-w-2/3 mt-15 mb-4"
           src="/logo.svg"
           alt="Michael Dean Wilkins logo"
         />
-        <nav className="bg-white/95 w-full p-6 flex justify-center sticky top-0 z-10 backdrop-blur-md">
+        <nav className="bg-white/95 w-full p-6 flex flex-wrap gap-4 justify-center sticky top-0 z-10 backdrop-blur-md font-light overflow-wrap">
           {sections.map((s: any) => (
               <Link
                 key={s._id}
                 href={`/?section=${slugify(s.title)}`}
-                className={`mx-4 text-lg hover:underline ${slugify(s.title) === section && 'font-bold'}`}
+                className={`text-lg hover:underline ${slugify(s.title) === section && 'font-bold'}`}
               >
                 {s.title}
               </Link>
             ))}
         </nav>
-          <section className="relative">
+        <section className="relative w-full">
           {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
-          {activeSection?._type === "gridSection" ? (
-              <GridSection photos={activeSection.photos} />
-            ) : activeSection?._type === "about" ? (
-              <AboutSection image={activeSection.image} content={activeSection.content} contact={activeSection.contact} />
-            ) : null }
+
+          {
+            /* grid section stays mounted and only hides conditionally to prevent full reloads of all images */
+            activeSection?._type === "gridSection" && (
+              <div
+                className={
+                  photo
+                    ? "absolute inset-0 invisible"
+                    : "relative"
+                }
+              >
+                <GridSection photos={activeSection.photos} />
+              </div>
+            )
+          }
+
+          {activeSection?._type === "about" && (
+            <AboutSection contact={activeSection.contact} image={activeSection.image} content={activeSection.content} />
+          )}
         </section>
       </main>
-      <footer className="w-full flex justify-between pb-10 px-8">
-            <span className="text-lg font-bold">&copy; 2025 Michael Dean Wilkins</span>
+      <footer className="w-full flex justify-between items-end pb-10 px-8">
+            <span className="font-semibold">Michael Dean Wilkins &copy; 2025</span>
             <a href="https://www.instagram.com/michaeldean__/" target="_blank" rel="noopener noreferrer">
               <img src="/instagram-icon.svg" alt="Instagram" className="h-8 w-8"/>
             </a>
