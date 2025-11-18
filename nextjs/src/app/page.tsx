@@ -61,6 +61,7 @@ export default async function Home({ searchParams} : {
           className="h-7 max-w-2/3 mt-15 mb-4"
           src="/logo.svg"
           alt="Michael Dean Wilkins logo"
+          id="#top"
         />
         <nav className="bg-white/95 w-full p-6 flex flex-wrap gap-4 justify-center sticky top-0 z-10 backdrop-blur-md font-light overflow-wrap">
           {sections.map((s: any) => (
@@ -73,7 +74,7 @@ export default async function Home({ searchParams} : {
               </Link>
             ))}
         </nav>
-        <section className="relative w-full">
+        <section className="relative w-full min-h-screen">
           {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
 
           {
@@ -82,7 +83,7 @@ export default async function Home({ searchParams} : {
               <div
                 className={
                   photo
-                    ? "absolute inset-0 invisible"
+                    ? "absolute inset-0 h-0 overflow-hidden opacity-0 pointer-events-none"
                     : "relative"
                 }
               >
@@ -98,9 +99,12 @@ export default async function Home({ searchParams} : {
       </main>
       <footer className="w-full flex justify-between items-end pb-10 px-8">
             <span className="font-semibold">Michael Dean Wilkins &copy; 2025</span>
-            <a href="https://www.instagram.com/michaeldean__/" target="_blank" rel="noopener noreferrer">
-              <img src="/instagram-icon.svg" alt="Instagram" className="h-8 w-8"/>
-            </a>
+            <div className="flex items-center gap-2">
+              <a href="https://www.instagram.com/michaeldean__/" target="_blank" rel="noopener noreferrer">
+                <img src="/instagram-icon.svg" alt="Instagram" className="h-8 w-8"/>
+              </a>
+              <a href="#top" className="h-8">&uarr;</a>
+            </div>
       </footer>
     </>
   );

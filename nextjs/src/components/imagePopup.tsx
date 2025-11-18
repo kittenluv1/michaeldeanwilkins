@@ -19,15 +19,15 @@ export default function ImagePopup({ photoId, photos }) {
   }
 
     return (
-      <div className="flex flex-col space-y-15 items-center p-15 min-h-screen">
+      <div className="flex flex-col space-y-15 items-center p-8 lg:p-15">
         <button 
-          className="absolute top-0 right-0 m-8 mr-15 cursor-pointer"
+          className="absolute top-0 right-0 mr-8 lg:m-8 lg:mr-15 cursor-pointer"
           onClick={() => removeParam('photo')}
         >
           <object data="/close.svg" type="image/svg+xml" className="w-3 pointer-events-none"/>
         </button>
           <img 
-            className="max-w-lg max-h-lg" 
+            className="max-w-3/4 lg:max-w-lg max-h-lg" 
             src={urlFor(photo.mainImage).url()} 
             alt={photo.altText}              
           />
