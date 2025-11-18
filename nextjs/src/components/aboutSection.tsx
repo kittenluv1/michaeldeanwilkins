@@ -13,7 +13,7 @@ export default function AboutSection({ contact, image, content }) {
           h2: ({ children }) => (
             <h2 className="text-3xl font-medium mb-4">{children}</h2>
           ),
-          normal: ({ children }) => <p className="mb-2">{children}</p>,
+          normal: ({ children }) => <p>{children}</p>,
         },
         marks: {
           link: ({ children, value }) => {
@@ -39,7 +39,7 @@ export default function AboutSection({ contact, image, content }) {
         <PortableTextWrapper value={contact} />
       </div>
 
-      <div className="grid place-items-center grid-cols-1 lg:grid-cols-2 gap-10">
+      <div className="grid align-top grid-cols-1 lg:grid-cols-2 gap-10">
         <div>
           <PortableTextWrapper value={content} />
         </div>

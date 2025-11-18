@@ -19,7 +19,7 @@ export default function GridSection({ photos }) {
                         }}>
                     <img
                         src={urlFor(photo.mainImage).url()}
-                        className="w-full mb-8 break-inside-avoid hover:opacity-90 transition-opacity duration-100"
+                        className="w-full mb-8 break-inside-avoid hover:opacity-75 transition-opacity duration-100"
                         alt={photo.altText}
                     />
                 </div>

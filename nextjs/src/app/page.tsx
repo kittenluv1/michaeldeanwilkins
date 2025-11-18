@@ -99,11 +99,13 @@ export default async function Home({ searchParams} : {
       </main>
       <footer className="w-full flex justify-between items-end pb-10 px-8">
             <span className="font-semibold">Michael Dean Wilkins &copy; 2025</span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <a href="https://www.instagram.com/michaeldean__/" target="_blank" rel="noopener noreferrer">
                 <img src="/instagram-icon.svg" alt="Instagram" className="h-8 w-8"/>
               </a>
-              <a href="#top" className="h-8">&uarr;</a>
+              <a href="#top" className="h-8">
+                <img src="/circle-arrow.svg" alt="Back to top" className="h-8"/>
+              </a>
             </div>
       </footer>
     </>
