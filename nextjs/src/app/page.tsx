@@ -25,9 +25,21 @@ const homepageQuery = defineQuery(`*[_type == "homepage"][0]{
     photos[]->{
       _id,
       title,
-      mainImage,
+      mainImage{
+        asset->{
+          _id,
+          url,
+          metadata{lqip,dimensions}
+        }
+      },
       altText,
-      relatedPhotos
+      relatedPhotos[]{
+        asset->{
+          _id,
+          url,
+          metadata{lqip,dimensions}
+        }
+      }
     },
     content,
     image,
@@ -83,7 +95,7 @@ export default async function Home({ searchParams} : {
               <div
                 className={
                   photo
-                    ? "absolute inset-0 h-0 overflow-hidden opacity-0 pointer-events-none"
+                    ? "absolute inset-0 w-full overflow-hidden z-0 pointer-events-none"
                     : "relative"
                 }
               >
