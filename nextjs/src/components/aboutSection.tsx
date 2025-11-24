@@ -1,5 +1,5 @@
-import { urlFor } from "@/sanity/image";
 import { PortableText } from "@portabletext/react";
+import ImageWrapper from "./image";
 
 export default function AboutSection({ contact, image, content }) {
   const PortableTextWrapper = ({ value }) => (
@@ -45,7 +45,7 @@ export default function AboutSection({ contact, image, content }) {
         </div>
 
         {image && (
-          <img src={urlFor(image).url()} className="w-full" />
+          <ImageWrapper photoAsset={image.asset} altText="Picture of the photographer" />
         )}
       </div>
     </div>

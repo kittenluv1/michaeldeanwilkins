@@ -5,6 +5,8 @@ import { defineQuery } from "next-sanity";
 import GridSection from "@/components/gridSection";
 import ImagePopup from "@/components/imagePopup";
 import AboutSection from "@/components/aboutSection";
+import { ImageLoadProvider } from '@/components/ImageLoadProvider';
+import Splash from '@/components/Splash';
 
 function slugify(title: string) {
   return title
@@ -42,7 +44,13 @@ const homepageQuery = defineQuery(`*[_type == "homepage"][0]{
       }
     },
     content,
-    image,
+    image{
+      asset->{
+        _id,
+        url,
+        metadata{lqip,dimensions}
+      }
+    },
     contact,
   }
 }`);
@@ -68,7 +76,9 @@ export default async function Home({ searchParams} : {
 
   return (
     <>
-      <main className="w-full flex flex-col items-center">
+      <ImageLoadProvider>
+        <Splash />
+        <main className="w-full flex flex-col items-center">
         <img
           className="h-7 max-w-2/3 mt-15 mb-4"
           src="/logo.svg"
@@ -108,7 +118,8 @@ export default async function Home({ searchParams} : {
             <AboutSection contact={activeSection.contact} image={activeSection.image} content={activeSection.content} />
           )}
         </section>
-      </main>
+        </main>
+      </ImageLoadProvider>
       <footer className="w-full flex justify-between items-end pb-10 px-8">
             <span className="font-semibold">Michael Dean Wilkins &copy; 2025</span>
             <div className="flex items-center gap-4">
