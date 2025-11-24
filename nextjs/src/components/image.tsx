@@ -2,40 +2,64 @@
 
 import Image from 'next/image';
 import { urlFor } from '@/sanity/image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useImageLoad } from './ImageLoadProvider';
 
 export default function ImageWrapper( {photoAsset, altText} : {photoAsset: any, altText: string} ) {
+  if (!photoAsset) return null;
     const imageUrl = urlFor(photoAsset).width(800).url();
     const width = photoAsset?.metadata?.dimensions?.width || 800;
     const height = photoAsset?.metadata?.dimensions?.height || 1000;
     const blurDataURL = photoAsset?.metadata?.lqip || undefined;
     const imgRef = useRef<HTMLImageElement | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const [visible, setVisible] = useState(false);
     const { register, markLoaded } = useImageLoad();
 
     useEffect(() => {
-      // register this image for the splash tracking (client-side only)
-      register();
+      // Only register this image for the splash when it actually enters the viewport.
+      // This keeps lazy-loaded images from blocking the initial splash.
+      if (!containerRef.current) return;
+      const el = containerRef.current;
+      let obs: IntersectionObserver | null = null;
+      if ('IntersectionObserver' in window) {
+        obs = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              register();
+              obs?.unobserve(el);
+            }
+          });
+        }, { rootMargin: '200px' });
+        obs.observe(el);
+      } else {
+        // Fallback: register immediately
+        register();
+      }
+
+      return () => {
+        if (obs && el) obs.unobserve(el);
+      };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-      <Image
-        src={imageUrl}
-        alt={altText}
-        width={width}
-        height={height}
-        placeholder="blur"
-        blurDataURL={blurDataURL}
-        className="transition-opacity duration-500 opacity-0"
-        ref={imgRef}
-        onLoadingComplete={() => {
-          // remove opacity class so image fades in
-          try {
-            if (imgRef.current) imgRef.current.classList.remove('opacity-0');
-          } catch (e) {}
-          markLoaded();
-        }}
-      />
+      <div ref={containerRef}>
+        <Image
+          src={imageUrl}
+          alt={altText}
+          width={width}
+          height={height}
+          placeholder="blur"
+          blurDataURL={blurDataURL}
+          className={`transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'}`}
+          ref={imgRef}
+          onLoadingComplete={() => {
+            // flip state so image fades in
+            setVisible(true);
+            markLoaded();
+          }}
+        />
+      </div>
     )
 }

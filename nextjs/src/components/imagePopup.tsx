@@ -37,9 +37,8 @@ export default function ImagePopup({ photoId, photos }) {
         {photo.relatedPhotos?.map((relatedPhoto, index) => {
           return (
             <div key={index} className="max-w-5/6 lg:max-w-lg max-h-lg" >
-              <ImageWrapper photoAsset={relatedPhoto.asset} altText={photo.altText} />
+              <ImageWrapper photoAsset={relatedPhoto?.asset} altText={photo.altText} />
             </div>
-
           )
         })}
     </div>
