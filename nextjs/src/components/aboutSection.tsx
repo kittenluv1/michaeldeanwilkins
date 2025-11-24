@@ -22,7 +22,7 @@ export default function AboutSection({ contact, image, content }) {
                 href={value.href}
                 target="_blank"
                 rel="noreferrer"
-                className="hover:underline"
+                className="underline hover:opacity-70"
               >
                 {children}
               </a>

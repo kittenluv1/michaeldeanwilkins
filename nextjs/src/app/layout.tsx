@@ -4,6 +4,7 @@ import { draftMode } from "next/headers";
 import { DisableDraftMode } from "@/components/DisableDraftMode";
 import { SanityLive } from "@/sanity/live";
 import { EB_Garamond } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next"
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default async function RootLayout({
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth">
       <body className={ebGaramond.className}>
         {children}
+        <Analytics />
         <SanityLive />
         {(await draftMode()).isEnabled && (
           <>
