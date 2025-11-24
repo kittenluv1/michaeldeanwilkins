@@ -13,7 +13,7 @@ export default function AboutSection({ contact, image, content }) {
           h2: ({ children }) => (
             <h2 className="text-3xl font-medium mb-4">{children}</h2>
           ),
-          normal: ({ children }) => <p>{children}</p>,
+          normal: ({ children }) => <p className="text-center">{children}</p>,
         },
         marks: {
           link: ({ children, value }) => {

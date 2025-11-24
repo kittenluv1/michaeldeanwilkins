@@ -24,12 +24,24 @@ export function ImageLoadProvider({ children }: { children: React.ReactNode }) {
   const [allLoaded, setAllLoaded] = useState(false);
 
   useEffect(() => {
-    if (total > 0 && loaded >= total) {
+    if (total === 0) {
+      // No images have registered — treat as already loaded so splash can hide.
       setAllLoaded(true);
+      return;
+    }
+
+    if (loaded >= total) {
+      setAllLoaded(true);
+    } else {
+      setAllLoaded(false);
     }
   }, [total, loaded]);
 
-  const register = () => setTotal((t) => t + 1);
+  const register = () => setTotal((t) => {
+    // When an image registers, ensure we mark not-all-loaded so splash stays visible
+    setAllLoaded(false);
+    return t + 1;
+  });
   const markLoaded = () => setLoaded((l) => l + 1);
 
   return (

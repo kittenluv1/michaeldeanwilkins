@@ -54,7 +54,7 @@ export default function ImageWrapper( {photoAsset, altText} : {photoAsset: any, 
           blurDataURL={blurDataURL}
           className={`transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'}`}
           ref={imgRef}
-          onLoadingComplete={() => {
+          onLoad={() => {
             // flip state so image fades in
             setVisible(true);
             markLoaded();
