@@ -79,12 +79,17 @@ export default async function Home({ searchParams} : {
       <ImageLoadProvider>
         <Splash />
         <main className="w-full flex flex-col items-center">
-        <img
-          className="h-7 max-w-2/3 mt-15 mb-4"
-          src="/logo.svg"
-          alt="Michael Dean Wilkins logo"
+        <Link 
+          className="max-w-3/4 mt-10 p-4"
+          href={`/?section=${slugify(sections[0].title)}`}
           id="#top"
-        />
+          >
+            <img
+              className="w-full h-6 pointer-events-none"
+              src="/logo.svg"
+              alt="Michael Dean Wilkins logo"
+            />
+        </Link>
         <nav className="bg-white/95 w-full p-6 flex flex-wrap gap-4 justify-center sticky top-0 z-10 backdrop-blur-md font-light overflow-wrap">
           {sections.map((s: any) => (
               <Link
