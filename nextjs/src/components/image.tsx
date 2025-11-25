@@ -7,9 +7,9 @@ import { useImageLoad } from './ImageLoadProvider';
 
 export default function ImageWrapper( {photoAsset, altText} : {photoAsset: any, altText: string} ) {
   if (!photoAsset) return null;
-    const imageUrl = urlFor(photoAsset).width(800).url();
-    const width = photoAsset?.metadata?.dimensions?.width || 800;
-    const height = photoAsset?.metadata?.dimensions?.height || 1000;
+    const imageUrl = urlFor(photoAsset).width(2500).quality(100).url();
+    const width = photoAsset?.metadata?.dimensions?.width || 2500;
+    const height = photoAsset?.metadata?.dimensions?.height || 3000;
     const blurDataURL = photoAsset?.metadata?.lqip || undefined;
     const imgRef = useRef<HTMLImageElement | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
