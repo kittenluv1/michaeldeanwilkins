@@ -63,6 +63,7 @@ export default async function Home({ searchParams} : {
   const { section, photo } = await searchParams;
   const { data: homepage } = await sanityFetch({ query: homepageQuery, stega: true });
   const sections = homepage?.sections ?? [];
+  const currentYear = new Date().getFullYear();
 
   // If no section is found, redirect to the first section
   if (!section) {
@@ -126,7 +127,7 @@ export default async function Home({ searchParams} : {
         </main>
       </ImageLoadProvider>
       <footer className="w-full flex justify-between items-end pb-10 px-8">
-            <span className="font-semibold">Michael Dean Wilkins &copy; 2025</span>
+            <span className="font-semibold">Michael Dean Wilkins &copy; {currentYear}</span>
             <div className="flex items-center gap-4">
               <a href="https://www.instagram.com/michaeldean__/" target="_blank" rel="noopener noreferrer">
                 <img src="/instagram-icon.svg" alt="Instagram" className="h-8 w-8"/>
