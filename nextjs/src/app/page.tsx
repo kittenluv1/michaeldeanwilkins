@@ -5,14 +5,14 @@ import ImagePopup from "@/components/imagePopup";
 import AboutSection from "@/components/aboutSection";
 import { HOMEPAGE_QUERY } from "@/sanity/queries";
 import { slugify } from "@/lib/utils";
-
-export const dynamic = "force-dynamic"; // SSR for production
+import { connection } from "next/server";
 
 export default async function Home({
   searchParams,
 }: {
   searchParams: Promise<{ section?: string; photo?: string }>;
 }) {
+  await connection(); // in the future, switch to revalidatePath + Sanity webhooks for more efficient updates instead of full page revalidation on every change
   const { section, photo } = await searchParams;
   const { data: homepage } = await sanityFetch({
     query: HOMEPAGE_QUERY,

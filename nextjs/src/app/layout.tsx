@@ -10,6 +10,7 @@ import { ImageLoadProvider } from "@/components/ImageLoadProvider";
 import Splash from "@/components/Splash";
 import Nav from "@/components/nav";
 import { SECTIONS_QUERY } from "@/sanity/queries";
+import { Suspense } from "react";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -49,7 +50,9 @@ export default async function RootLayout({
                 alt="Michael Dean Wilkins logo"
               />
             </Link>
-            <Nav sections={sections} />
+            <Suspense>
+              <Nav sections={sections} />
+            </Suspense>
             {children}
           </main>
         </ImageLoadProvider>

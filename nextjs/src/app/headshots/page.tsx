@@ -2,14 +2,14 @@ import { HEADSHOTS_QUERY } from "@/sanity/queries";
 import { sanityFetch } from "@/sanity/live";
 import GridSection from "@/components/gridSection";
 import ImagePopup from "@/components/imagePopup";
-
-export const dynamic = "force-dynamic"; // SSR for production
+import { connection } from "next/server";
 
 export default async function Headshots({
   searchParams,
 }: {
   searchParams: Promise<{ photo?: string }>;
 }) {
+  await connection();
   const { data: headshotsPage } = await sanityFetch({
     query: HEADSHOTS_QUERY,
     stega: true,
