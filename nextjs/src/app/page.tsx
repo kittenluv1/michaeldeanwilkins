@@ -1,69 +1,24 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { sanityFetch } from "@/sanity/live";
-import { defineQuery } from "next-sanity";
 import GridSection from "@/components/gridSection";
 import ImagePopup from "@/components/imagePopup";
 import AboutSection from "@/components/aboutSection";
-import { ImageLoadProvider } from '@/components/ImageLoadProvider';
-import Splash from '@/components/Splash';
-
-function slugify(title: string) {
-  return title
-  .toLowerCase()
-  .replace(/\s+/g, '-')     // Replace spaces with -
-  .replace(/[&]/g, '-and-')   // Replace & with 'and'
-  .replace(/[^\w\-]+/g, '') // Remove all non-word chars except hyphens
-  .replace(/\-\-+/g, '-')   // Replace multiple - with single -
-  .replace(/^-+/, '')       // Trim - from start
-  .replace(/-+$/, '')       // Trim - from end
-}
-
-const homepageQuery = defineQuery(`*[_type == "homepage"][0]{
-  sections[]->{
-    _id,
-    _type,
-    title,
-    photos[]->{
-      _id,
-      title,
-      mainImage{
-        asset->{
-          _id,
-          url,
-          metadata{lqip,dimensions}
-        }
-      },
-      altText,
-      relatedPhotos[]{
-        asset->{
-          _id,
-          url,
-          metadata{lqip,dimensions}
-        }
-      }
-    },
-    content,
-    image{
-      asset->{
-        _id,
-        url,
-        metadata{lqip,dimensions}
-      }
-    },
-    contact,
-  }
-}`);
+import { HOMEPAGE_QUERY } from "@/sanity/queries";
+import { slugify } from "@/lib/utils";
 
 export const dynamic = "force-dynamic"; // SSR for production
 
-export default async function Home({ searchParams} : {
-  searchParams?: { section?: string, photo?: string }
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ section?: string; photo?: string }>;
 }) {
   const { section, photo } = await searchParams;
-  const { data: homepage } = await sanityFetch({ query: homepageQuery, stega: true });
+  const { data: homepage } = await sanityFetch({
+    query: HOMEPAGE_QUERY,
+    stega: true,
+  });
   const sections = homepage?.sections ?? [];
-  const currentYear = new Date().getFullYear();
 
   // If no section is found, redirect to the first section
   if (!section) {
@@ -72,71 +27,38 @@ export default async function Home({ searchParams} : {
 
   // Determine the active section based on the slug from the query parameters
   const activeSection =
-    (section ? sections.find((s: any) => slugify(s.title) === section) : null) ||
-    sections[0];
+    (section
+      ? sections.find((s: any) => slugify(s.title) === section)
+      : null) || sections[0];
 
   return (
     <>
-      <ImageLoadProvider>
-        <Splash />
-        <main className="w-full flex flex-col items-center">
-        <Link 
-          className="max-w-3/4 mt-10 p-4"
-          href={`/?section=${slugify(sections[0].title)}`}
-          id="#top"
-          >
-            <img
-              className="w-full h-6 pointer-events-none"
-              src="/logo.svg"
-              alt="Michael Dean Wilkins logo"
-            />
-        </Link>
-        <nav className="bg-white/95 w-full p-6 flex flex-wrap gap-4 justify-center sticky top-0 z-10 backdrop-blur-md font-light overflow-wrap">
-          {sections.map((s: any) => (
-              <Link
-                key={s._id}
-                href={`/?section=${slugify(s.title)}`}
-                className={`text-lg hover:underline ${slugify(s.title) === section && 'font-bold'}`}
-              >
-                {s.title}
-              </Link>
-            ))}
-        </nav>
-        <section className="relative w-full min-h-screen">
-          {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
+      <section className="relative w-full min-h-screen">
+        {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
 
-          {
-            /* grid section stays mounted and only hides conditionally to prevent full reloads of all images */
-            activeSection?._type === "gridSection" && (
-              <div
-                className={
-                  photo
-                    ? "absolute inset-0 w-full overflow-hidden z-0 pointer-events-none"
-                    : "relative"
-                }
-              >
-                <GridSection photos={activeSection.photos} />
-              </div>
-            )
-          }
-
-          {activeSection?._type === "about" && (
-            <AboutSection contact={activeSection.contact} image={activeSection.image} content={activeSection.content} />
-          )}
-        </section>
-        </main>
-      </ImageLoadProvider>
-      <footer className="w-full flex justify-between items-end pb-10 px-8">
-            <span className="font-semibold">Michael Dean Wilkins &copy; {currentYear}</span>
-            <div className="flex items-center gap-4">
-              <a href="https://www.instagram.com/michaeldean__/" target="_blank" rel="noopener noreferrer">
-                <img src="/instagram-icon.svg" alt="Instagram" className="h-8 w-8"/>
-              </a>
-              <a href="#top" className="h-8">
-                <img src="/circle-arrow.svg" alt="Back to top" className="h-8"/>
-              </a>
+        {
+          /* grid section stays mounted and only hides conditionally to prevent full reloads of all images */
+          activeSection?._type === "gridSection" && (
+            <div
+              className={
+                photo
+                  ? "absolute inset-0 w-full overflow-hidden z-0 pointer-events-none"
+                  : "relative"
+              }
+            >
+              <GridSection photos={activeSection.photos} />
             </div>
-      </footer>
+          )
+        }
+
+        {activeSection?._type === "about" && (
+          <AboutSection
+            contact={activeSection.contact}
+            image={activeSection.image}
+            content={activeSection.content}
+          />
+        )}
+      </section>
     </>
   );
 }

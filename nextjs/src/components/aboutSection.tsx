@@ -8,10 +8,10 @@ export default function AboutSection({ contact, image, content }) {
       components={{
         block: {
           h1: ({ children }) => (
-            <h1 className="text-4xl font-medium mb-4">{children}</h1>
+            <h1 className="text-4xl font-medium mb-4 text-center">{children}</h1>
           ),
           h2: ({ children }) => (
-            <h2 className="text-3xl font-medium mb-4">{children}</h2>
+            <h2 className="text-3xl font-medium mb-4 text-center">{children}</h2>
           ),
           normal: ({ children }) => <p className="text-center">{children}</p>,
         },

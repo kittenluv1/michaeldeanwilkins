@@ -1,9 +1,9 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
-import {structure} from './structure';
+import {structure} from './structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
-import { defineDocuments, presentationTool } from "sanity/presentation";
+import {defineDocuments, presentationTool} from 'sanity/presentation'
 // import { linkField } from "sanity-plugin-link-field";
 
 export default defineConfig({
@@ -21,17 +21,21 @@ export default defineConfig({
             route: '/',
             filter: `_type == "homepage"`,
           },
+          {
+            route: '/headshots',
+            filter: `_type == "headshotsPage"`,
+          },
         ]),
       },
       previewUrl: {
         initial: process.env.SANITY_STUDIO_PREVIEW_ORIGIN,
-        preview: "/",
+        preview: '/',
         previewMode: {
-          enable: "/api/draft-mode/enable",
+          enable: '/api/draft-mode/enable',
         },
       },
     }),
-    structureTool({structure}), 
+    structureTool({structure}),
     ...(process.env.NODE_ENV === 'development' ? [visionTool()] : []),
     // linkField({
     //   linkableSchemaTypes: ['homepage'],
