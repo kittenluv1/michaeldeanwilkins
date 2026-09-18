@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
-import { getSections } from "@/sanity/queries";
+import { getSectionTitles } from "@/sanity/queries";
 import GalleryPage from "@/components/galleryPage";
 import { slugify } from "@/lib/utils";
 
 export async function generateStaticParams() {
-  const { skillsAndServices } = await getSections();
+  const { skillsAndServices } = await getSectionTitles();
 
   return skillsAndServices.map((section) => ({
     gallery: slugify(section.title),
@@ -19,7 +19,7 @@ export default async function SkillsAndServicesGallery({
   searchParams: Promise<{ photo?: string }>;
 }) {
   const { gallery } = await params;
-  const { skillsAndServices } = await getSections();
+  const { skillsAndServices } = await getSectionTitles();
   const allowedGalleries = skillsAndServices.map((section) => slugify(section.title));
   const gallerySection = skillsAndServices.find((section) => slugify(section.title) === gallery);
 

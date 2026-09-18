@@ -4,78 +4,120 @@ import { client } from "./client";
 import { sanityFetch } from "./live";
 
 type AboutSection = {
-	contact: unknown[];
-	image?: { asset?: { _ref?: string; _type?: string } };
-	content: unknown[];
+  contact: unknown[];
+  image?: { asset?: { _ref?: string; _type?: string } };
+  content: unknown[];
 };
 
 type Gallery = {
-	_id: string;
-	_type: string;
-	title: string;
-	photos: {
-		_id: string;
-		title: string;
-		mainImage: {
-			asset: {
-				_id: string;
-				url: string;
-				metadata: {
-					lqip: string;
-					dimensions: {
-						width: number;
-						height: number;
-					};
-				};
-			};
-		}[];
-		altText: string;
-		relatedPhotos: {
-			asset: {
-				_id: string;
-				url: string;
-				metadata: {
-					lqip: string;
-					dimensions: {
-						width: number;
-						height: number;
-					};
-				};
-			};
-		}[];
-	}[];
+  _id: string;
+  _type: string;
+  title: string;
+  photos: {
+    _id: string;
+    title: string;
+    mainImage: {
+      asset: {
+        _id: string;
+        url: string;
+        metadata: {
+          lqip: string;
+          dimensions: {
+            width: number;
+            height: number;
+          };
+        };
+      };
+    }[];
+    altText: string;
+    relatedPhotos: {
+      asset: {
+        _id: string;
+        url: string;
+        metadata: {
+          lqip: string;
+          dimensions: {
+            width: number;
+            height: number;
+          };
+        };
+      };
+    }[];
+  }[];
 };
 
-export const getSections = cache(async (): Promise<{
-	selectedWorks: { title: string }[];
-	skillsAndServices: { title: string }[];
-}> => {
-	return await client.fetch<{
-		selectedWorks: { title: string }[];
-		skillsAndServices: { title: string }[];
-	}>(
-		`{
-			"selectedWorks": *[_type == "homepage"][0].subsections[]->{ title },
-			"skillsAndServices": *[_type == "skillsAndServices"][0].subsections[]->{ title }
-		}`
-	);
-});
+export type SkillsAndServicesPage = {
+  hero?: {
+    asset?: {
+      _id: string;
+      url: string;
+      metadata?: {
+        lqip?: string;
+        dimensions?: { width: number; height: number };
+      };
+    };
+  };
+  galleries: {
+    gallery?: { _id: string; title: string };
+    galleryImage?: {
+      asset?: {
+        _id: string;
+        url: string;
+        metadata?: {
+          lqip?: string;
+          dimensions?: { width: number; height: number };
+        };
+      };
+    };
+  }[];
+};
+
+export const getSectionTitles = cache(
+  async (): Promise<{
+    selectedWorks: { title: string }[];
+    skillsAndServices: { title: string }[];
+  }> => {
+    return await client.fetch<{
+      selectedWorks: { title: string }[];
+      skillsAndServices: { title: string }[];
+    }>(
+      `{
+			"selectedWorks": *[_type == "homepage"][0].galleries[]->{ title },
+			"skillsAndServices": *[_type == "skillsAndServices"][0].galleries[]{
+				"title": gallery->title
+			}
+		}`,
+    );
+  },
+);
 
 export const getAboutSection = cache(async (): Promise<AboutSection | null> => {
-	  return await client.fetch<AboutSection | null>(
-		`*[_type == "about"][0]{contact, image, content}`,
-	  );
+  return await client.fetch<AboutSection | null>(
+    `*[_type == "about"	][0]{contact, image, content}`,
+  );
 });
 
-export const getGallery = cache(async (galleryTitle: string): Promise<Gallery | null> => {
-	const { data: gallery } = await sanityFetch({
-		query: GALLERY_QUERY,
-		params: { title: galleryTitle },
-		stega: true,
-	});
-	return gallery as Gallery | null;
-});
+export const getGallery = cache(
+  async (galleryTitle: string): Promise<Gallery | null> => {
+    const { data: gallery } = await sanityFetch({
+      query: GALLERY_QUERY,
+      params: { title: galleryTitle },
+      stega: true,
+    });
+    return gallery as Gallery | null;
+  },
+);
 
+export const getSkillsAndServicesPage = cache(
+  async (): Promise<SkillsAndServicesPage | null> => {
+    const { data: page } = await sanityFetch({
+      query: SKILLS_AND_SERVICES_QUERY,
+      stega: true,
+    });
+
+    return page as SkillsAndServicesPage | null;
+  },
+);
 
 const GALLERY_QUERY = defineQuery(`
 	*[_type == "gridSection" && title == $title][0]{
@@ -101,44 +143,29 @@ const GALLERY_QUERY = defineQuery(`
       }
     }
   }
-}`
-);
-
-export const HOMEPAGE_QUERY = defineQuery(`*[_type == "homepage"][0]{
-	subsections[]->{
-	_id,
-	_type,
-	title,
-	photos[]->{
-	  _id,
-	  title,
-	  mainImage{
-		asset->{
-		  _id,
-		  url,
-		  metadata{lqip,dimensions}
-		}
-	  },
-	  altText,
-	  relatedPhotos[]{
-		asset->{
-		  _id,
-		  url,
-		  metadata{lqip,dimensions}
-		}
-	  }
-	},
-	content,
-	image{
-	  asset->{
-		_id,
-		url,
-		metadata{lqip,dimensions}
-	  }
-	},
-	contact,
-  }
 }`);
+
+const SKILLS_AND_SERVICES_QUERY = defineQuery(`
+  *[_type == "skillsAndServices"][0]{
+    hero{
+      asset->{
+        _id,
+        url,
+        metadata{lqip,dimensions}
+      }
+    },
+    galleries[]{
+      gallery->{_id, title},
+      galleryImage{
+        asset->{
+          _id,
+          url,
+          metadata{lqip,dimensions}
+        }
+      }
+    }
+  }
+`);
 
 export const HEADSHOTS_QUERY = defineQuery(`*[_type == "headshotsPage"][0]
 {

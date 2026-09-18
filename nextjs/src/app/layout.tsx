@@ -10,7 +10,7 @@ import { ImageLoadProvider } from "@/components/ImageLoadProvider";
 import Splash from "@/components/Splash";
 import Nav from "@/components/nav";
 import { Suspense } from "react";
-import { getSections } from "@/sanity/queries";
+import { getSectionTitles } from "@/sanity/queries";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -30,7 +30,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // get sections data to pass to nav
-  const sections = await getSections();
+  const sections = await getSectionTitles();
   const currentYear = new Date().getFullYear();
 
   return (
