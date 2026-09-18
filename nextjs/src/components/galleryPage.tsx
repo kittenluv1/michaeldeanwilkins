@@ -1,28 +1,21 @@
 import { connection } from "next/server";
 import { notFound } from "next/navigation";
-import { sanityFetch } from "@/sanity/live";
 import GridSection from "@/components/gridSection";
 import ImagePopup from "@/components/imagePopup";
-import { HOMEPAGE_QUERY } from "@/sanity/queries";
-import { slugify } from "@/lib/utils";
+import { getGallery } from "@/sanity/queries";
 
 export default async function GalleryPage({
-  gallery,
+  galleryTitle,
   searchParams,
 }: {
-  gallery: string;
+  galleryTitle: string;
   searchParams: Promise<{ photo?: string }>;
 }) {
   await connection();
   const { photo } = await searchParams;
-  const { data: homepage } = await sanityFetch({ query: HOMEPAGE_QUERY, stega: true });
-  const subsections = homepage?.subsections ?? [];
-  const activeSection =
-    subsections.find((section: any) => slugify(section.title) === gallery) ||
-    subsections.find((section: any) => section._type === "gridSection") ||
-    subsections[0];
+  const activeSection = await getGallery(galleryTitle);
 
-  if (!activeSection || activeSection._type !== "gridSection") notFound();
+  if (!activeSection) notFound();
 
   return (
     <section className="relative min-h-screen w-full">

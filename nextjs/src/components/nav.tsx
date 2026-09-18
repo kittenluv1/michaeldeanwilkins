@@ -4,21 +4,36 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { slugify } from "@/lib/utils";
-import type { Section } from "@/sanity/queries";
 
-export default function Nav({ sections }: { sections: Section[] }) {
-  const pathname = usePathname();
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
-  const navigation = [
-    {
-      label: "Selected Works",
-      href: "/selected-works",
-      items: sections.map((section) => ({
-        label: section.title,
-        slug: slugify(section.title),
-      })),
-    },
-  ];
+export default function Nav({
+	sections: { selectedWorks, skillsAndServices }
+}: {
+	sections: {
+		selectedWorks: { title: string }[];
+		skillsAndServices: { title: string }[];
+	};
+}) {
+	const pathname = usePathname();
+	const [openMenu, setOpenMenu] = useState<string | null>(null);
+
+	const navigation = [
+		{
+			label: "Selected Works",
+			href: "/selected-works",
+			items: selectedWorks.map((gallery) => ({
+				label: gallery.title,
+				slug: slugify(gallery.title),
+			})),
+		},
+		{
+			label: "Skills & Services",
+			href: "/skills-and-services",
+			items: skillsAndServices.map((gallery) => ({
+				label: gallery.title,
+				slug: slugify(gallery.title),
+			})),
+		},
+	];
 
   return (
     <nav className="sticky top-0 z-10 flex w-full flex-wrap justify-center gap-x-7 gap-y-2 bg-white/95 px-6 py-4 font-light backdrop-blur-md">

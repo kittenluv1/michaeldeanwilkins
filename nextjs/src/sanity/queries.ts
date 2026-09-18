@@ -1,10 +1,7 @@
 import { defineQuery } from "next-sanity";
 import { cache } from "react";
 import { client } from "./client";
-
-export type Section = {
-  title: string;
-};
+import { sanityFetch } from "./live";
 
 type AboutSection = {
 	contact: unknown[];
@@ -12,10 +9,55 @@ type AboutSection = {
 	content: unknown[];
 };
 
-export const getGridSections = cache(async (page: "homepage" | "headshotsPage"): Promise<Section[]> => {	
-	return await client.fetch<({ title: string; } | null)[]>(
-		`*[_type == $page][0].subsections[]->{ title }`,
-		{ page }
+type Gallery = {
+	_id: string;
+	_type: string;
+	title: string;
+	photos: {
+		_id: string;
+		title: string;
+		mainImage: {
+			asset: {
+				_id: string;
+				url: string;
+				metadata: {
+					lqip: string;
+					dimensions: {
+						width: number;
+						height: number;
+					};
+				};
+			};
+		}[];
+		altText: string;
+		relatedPhotos: {
+			asset: {
+				_id: string;
+				url: string;
+				metadata: {
+					lqip: string;
+					dimensions: {
+						width: number;
+						height: number;
+					};
+				};
+			};
+		}[];
+	}[];
+};
+
+export const getSections = cache(async (): Promise<{
+	selectedWorks: { title: string }[];
+	skillsAndServices: { title: string }[];
+}> => {
+	return await client.fetch<{
+		selectedWorks: { title: string }[];
+		skillsAndServices: { title: string }[];
+	}>(
+		`{
+			"selectedWorks": *[_type == "homepage"][0].subsections[]->{ title },
+			"skillsAndServices": *[_type == "skillsAndServices"][0].subsections[]->{ title }
+		}`
 	);
 });
 
@@ -24,6 +66,43 @@ export const getAboutSection = cache(async (): Promise<AboutSection | null> => {
 		`*[_type == "about"][0]{contact, image, content}`,
 	  );
 });
+
+export const getGallery = cache(async (galleryTitle: string): Promise<Gallery | null> => {
+	const { data: gallery } = await sanityFetch({
+		query: GALLERY_QUERY,
+		params: { title: galleryTitle },
+		stega: true,
+	});
+	return gallery as Gallery | null;
+});
+
+
+const GALLERY_QUERY = defineQuery(`
+	*[_type == "gridSection" && title == $title][0]{
+  _id,
+  _type,
+  title,
+  photos[]->{
+    _id,
+    title,
+    mainImage{
+      asset->{
+        _id,
+        url,
+        metadata{lqip,dimensions}
+      }
+    },
+    altText,
+    relatedPhotos[]{
+      asset->{
+        _id,
+        url,
+        metadata{lqip,dimensions}
+      }
+    }
+  }
+}`
+);
 
 export const HOMEPAGE_QUERY = defineQuery(`*[_type == "homepage"][0]{
 	subsections[]->{
