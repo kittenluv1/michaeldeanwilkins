@@ -9,8 +9,9 @@ import Link from "next/link";
 import { ImageLoadProvider } from "@/components/ImageLoadProvider";
 import Splash from "@/components/Splash";
 import Nav from "@/components/nav";
-import { SECTIONS_QUERY } from "@/sanity/queries";
 import { Suspense } from "react";
+import { getGridSections } from "@/sanity/queries";
+import type { Section } from "@/sanity/queries";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -30,11 +31,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // get sections data to pass to nav
-  const sections = await sanityFetch({
-    query: SECTIONS_QUERY,
-    stega: true,
-  }).then((res) => res.data?.sections ?? []);
-
+  const sections: Section[] = await getGridSections("homepage");
   const currentYear = new Date().getFullYear();
 
   return (

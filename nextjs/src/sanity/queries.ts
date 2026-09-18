@@ -1,14 +1,24 @@
 import { defineQuery } from "next-sanity";
+import { cache } from "react";
+import { client } from "./client";
 
-export const SECTIONS_QUERY = defineQuery(`*[_type == "homepage"][0]{
-  sections[]->{
-    _id,
-	title
-  }
-}`);
+export type Section = {
+  title: string;
+};
+
+export const getGridSections = cache(async (page: "homepage" | "headshotsPage"): Promise<Section[]> => {
+	const sections = await client.fetch<({ title?: string; } | null)[]>(
+		`*[_type == $page][0].subsections[]->{ title }`,
+		{ page }
+	);
+	
+	return sections.filter(
+		(section): section is Section => Boolean(section?.title)
+	);
+});
 
 export const HOMEPAGE_QUERY = defineQuery(`*[_type == "homepage"][0]{
-  sections[]->{
+	subsections[]->{
 	_id,
 	_type,
 	title,
