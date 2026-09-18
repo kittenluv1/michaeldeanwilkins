@@ -7,9 +7,9 @@ export const selectedWorks = defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'subsections',
-      title: 'Subsections',
-      description: 'These subsections will be displayed under the "Selected Works" dropdown menu',
+      name: 'galleries',
+      title: 'Galleries',
+      description: 'These galleries will be displayed under the "Selected Works" dropdown menu',
       type: 'array',
       of: [
         {
