@@ -6,15 +6,23 @@ export type Section = {
   title: string;
 };
 
-export const getGridSections = cache(async (page: "homepage" | "headshotsPage"): Promise<Section[]> => {
-	const sections = await client.fetch<({ title?: string; } | null)[]>(
+type AboutSection = {
+	contact: unknown[];
+	image?: { asset?: { _ref?: string; _type?: string } };
+	content: unknown[];
+};
+
+export const getGridSections = cache(async (page: "homepage" | "headshotsPage"): Promise<Section[]> => {	
+	return await client.fetch<({ title: string; } | null)[]>(
 		`*[_type == $page][0].subsections[]->{ title }`,
 		{ page }
 	);
-	
-	return sections.filter(
-		(section): section is Section => Boolean(section?.title)
-	);
+});
+
+export const getAboutSection = cache(async (): Promise<AboutSection | null> => {
+	  return await client.fetch<AboutSection | null>(
+		`*[_type == "about"][0]{contact, image, content}`,
+	  );
 });
 
 export const HOMEPAGE_QUERY = defineQuery(`*[_type == "homepage"][0]{

@@ -50,7 +50,7 @@ export default function ImageWrapper( {photoAsset, altText} : {photoAsset: any, 
           alt={altText}
           width={width}
           height={height}
-          placeholder="blur"
+          placeholder={blurDataURL ? "blur" : undefined}   // only use blur placeholder if we have a blurDataURL
           blurDataURL={blurDataURL}
           className={`transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'}`}
           ref={imgRef}
