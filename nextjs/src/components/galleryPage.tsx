@@ -18,7 +18,7 @@ export default async function GalleryPage({
   if (!activeSection) notFound();
 
   return (
-    <section className="relative min-h-screen w-full">
+    <section className="relative w-full">
       {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
       <div className={photo ? "pointer-events-none absolute inset-0 z-0 overflow-hidden" : "relative"}>
         <GridSection photos={activeSection.photos ?? []} />

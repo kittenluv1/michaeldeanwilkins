@@ -35,20 +35,22 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth">
-      <body className={ebGaramond.className}>
+      <body className={`${ebGaramond.className} min-h-screen h-screen flex w-full flex-col items-center`}>
         <ImageLoadProvider>
           <Splash />
-          <main className="w-full flex flex-col items-center">
-            <Link className="max-w-3/4 mt-10 p-4" href={`/`} id="#top">
-              <img
-                className="w-full h-6 pointer-events-none"
-                src="/logo.svg"
-                alt="Michael Dean Wilkins logo"
-              />
-            </Link>
-            <Suspense>
-              <Nav sections={sections} />
-            </Suspense>
+          <header>
+              <Link className="max-w-3/4 mt-10 p-4" href={`/`} id="#top">
+                <img
+                  className="w-full h-6 pointer-events-none"
+                  src="/logo.svg"
+                  alt="Michael Dean Wilkins logo"
+                />
+              </Link>
+              <Suspense>
+                <Nav sections={sections} />
+              </Suspense>
+            </header>
+          <main className="flex-1">
             {children}
           </main>
         </ImageLoadProvider>
