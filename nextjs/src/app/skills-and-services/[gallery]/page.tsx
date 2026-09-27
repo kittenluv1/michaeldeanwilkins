@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getSectionTitles } from "@/sanity/queries";
+import { getSectionTitles } from "@/sanity/queries/fetch";
 import GalleryPage from "@/components/galleryPage";
 import { slugify } from "@/lib/utils";
 

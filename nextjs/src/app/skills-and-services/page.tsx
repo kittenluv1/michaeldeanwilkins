@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ImageWrapper from "@/components/image";
-import { getSkillsAndServicesPage } from "@/sanity/queries";
+import { getSkillsAndServicesPage } from "@/sanity/queries/fetch";
 import { slugify } from "@/lib/utils";
 
 export default async function SkillsAndServicesIndex() {

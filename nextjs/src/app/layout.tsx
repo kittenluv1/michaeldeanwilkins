@@ -10,7 +10,7 @@ import { ImageLoadProvider } from "@/components/ImageLoadProvider";
 import Splash from "@/components/Splash";
 import Nav from "@/components/nav";
 import { Suspense } from "react";
-import { getSectionTitles } from "@/sanity/queries";
+import { getSectionTitles } from "@/sanity/queries/fetch";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],

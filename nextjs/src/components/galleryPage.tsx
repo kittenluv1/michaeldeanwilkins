@@ -2,7 +2,7 @@ import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import GridSection from "@/components/gridSection";
 import ImagePopup from "@/components/imagePopup";
-import { getGallery } from "@/sanity/queries";
+import { getGallery } from "@/sanity/queries/fetch";
 
 export default async function GalleryPage({
   galleryTitle,

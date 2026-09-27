@@ -1,4 +1,4 @@
-import { HEADSHOTS_QUERY } from "@/sanity/queries";
+import { HEADSHOTS_QUERY } from "@/sanity/queries/fetch";
 import { sanityFetch } from "@/sanity/live";
 import GridSection from "@/components/gridSection";
 import ImagePopup from "@/components/imagePopup";

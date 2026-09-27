@@ -1,4 +1,4 @@
-import { getAboutSection } from "@/sanity/queries";
+import { getAboutSection } from "@/sanity/queries/fetch";
 import AboutSection from "@/components/aboutSection";
 import { notFound } from "next/navigation";
 
