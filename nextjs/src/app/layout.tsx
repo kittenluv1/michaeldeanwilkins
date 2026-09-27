@@ -2,10 +2,9 @@ import "./globals.css";
 import { VisualEditing } from "next-sanity";
 import { draftMode } from "next/headers";
 import { DisableDraftMode } from "@/components/DisableDraftMode";
-import { sanityFetch, SanityLive } from "@/sanity/live";
+import { SanityLive } from "@/sanity/live";
 import { EB_Garamond } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import Link from "next/link";
 import { ImageLoadProvider } from "@/components/ImageLoadProvider";
 import Splash from "@/components/Splash";
 import Nav from "@/components/nav";
@@ -35,26 +34,17 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth">
-      <body className={`${ebGaramond.className} min-h-screen h-screen flex w-full flex-col items-center`}>
+      <body
+        className={`${ebGaramond.className} min-h-screen h-screen flex w-full flex-col items-center`}
+      >
         <ImageLoadProvider>
           <Splash />
-          <header>
-              <Link className="max-w-3/4 mt-10 p-4" href={`/`} id="#top">
-                <img
-                  className="w-full h-6 pointer-events-none"
-                  src="/logo.svg"
-                  alt="Michael Dean Wilkins logo"
-                />
-              </Link>
-              <Suspense>
-                <Nav sections={sections} />
-              </Suspense>
-            </header>
-          <main className="flex-1">
-            {children}
-          </main>
+          <Suspense>
+            <Nav sections={sections} />
+          </Suspense>
+          <main className="flex-1 w-full">{children}</main>
         </ImageLoadProvider>
-        <footer className="w-full flex justify-between items-end pb-10 px-8">
+        <footer className="w-full flex justify-between items-end py-10 px-8">
           <span className="font-semibold">
             Michael Dean Wilkins &copy; {currentYear}
           </span>

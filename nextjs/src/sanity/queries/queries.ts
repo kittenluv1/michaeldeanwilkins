@@ -26,15 +26,44 @@ export const GALLERY_QUERY = defineQuery(`
   }
 }`);
 
-export const SKILLS_AND_SERVICES_QUERY = defineQuery(`
-  *[_type == "skillsAndServices"][0]{
-    hero{
+export const SELECTED_WORKS_QUERY = defineQuery(`
+  *[_type == "homepage"][0]{
+    hero[]{
+    _type,
+    _type == "image" => {
       asset->{
         _id,
         url,
-        metadata{lqip,dimensions}
+        metadata{lqip, dimensions}
       }
     },
+    _type == "file" => {
+      asset->{
+        _id,
+        url,
+      }
+    }
+  }
+  }`);
+
+export const SKILLS_AND_SERVICES_QUERY = defineQuery(`
+  *[_type == "skillsAndServices"][0]{
+    hero[]{
+    _type,
+    _type == "image" => {
+      asset->{
+        _id,
+        url,
+        metadata{lqip, dimensions}
+      }
+    },
+    _type == "file" => {
+      asset->{
+        _id,
+        url,
+      }
+    }
+  },
     galleries[]{
       gallery->{_id, title},
       galleryImage{

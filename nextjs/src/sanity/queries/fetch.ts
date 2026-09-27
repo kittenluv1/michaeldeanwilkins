@@ -1,8 +1,17 @@
 import { cache } from "react";
 import { client } from "../client";
 import { sanityFetch } from "../live";
-import type { AboutSection, Gallery, SkillsAndServicesPage } from "./types";
-import { GALLERY_QUERY, SKILLS_AND_SERVICES_QUERY } from "./queries";
+import type {
+  AboutSection,
+  Gallery,
+  SkillsAndServicesPage,
+  SelectedWorksPage,
+} from "./types";
+import {
+  GALLERY_QUERY,
+  SKILLS_AND_SERVICES_QUERY,
+  SELECTED_WORKS_QUERY,
+} from "./queries";
 
 export const getSectionTitles = cache(
   async (): Promise<{
@@ -45,6 +54,17 @@ export const getGallery = cache(
       stega: true,
     });
     return gallery as Gallery | null;
+  },
+);
+
+export const getSelectedWorksPage = cache(
+  async (): Promise<SelectedWorksPage | null> => {
+    const { data: page } = await sanityFetch({
+      query: SELECTED_WORKS_QUERY,
+      stega: true,
+    });
+
+    return page as SelectedWorksPage | null;
   },
 );
 

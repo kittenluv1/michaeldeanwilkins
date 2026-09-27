@@ -7,6 +7,25 @@ export const selectedWorks = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'hero',
+      title: 'Hero Slider',
+      description: 'Images and videos for the hero slider on the Selected Works landing page',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+        },
+        {
+          type: 'file',
+          title: 'Video',
+          options: {
+            accept: 'video/*',
+          },
+        },
+      ],
+      validation: (rule) => rule.required().min(1),
+    }),
+    defineField({
       name: 'galleries',
       title: 'Galleries',
       description: 'These galleries will be displayed under the "Selected Works" dropdown menu',
@@ -14,7 +33,7 @@ export const selectedWorks = defineType({
       of: [
         {
           type: 'reference',
-          to: [{ type: 'gridSection' }],
+          to: [{type: 'gridSection'}],
         },
       ],
       validation: (rule) => rule.required(),
@@ -23,8 +42,8 @@ export const selectedWorks = defineType({
   preview: {
     prepare() {
       return {
-        title: "Selected Works",
+        title: 'Selected Works',
       }
-    }
-  }
+    },
+  },
 })

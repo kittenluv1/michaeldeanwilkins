@@ -2,12 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import ImageWrapper from "./image";
+import ErrorMessage from "./ErrorMessage";
 
 export default function GridSection({ photos }) {
     const router = useRouter();
 
+    if (!photos?.length) {
+        return <ErrorMessage>No photos available.</ErrorMessage>;
+    }
+
     return (
-        <div className="w-full columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-8 p-8 pt-0">
+        <div className="w-full columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-8 px-8">
             {photos.map((photo: any) => {
                 if (!photo || !photo._id) return null;
                 return (

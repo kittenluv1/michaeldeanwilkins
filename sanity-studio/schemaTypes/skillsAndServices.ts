@@ -7,11 +7,22 @@ export const skillsAndServices = defineType({
   fields: [
     defineField({
       name: 'hero',
-      title: 'Hero Image',
-      description:
-        'This is the hero image for the Skills & Services page. It will be displayed at the top of the page.',
-      type: 'image',
-      validation: (rule) => rule.required(),
+      title: 'Hero Slider',
+      description: 'Images and videos for the hero slider on the Skills & Services landing page',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+        },
+        {
+          type: 'file',
+          title: 'Video',
+          options: {
+            accept: 'video/*',
+          },
+        },
+      ],
+      validation: (rule) => rule.required().min(1),
     }),
     defineField({
       name: 'galleries',

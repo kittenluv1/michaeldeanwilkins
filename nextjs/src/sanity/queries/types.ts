@@ -41,17 +41,12 @@ export type Gallery = {
   }[];
 };
 
+export type SelectedWorksPage = {
+  hero: HeroSlider[];
+};
+
 export type SkillsAndServicesPage = {
-  hero?: {
-    asset?: {
-      _id: string;
-      url: string;
-      metadata?: {
-        lqip?: string;
-        dimensions?: { width: number; height: number };
-      };
-    };
-  };
+  hero: HeroSlider[];
   galleries: {
     gallery?: { _id: string; title: string };
     galleryImage?: {
@@ -66,3 +61,23 @@ export type SkillsAndServicesPage = {
     };
   }[];
 };
+
+export type HeroSlider =
+  | {
+      _type: "image";
+      asset: {
+        _id: string;
+        url: string;
+        metadata?: {
+          lqip?: string;
+          dimensions?: { width: number; height: number };
+        };
+      };
+    }
+  | {
+      _type: "file";
+      asset: {
+        _id: string;
+        url: string;
+      };
+    };

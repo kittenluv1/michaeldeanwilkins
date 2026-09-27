@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import ImageWrapper from "@/components/image";
 import { getSkillsAndServicesPage } from "@/sanity/queries/fetch";
 import { slugify } from "@/lib/utils";
+import HeroSlider from "@/components/heroSlider";
 
 export default async function SkillsAndServicesIndex() {
   const page = await getSkillsAndServicesPage();
@@ -11,15 +12,7 @@ export default async function SkillsAndServicesIndex() {
 
   return (
     <section className="w-full">
-      {page.hero?.asset && (
-        <div className="aspect-[16/7] w-full overflow-hidden">
-          <ImageWrapper
-            photoAsset={page.hero.asset}
-            altText="Skills and services"
-            className="h-full w-full object-cover transition-opacity duration-500"
-          />
-        </div>
-      )}
+      <HeroSlider slides={page.hero} />
 
       <div className="grid grid-cols-1 gap-4 p-4 sm:p-6 md:grid-cols-2 lg:gap-4 lg:p-10">
         {page.galleries.map((entry) => {
