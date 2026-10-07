@@ -12,7 +12,7 @@ export default async function SkillsAndServicesIndex() {
 
   return (
     <section className="w-full">
-      <HeroSlider slides={page.hero} />
+      <HeroSlider slides={page.hero.hero} />
 
       <div className="grid grid-cols-1 gap-4 p-4 sm:p-6 md:grid-cols-2 lg:gap-4 lg:p-10">
         {page.galleries.map((entry) => {

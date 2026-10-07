@@ -23,7 +23,7 @@ export const getSectionTitles = cache(
       skillsAndServices: { title: string }[];
     }>(
       `{
-			"selectedWorks": *[_type == "homepage"][0].galleries[]->{ title },
+			"selectedWorks": coalesce(*[_type == "homepage"][0].galleries[]->{ title }, []),
 			"skillsAndServices": *[_type == "skillsAndServices"][0].galleries[]{
 				"title": gallery->title
 			}

@@ -28,42 +28,72 @@ export const GALLERY_QUERY = defineQuery(`
 
 export const SELECTED_WORKS_QUERY = defineQuery(`
   *[_type == "homepage"][0]{
-    hero[]{
-    _type,
-    _type == "image" => {
-      asset->{
+    homepageSections[]{
+      heroSlider->{
         _id,
-        url,
-        metadata{lqip, dimensions}
-      }
-    },
-    _type == "file" => {
-      asset->{
+        title,
+        hero[]{
+          _type,
+          _type == "image" => {
+            asset->{
+              _id,
+              url,
+              metadata{lqip, dimensions}
+            }
+          },
+          _type == "file" => {
+            asset->{
+              _id,
+              url,
+            }
+          }
+        }
+      },
+      photos[]->{
         _id,
-        url,
+        title,
+        mainImage{
+          asset->{
+            _id,
+            url,
+            metadata{lqip, dimensions}
+          }
+        },
+        altText,
+        relatedPhotos[]{
+          asset->{
+            _id,
+            url,
+            metadata{lqip, dimensions}
+          }
+        }
       }
     }
   }
-  }`);
+`);
 
 export const SKILLS_AND_SERVICES_QUERY = defineQuery(`
   *[_type == "skillsAndServices"][0]{
-    hero[]{
-    _type,
-    _type == "image" => {
-      asset->{
-        _id,
-        url,
-        metadata{lqip, dimensions}
+    hero->{
+      _id,
+      title,
+      hero[]{
+        _type,
+        _type == "image" => {
+          asset->{
+            _id,
+            url,
+            metadata{lqip, dimensions}
+          }
+        },
+        _type == "file" => {
+          asset->{
+            _id,
+            url,
+          }
+        }
       }
     },
-    _type == "file" => {
-      asset->{
-        _id,
-        url,
-      }
-    }
-  },
     galleries[]{
       gallery->{_id, title},
       galleryImage{

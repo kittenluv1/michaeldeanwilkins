@@ -42,11 +42,56 @@ export type Gallery = {
 };
 
 export type SelectedWorksPage = {
-  hero: HeroSlider[];
+  homepageSections: SelectedWorksSection[];
+};
+
+export type SelectedWorksSection = {
+  heroSlider: {
+    _id: string;
+    title: string;
+    hero: HeroSlider[];
+  };
+  photos: Photo[];
+};
+
+export type Photo = {
+  _id: string;
+  title: string;
+  mainImage: {
+    asset: {
+      _id: string;
+      url: string;
+      metadata: {
+        lqip: string;
+        dimensions: {
+          width: number;
+          height: number;
+        };
+      };
+    };
+  };
+  altText: string;
+  relatedPhotos: {
+    asset: {
+      _id: string;
+      url: string;
+      metadata: {
+        lqip: string;
+        dimensions: {
+          width: number;
+          height: number;
+        };
+      };
+    };
+  }[];
 };
 
 export type SkillsAndServicesPage = {
-  hero: HeroSlider[];
+  hero: {
+    _id: string;
+    title: string;
+    hero: HeroSlider[];
+  };
   galleries: {
     gallery?: { _id: string; title: string };
     galleryImage?: {

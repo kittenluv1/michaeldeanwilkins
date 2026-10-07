@@ -7,19 +7,47 @@ export const selectedWorks = defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'hero',
-      title: 'Hero Slider',
-      description: 'Images and videos for the hero slider on the Selected Works landing page',
+      name: 'homepageSections',
+      title: 'Homepage Sections',
+      description:
+        'Homepage sections include a hero slider and custom photo galleries. These sections will be displayed on the homepage of the website.',
       type: 'array',
       of: [
         {
-          type: 'image',
-        },
-        {
-          type: 'file',
-          title: 'Video',
-          options: {
-            accept: 'video/*',
+          type: 'object',
+          name: 'homepageSectionItem',
+          title: 'Homepage Section',
+          fields: [
+            defineField({
+              name: 'heroSlider',
+              title: 'Hero Slider',
+              type: 'reference',
+              to: [{type: 'heroSlider'}],
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'photos',
+              title: 'Photos',
+              type: 'array',
+              of: [
+                {
+                  type: 'reference',
+                  to: [{type: 'photo'}],
+                },
+              ],
+              validation: (rule) => rule.required().min(8).max(8),
+            }),
+          ],
+          validation: (rule) => rule.required(),
+          preview: {
+            select: {
+              title: 'heroSlider.title',
+            },
+            prepare({title}) {
+              return {
+                title: title || 'Homepage Section',
+              }
+            },
           },
         },
       ],

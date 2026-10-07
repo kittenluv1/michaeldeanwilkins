@@ -1,4 +1,5 @@
 import HeroSlider from "@/components/heroSlider";
+import GridSection from "@/components/gridSection";
 import { getSelectedWorksPage } from "@/sanity/queries/fetch";
 import notFound from "../not-found";
 
@@ -9,7 +10,12 @@ export default async function SelectedWorksIndex() {
 
   return (
     <section className="w-full">
-      <HeroSlider slides={page.hero} />
+      {page.homepageSections.map((section) => (
+        <div key={section.heroSlider._id}>
+          <HeroSlider slides={section.heroSlider.hero} />
+          <GridSection photos={section.photos} />
+        </div>
+      ))}
     </section>
   );
 }
