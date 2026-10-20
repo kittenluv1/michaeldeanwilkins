@@ -55,7 +55,7 @@ export default function ObjectDemo() {
       >
         {createElement("model-viewer", {
           ref: viewerRef,
-          src: "/obj/Extract7.glb",
+          src: "/assets/obj/Extract7.glb",
           alt: "Interactive 3D model",
           "camera-controls": true,
           "auto-rotate": true,

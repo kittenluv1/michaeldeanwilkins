@@ -20,7 +20,8 @@ const ebGaramond = EB_Garamond({
 
 export const metadata = {
   title: "Michael Dean Wilkins",
-  description: "Michael Dean Wilkins fashion editorial photography",
+  description:
+    "Michael Dean Wilkins fashion editorial photography and full service production studio.",
 };
 
 export default async function RootLayout({
