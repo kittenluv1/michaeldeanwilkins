@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
 import ImageWrapper from "./image";
 import ErrorMessage from "./ErrorMessage";
 import type { HeroSlider as HeroSlide } from "@/sanity/queries/types";
 
 const AUTO_FADE_INTERVAL = 8000;
+const FADE_DURATION = 1800;
 
 export default function HeroSlider({
   slides,
@@ -14,8 +16,6 @@ export default function HeroSlider({
 }) {
   const heroSlides = (slides ?? []).slice(0, 3);
   const [index, setIndex] = useState(0);
-  const [previousIndex, setPreviousIndex] = useState<number | null>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [autoFadeActive, setAutoFadeActive] = useState(true);
 
   const mediaTypes = new Set(heroSlides.map((slide) => slide._type));
@@ -23,10 +23,22 @@ export default function HeroSlider({
   const isImageBlock = mediaTypes.has("image");
   const currentSlide = heroSlides[index];
 
+  const changeSlide = useCallback(
+    (nextIndex: number, pauseAutoFade = false) => {
+      if (nextIndex === index) {
+        return;
+      }
+
+      if (pauseAutoFade) {
+        setAutoFadeActive(false);
+      }
+      setIndex(nextIndex);
+    },
+    [index],
+  );
+
   useEffect(() => {
     setIndex(0);
-    setPreviousIndex(null);
-    setIsTransitioning(false);
     setAutoFadeActive(true);
   }, [slides]);
 
@@ -36,14 +48,11 @@ export default function HeroSlider({
     }
 
     const timer = window.setInterval(() => {
-      setPreviousIndex(index);
-      setIndex((currentIndex) => (currentIndex + 1) % heroSlides.length);
-      setIsTransitioning(false);
-      requestAnimationFrame(() => setIsTransitioning(true));
+      changeSlide((index + 1) % heroSlides.length);
     }, AUTO_FADE_INTERVAL);
 
     return () => window.clearInterval(timer);
-  }, [autoFadeActive, heroSlides.length, index, isImageBlock]);
+  }, [autoFadeActive, changeSlide, heroSlides.length, index, isImageBlock]);
 
   if (heroSlides.length === 0) {
     return (
@@ -63,25 +72,11 @@ export default function HeroSlider({
   }
 
   const stopAutoFade = () => setAutoFadeActive(false);
-  const goToSlide = (nextIndex: number) => {
-    if (nextIndex === index) {
-      return;
-    }
-
-    stopAutoFade();
-    setPreviousIndex(index);
-    setIndex(nextIndex);
-    setIsTransitioning(false);
-    requestAnimationFrame(() => setIsTransitioning(true));
-    window.setTimeout(() => setPreviousIndex(null), 1800);
-  };
   const showPrevious = () => {
-    goToSlide(
-      index === 0 ? heroSlides.length - 1 : index - 1,
-    );
+    changeSlide(index === 0 ? heroSlides.length - 1 : index - 1, true);
   };
   const showNext = () => {
-    goToSlide((index + 1) % heroSlides.length);
+    changeSlide((index + 1) % heroSlides.length, true);
   };
 
   return (
@@ -89,20 +84,18 @@ export default function HeroSlider({
       className="relative h-[90vh] min-h-[28rem] w-full overflow-hidden"
       onClick={stopAutoFade}
     >
-      {previousIndex !== null && (
-        <div className="absolute inset-0 h-full w-full opacity-100 transition-opacity duration-[1800ms] ease-in-out">
-          <SlideMedia slide={heroSlides[previousIndex]} />
-        </div>
-      )}
-      <div
-        className={`absolute inset-0 h-full w-full transition-opacity duration-[1800ms] ease-in-out ${
-          previousIndex === null || isTransitioning
-            ? "opacity-100"
-            : "opacity-0"
-        }`}
-      >
-        <SlideMedia slide={currentSlide} />
-      </div>
+      <AnimatePresence initial={false} mode="sync">
+        <motion.div
+          key={currentSlide.asset._id}
+          className="absolute inset-0 h-full w-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: FADE_DURATION / 1000, ease: "easeInOut" }}
+        >
+          <SlideMedia slide={currentSlide} />
+        </motion.div>
+      </AnimatePresence>
 
       {heroSlides.length > 1 && (
         <>
@@ -110,17 +103,25 @@ export default function HeroSlider({
             type="button"
             aria-label="Previous slide"
             onClick={showPrevious}
-            className="absolute left-4 top-1/2 z-10 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70"
+            className="absolute left-4 top-1/2 z-10 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70 hover:cursor-pointer"
           >
-            &lt;
+            <img
+              src="/>.svg"
+              alt="Previous"
+              className="h-8 w-8 -scale-x-100 drop-shadow-[0_0_10px_rgba(0,0,0,1)]"
+            />
           </button>
           <button
             type="button"
             aria-label="Next slide"
             onClick={showNext}
-            className="absolute right-4 top-1/2 z-10 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70"
+            className="absolute right-4 top-1/2 z-10 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70 hover:cursor-pointer"
           >
-            &gt;
+            <img
+              src="/>.svg"
+              alt="Next"
+              className="h-8 w-8 drop-shadow-[0_0_10px_rgba(0,0,0,1)]"
+            />
           </button>
         </>
       )}
@@ -143,7 +144,7 @@ function SlideMedia({ slide }: { slide: HeroSlide }) {
     <ImageWrapper
       photoAsset={slide.asset}
       altText="Selected Works"
-      className="h-full w-full object-cover"
+      className="h-full w-full object-cover !opacity-100"
     />
   );
 }
