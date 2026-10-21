@@ -1,5 +1,5 @@
 import HeroSlider from "@/components/heroSlider";
-import GridSection from "@/components/gridSection";
+import GridSection from "@/components/galleryGrid";
 import { getSelectedWorksPage } from "@/sanity/queries/fetch";
 import notFound from "../not-found";
 

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getSectionTitles } from "@/sanity/queries/fetch";
-import GalleryPage from "@/components/galleryPage";
+import { getGallery } from "@/sanity/queries/fetch";
+import GridSection from "@/components/galleryGrid";
 import { slugify } from "@/lib/utils";
 
 export async function generateStaticParams() {
@@ -19,11 +20,19 @@ export default async function SkillsAndServicesGallery({
   searchParams: Promise<{ photo?: string }>;
 }) {
   const { gallery } = await params;
+  const { photo } = await searchParams;
   const { skillsAndServices } = await getSectionTitles();
-  const allowedGalleries = skillsAndServices.map((section) => slugify(section.title));
-  const gallerySection = skillsAndServices.find((section) => slugify(section.title) === gallery);
+  const allowedGalleries = skillsAndServices.map((section) =>
+    slugify(section.title),
+  );
+  const gallerySection = skillsAndServices.find(
+    (section) => slugify(section.title) === gallery,
+  );
 
   if (!allowedGalleries.includes(gallery) || !gallerySection) notFound();
 
-  return <GalleryPage galleryTitle={gallerySection.title} searchParams={searchParams} />;
+  const galleryData = await getGallery(gallerySection.title);
+  if (!galleryData) notFound();
+
+  return <GridSection photos={galleryData.photos ?? []} photoId={photo} />;
 }
