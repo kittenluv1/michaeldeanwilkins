@@ -22,7 +22,9 @@ export default function GridSection({ photos }) {
                         onClick={() => {
                             const params = new URLSearchParams(window.location.search);
                             params.set('photo', photo?._id); // only updates photo param
-                            router.push(`${window.location.pathname}?${params.toString()}`);
+                            router.push(`${window.location.pathname}?${params.toString()}`, {
+                                scroll: false,
+                            });
                             }}>
                         <div className="w-full mb-8 break-inside-avoid hover:opacity-75 transition-opacity duration-200">
                             <ImageWrapper photoAsset={photo?.mainImage?.asset} altText={photo?.altText} />

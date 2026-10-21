@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { slugify } from "@/lib/utils";
 
 const SCROLL_THRESHOLD = 50;
@@ -16,6 +16,7 @@ export default function Nav({
   };
 }) {
   const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
   // reusable classes for nav text color based on scroll position and page type
@@ -37,6 +38,28 @@ export default function Nav({
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLandingPage]);
+
+  // Update CSS variable for header height so modal can be positioned below it
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const updateHeaderHeight = () => {
+      document.documentElement.style.setProperty(
+        "--site-header-height",
+        `${header.offsetHeight}px`,
+      );
+    };
+
+    updateHeaderHeight();
+    const observer = new ResizeObserver(updateHeaderHeight);
+    observer.observe(header);
+
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.removeProperty("--site-header-height");
+    };
+  }, []);
 
   const navigation = [
     {
@@ -76,6 +99,7 @@ export default function Nav({
 
   return (
     <header
+      ref={headerRef}
       className={`${isLandingPage ? "fixed" : "sticky"} top-0 z-10 py-6 flex w-full flex-wrap justify-center transition-[background-color,color] duration-1000 ${
         isLandingPage && !hasScrolled
           ? "left-0 bg-transparent text-white"

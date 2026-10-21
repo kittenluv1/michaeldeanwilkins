@@ -36,14 +36,14 @@ export default async function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth">
       <body
-        className={`${ebGaramond.className} min-h-screen h-screen flex w-full flex-col items-center`}
+        className={`${ebGaramond.className} min-h-screen flex w-full flex-col items-center`}
       >
         <ImageLoadProvider>
           <Splash />
           <Suspense>
             <Nav sections={sections} />
           </Suspense>
-          <main className="flex-1 w-full">{children}</main>
+          <main className="relative flex-1 w-full">{children}</main>
         </ImageLoadProvider>
         <footer className="w-full flex justify-between items-end py-10 px-8">
           <span className="font-semibold">

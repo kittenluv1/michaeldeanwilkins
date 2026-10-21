@@ -1,7 +1,7 @@
 import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import GridSection from "@/components/gridSection";
-import ImagePopup from "@/components/imagePopup";
+import ImageModal from "@/components/imageModal";
 import { getGallery } from "@/sanity/queries/fetch";
 
 export default async function GalleryPage({
@@ -19,10 +19,8 @@ export default async function GalleryPage({
 
   return (
     <section className="relative w-full">
-      {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
-      <div className={photo ? "pointer-events-none absolute inset-0 z-0 overflow-hidden" : "relative"}>
-        <GridSection photos={activeSection.photos ?? []} />
-      </div>
+      {photo && <ImageModal photoId={photo} photos={activeSection.photos} />}
+      <GridSection photos={activeSection.photos ?? []} />
     </section>
   );
 }
