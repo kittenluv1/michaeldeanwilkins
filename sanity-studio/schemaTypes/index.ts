@@ -1,7 +1,17 @@
-import { gridSection } from './gridSection'
-import {homePage} from './homePage'
+import {gridSection} from './gridSection'
+import {selectedWorks} from './homePage'
 import {about} from './aboutSection'
 import {photoType} from './photoType'
-import { headshotsPage } from './headshotsPage'
+import {skillsAndServices} from './skillsAndServices'
+import {privatePage} from './privatePage'
+import {heroSlider} from './heroSlider'
 
-export const schemaTypes = [homePage, gridSection, headshotsPage, about, photoType]
+export const schemaTypes = [
+  selectedWorks,
+  skillsAndServices,
+  gridSection,
+  privatePage,
+  about,
+  photoType,
+  heroSlider,
+]
