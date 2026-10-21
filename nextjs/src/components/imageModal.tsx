@@ -14,14 +14,7 @@ export default function ImageModal({ photoId, photos }) {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
     if (!dialog.open) dialog.showModal();
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
   }, []);
 
   const closeModal = () => {
@@ -45,7 +38,7 @@ export default function ImageModal({ photoId, photos }) {
   return (
     <dialog
       ref={dialogRef}
-      className="fixed top-[var(--site-header-height,0px)] left-0 z-[9999] m-0 h-[calc(100dvh-var(--site-header-height,0px))] max-h-none w-full max-w-none overflow-y-auto overscroll-contain bg-white/97 px-15 pb-15 backdrop:bg-transparent"
+      className="fixed top-[var(--site-header-height,0px)] left-0 z-[9999] m-0 h-[calc(100dvh-var(--site-header-height,0px))] max-h-none w-full max-w-none overflow-y-auto overscroll-contain bg-white/97 pt-2 px-15 pb-15 backdrop:bg-transparent"
       onClick={(event) => {
         if (event.target === event.currentTarget) closeModal();
       }}

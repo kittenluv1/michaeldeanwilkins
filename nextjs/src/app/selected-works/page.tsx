@@ -3,7 +3,12 @@ import GridSection from "@/components/galleryGrid";
 import { getSelectedWorksPage } from "@/sanity/queries/fetch";
 import notFound from "../not-found";
 
-export default async function SelectedWorksIndex() {
+export default async function SelectedWorksIndex({
+  searchParams,
+}: {
+  searchParams: Promise<{ photo?: string }>;
+}) {
+  const { photo } = await searchParams;
   const page = await getSelectedWorksPage();
 
   if (!page) notFound();
@@ -13,7 +18,14 @@ export default async function SelectedWorksIndex() {
       {page.homepageSections.map((section) => (
         <div key={section.heroSlider._id}>
           <HeroSlider slides={section.heroSlider.hero} />
-          <GridSection photos={section.photos} />
+          <GridSection
+            photos={section.photos}
+            photoId={
+              photo && section.photos.some((item) => item?._id === photo)
+                ? photo
+                : undefined
+            }
+          />
         </div>
       ))}
     </section>
