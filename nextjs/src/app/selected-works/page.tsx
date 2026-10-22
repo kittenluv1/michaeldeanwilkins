@@ -1,8 +1,10 @@
 import HeroSlider from "@/components/heroSlider";
 import GridSection from "@/components/galleryGrid";
-import { getSelectedWorksPage } from "@/sanity/queries/fetch";
+import { getSectionTitles, getSelectedWorksPage } from "@/sanity/queries/fetch";
 import notFound from "../not-found";
 import ErrorMessage from "@/components/ErrorMessage";
+import Link from "next/link";
+import { slugify } from "@/lib/utils";
 
 export default async function SelectedWorksIndex({
   searchParams,
@@ -17,6 +19,8 @@ export default async function SelectedWorksIndex({
   if (!page.homepageSections || page.homepageSections.length === 0) {
     return <ErrorMessage>No homepage sections found.</ErrorMessage>;
   }
+
+  const { selectedWorks: sections } = await getSectionTitles();
 
   return (
     <section className="w-full">
@@ -36,6 +40,20 @@ export default async function SelectedWorksIndex({
           </div>
         </div>
       ))}
+      <div className="flex flex-col text-2xl items-center justify-center gap-4 text-center m-10">
+        <p className="pb-6">EXPLORE GALLERIES:</p>
+        <div className="flex flex-wrap items-center justify-center gap-20">
+          {sections.map((section) => (
+            <Link
+              key={section.title}
+              href={`/selected-works/${slugify(section.title)}`}
+              className="mb-4 text-lg hover:underline"
+            >
+              [ {section.title.toUpperCase()} ]
+            </Link>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

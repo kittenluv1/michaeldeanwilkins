@@ -46,9 +46,10 @@ export default async function RootLayout({
           <main className="flex-1 w-full">{children}</main>
         </ImageLoadProvider>
         <footer className="w-full flex justify-between items-end py-10 px-8">
-          <span className="font-semibold">
-            Michael Dean Wilkins &copy; {currentYear}
-          </span>
+          <div>
+            <p>studio@michaeldeanwilkins.com</p>
+            <p>bookings@michaeldeanwilkins.com</p>
+          </div>
           <div className="flex items-center gap-4">
             <a
               href="https://www.instagram.com/michaeldean__/"
@@ -65,6 +66,9 @@ export default async function RootLayout({
               <img src="/circle-arrow.svg" alt="Back to top" className="h-8" />
             </a>
           </div>
+          <span className="absolute left-1/2 -translate-x-1/2 font-semibold">
+            Michael Dean Wilkins &copy; {currentYear}
+          </span>
         </footer>
         {/* vercel and sanity tools */}
         <Analytics />

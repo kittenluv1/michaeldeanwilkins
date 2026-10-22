@@ -6,7 +6,7 @@ export const structure: StructureResolver = (S) =>
     .title('Content')
     .items([
       S.listItem().title('Selected Works').icon(FaHome).child(
-        S.document().schemaType('selectedWorks').documentId('27b8827a-7dba-4c47-b9d3-86af75c01064'), // fixed ID for singleton
+        S.document().schemaType('homepage').documentId('27b8827a-7dba-4c47-b9d3-86af75c01064'), // fixed ID for singleton
       ),
       S.listItem()
         .title('Skills & Services')
@@ -34,7 +34,7 @@ export const structure: StructureResolver = (S) =>
         const id = listItem.getId()
         return (
           id !== undefined &&
-          !['selectedWorks'].includes(id) &&
+          !['homepage'].includes(id) &&
           !['skillsAndServices'].includes(id) &&
           !['about'].includes(id) &&
           !['privatePage'].includes(id)

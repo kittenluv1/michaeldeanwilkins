@@ -18,12 +18,20 @@ export default defineConfig({
       resolve: {
         mainDocuments: defineDocuments([
           {
-            route: '/',
+            route: '/selected-works',
             filter: `_type == "homepage"`,
           },
           {
-            route: '/headshots',
-            filter: `_type == "headshotsPage"`,
+            route: '/skills-and-services',
+            filter: `_type == "skillsAndServices"`,
+          },
+          {
+            route: '/contact',
+            filter: `_type == "about"`,
+          },
+          {
+            route: '/private',
+            filter: `_type == "privatePage"`,
           },
         ]),
       },

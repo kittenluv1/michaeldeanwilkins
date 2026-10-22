@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 // the _type of this document is still 'homepage' in the studio because it was initially registered that way. the name is now 'selectedWorks' to reflect the purpose of this document type
 export const selectedWorks = defineType({
-  name: 'selectedWorks',
+  name: 'homepage',
   title: 'Selected Works',
   type: 'document',
   fields: [

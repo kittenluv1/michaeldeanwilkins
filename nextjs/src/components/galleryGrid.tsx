@@ -25,7 +25,7 @@ export default function GridSection({
       {/* Display the image modal if a photo ID is provided from the search params */}
       {photoId && <ImageModal photoId={photoId} photos={photos} />}
       <div
-        className={`w-full gap-8 ${display === "square" ? "grid md:grid-cols-4 grid-cols-2" : "columns-1 sm:columns-2 md:columns-3 lg:columns-4"}`}
+        className={`w-full gap-8 ${display === "square" ? "grid lg:grid-cols-4 grid-cols-2" : "columns-1 sm:columns-2 md:columns-3 lg:columns-4"}`}
       >
         {photos.map((photo: any) => {
           if (!photo || !photo._id) return null;
@@ -56,7 +56,7 @@ export default function GridSection({
                 />
               </div>
               {display === "square" && (
-                <div className="m-2 text-center text-lg transition-opacity duration-200 group-hover/photo:opacity-75">
+                <div className="m-2 text-center text-lg group-hover/photo:underline">
                   {photo?.title}
                 </div>
               )}
