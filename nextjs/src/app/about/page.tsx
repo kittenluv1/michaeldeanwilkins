@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { PortableText } from "@portabletext/react";
 import ImageWrapper from "@/components/image";
 
-export default async function ContactPage() {
+export default async function AboutPage() {
   const about = await getAboutSection();
   if (!about) notFound();
 

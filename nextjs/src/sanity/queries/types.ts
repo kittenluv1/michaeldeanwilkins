@@ -4,6 +4,18 @@ export type AboutSection = {
   content: unknown[];
 };
 
+export type SectionTitle = {
+  title: string;
+};
+
+export type SectionTitles = {
+  selectedWorks: SectionTitle[];
+  portals: (SectionTitle & {
+    galleries: SectionTitle[];
+  })[];
+  about: SectionTitle;
+};
+
 export type Gallery = {
   _id: string;
   _type: string;

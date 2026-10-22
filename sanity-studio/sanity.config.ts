@@ -4,7 +4,16 @@ import {structure} from './structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 import {defineDocuments, presentationTool} from 'sanity/presentation'
+import {slugify} from '../shared/slugify'
 // import { linkField } from "sanity-plugin-link-field";
+
+const slugPattern = (slug: string) =>
+  slugify(slug)
+    .replace(/-and-/g, '*')
+    .split('-')
+    .filter(Boolean)
+    .join('*')
+    .replace(/[^a-zA-Z0-9_*]/g, '')
 
 export default defineConfig({
   name: 'default',
@@ -28,6 +37,30 @@ export default defineConfig({
           {
             route: '/private',
             filter: `_type == "privatePage"`,
+          },
+          {
+            route: '/skills-and-services',
+            filter: `_type == "skillsAndServices"`,
+          },
+          {
+            route: '/selected-works/:gallery',
+            filter: ({params}) =>
+              `_type == "gridSection" && title match "${slugPattern(params.gallery)}"`,
+          },
+          {
+            route: '/:portal',
+            filter: ({params}) =>
+              `_type == "portalPage" && title match "${slugPattern(params.portal)}"`,
+          },
+          {
+            route: '/:portal/:gallery',
+            filter: ({params}) =>
+              `_type == "gridSection" && title match "${slugPattern(params.gallery)}"`,
+          },
+          {
+            route: '/private/:gallery',
+            filter: ({params}) =>
+              `_type == "gridSection" && title match "${slugPattern(params.gallery)}"`,
           },
         ]),
       },

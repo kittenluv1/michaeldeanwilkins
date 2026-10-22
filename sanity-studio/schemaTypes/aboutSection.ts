@@ -1,5 +1,5 @@
 import {defineField, defineType} from 'sanity'
-import { MdFormatColorText } from 'react-icons/md';
+import {MdFormatColorText} from 'react-icons/md'
 // import { linkField } from 'sanity-plugin-link-field';
 
 export const about = defineType({
@@ -8,12 +8,12 @@ export const about = defineType({
   type: 'document',
   icon: MdFormatColorText,
   preview: {
-    select: { title: 'title' },
-    prepare({ title }) {
+    select: {title: 'title'},
+    prepare({title}) {
       return {
         title: title,
         media: MdFormatColorText,
-      };
+      }
     },
   },
   fields: [
@@ -21,6 +21,7 @@ export const about = defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
+      description: 'Title of the about section; appears as a clickable link in the nav bar',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -28,7 +29,7 @@ export const about = defineType({
       title: 'Image',
       type: 'image',
       options: {
-        hotspot: true
+        hotspot: true,
       },
     }),
     defineField({
@@ -36,12 +37,12 @@ export const about = defineType({
       title: 'Contact',
       type: 'array',
       of: [
-        { 
+        {
           type: 'block',
           styles: [
-            { title: 'Heading 1', value: 'h1' },
-            { title: 'Heading 2', value: 'h2' },
-            { title: 'Normal', value: 'normal' },
+            {title: 'Heading 1', value: 'h1'},
+            {title: 'Heading 2', value: 'h2'},
+            {title: 'Normal', value: 'normal'},
           ],
           marks: {
             decorators: [],
@@ -54,11 +55,11 @@ export const about = defineType({
                   {
                     name: 'href',
                     type: 'url',
-                    title: 'URL'
-                  }
-                ]
-              }
-            ]
+                    title: 'URL',
+                  },
+                ],
+              },
+            ],
           },
           lists: [],
         },
@@ -69,15 +70,15 @@ export const about = defineType({
       title: 'Content',
       type: 'array',
       of: [
-        { 
+        {
           type: 'block',
           styles: [
-            { title: 'Heading 1', value: 'h1' },
-            { title: 'Heading 2', value: 'h2' },
-            { title: 'Normal', value: 'normal' },
+            {title: 'Heading 1', value: 'h1'},
+            {title: 'Heading 2', value: 'h2'},
+            {title: 'Normal', value: 'normal'},
           ],
           marks: {
-            decorators: []
+            decorators: [],
           },
           lists: [],
         },
@@ -85,4 +86,4 @@ export const about = defineType({
       validation: (rule) => rule.required(),
     }),
   ],
-});
+})

@@ -26,6 +26,20 @@ export const GALLERY_QUERY = defineQuery(`
   }
 }`);
 
+export const SECTION_TITLES_QUERY = defineQuery(`
+  {
+    "selectedWorks": coalesce(*[_type == "homepage"][0].galleries[]->{ title }, []),
+    "portals": *[_type == "portalPage"]{
+      title,
+      "galleries": galleries[]{
+        "title": gallery->title
+      },
+    },
+    "about": *[_type == "about"][0]{
+      title
+    }
+  }`);
+
 export const SELECTED_WORKS_QUERY = defineQuery(`
   *[_type == "homepage"][0]{
     homepageSections[]{

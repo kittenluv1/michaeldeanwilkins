@@ -4,16 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { slugify } from "@/lib/utils";
+import type { SectionTitles } from "@/sanity/queries/types";
 
 const SCROLL_THRESHOLD = 50;
 
 export default function Nav({
-  sections: { selectedWorks, portals },
+  sections: { selectedWorks, portals, about },
 }: {
-  sections: {
-    selectedWorks: { title: string }[];
-    portals: { title: string; galleries: { title: string }[] }[];
-  };
+  sections: SectionTitles;
 }) {
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
@@ -195,10 +193,10 @@ export default function Nav({
           );
         })}
         <Link
-          href="/contact"
-          className={`text-base ${navTextColor} transition-colors duration-1000 ease-in-out hover:underline ${pathname === "/contact" ? "font-bold" : ""}`}
+          href="/about"
+          className={`text-base ${navTextColor} transition-colors duration-1000 ease-in-out hover:underline ${pathname === "/about" ? "font-bold" : ""}`}
         >
-          Contact & Info
+          {about.title}
         </Link>
       </nav>
     </header>

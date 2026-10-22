@@ -6,32 +6,18 @@ import type {
   Gallery,
   SelectedWorksPage,
   PortalPage,
+  SectionTitles,
 } from "./types";
 import {
   GALLERY_QUERY,
+  SECTION_TITLES_QUERY,
   SELECTED_WORKS_QUERY,
   PORTAL_PAGE_QUERY,
 } from "./queries";
 
 export const getSectionTitles = cache(
-  async (): Promise<{
-    selectedWorks: { title: string }[];
-    portals: { title: string; galleries: { title: string }[] }[];
-  }> => {
-    return await client.fetch<{
-      selectedWorks: { title: string }[];
-      portals: { title: string; galleries: { title: string }[] }[];
-    }>(
-      `{
-			"selectedWorks": coalesce(*[_type == "homepage"][0].galleries[]->{ title }, []),
-      "portals": *[_type == "portalPage"]{
-        title,
-        "galleries": galleries[]{
-          "title": gallery->title
-        }
-      }
-		}`,
-    );
+  async (): Promise<SectionTitles> => {
+    return await client.fetch<SectionTitles>(SECTION_TITLES_QUERY);
   },
 );
 
