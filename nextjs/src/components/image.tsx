@@ -19,9 +19,8 @@ export default function ImageWrapper({
   const width = asset?.metadata?.dimensions?.width || 2000;
   const height = asset?.metadata?.dimensions?.height || 2500;
   const blurDataURL = asset?.metadata?.lqip || undefined;
-  const imageUrl = urlFor(asset).width(width).height(height).quality(85).url();
-  // The ref must be on the image so the splash loader can register it as it
-  // approaches the viewport
+  const imageUrl = urlFor(photo).width(2000).quality(85).url();
+  // The ref must be on the image so the splash loader can register it as it approaches the viewport
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [visible, setVisible] = useState(false);
   const { register, markLoaded } = useImageLoad();

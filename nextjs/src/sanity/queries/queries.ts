@@ -53,6 +53,7 @@ export const SELECTED_WORKS_QUERY = defineQuery(`
         _id,
         title,
         mainImage{
+          ...,
           asset->{
             _id,
             url,

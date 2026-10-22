@@ -22,6 +22,9 @@ export const heroSlider = defineType({
       of: [
         {
           type: 'image',
+          options: {
+            hotspot: true,
+          },
         },
         {
           type: 'file',

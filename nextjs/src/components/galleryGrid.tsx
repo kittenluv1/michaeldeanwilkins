@@ -45,10 +45,10 @@ export default function GridSection({
               }}
             >
               <div
-                className={`w-full hover:opacity-75 transition-opacity duration-200 ${display === "square" ? "aspect-[2/3] border-2 border-red-700" : "mb-8 break-inside-avoid"}`}
+                className={`w-full hover:opacity-75 transition-opacity duration-200 ${display === "square" ? "aspect-[2/3]" : "mb-8 break-inside-avoid"}`}
               >
                 <ImageWrapper
-                  photo={photo?.mainImage?.asset}
+                  photo={photo?.mainImage}
                   altText={photo?.altText}
                   {...(display === "square" && {
                     cover: true,

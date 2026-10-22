@@ -21,7 +21,9 @@ export const photoType = defineType({
       type: 'image',
       description: 'This is the thumbnail image, which is displayed in galleries',
       options: {
-        hotspot: true,
+        hotspot: {
+          previews: [{title: 'Portrait', aspectRatio: 2 / 3}],
+        },
       },
       validation: (rule) => rule.required(),
     }),
@@ -41,9 +43,6 @@ export const photoType = defineType({
       of: [
         {
           type: 'image',
-          options: {
-            hotspot: true,
-          },
         },
       ],
     }),
