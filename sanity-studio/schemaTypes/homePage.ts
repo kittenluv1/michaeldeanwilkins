@@ -35,7 +35,7 @@ export const selectedWorks = defineType({
                   to: [{type: 'photo'}],
                 },
               ],
-              validation: (rule) => rule.required().min(8).max(8),
+              validation: (rule) => rule.required(),
             }),
           ],
           validation: (rule) => rule.required(),

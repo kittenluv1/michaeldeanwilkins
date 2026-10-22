@@ -1,9 +1,11 @@
 import {defineField, defineType} from 'sanity'
+import {MdOutlineViewCarousel} from 'react-icons/md'
 
 export const heroSlider = defineType({
   name: 'heroSlider',
-  title: 'Hero Slider',
+  title: 'Hero Sliders',
   type: 'document',
+  icon: MdOutlineViewCarousel,
   fields: [
     defineField({
       name: 'title',

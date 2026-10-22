@@ -6,19 +6,20 @@ import { useEffect, useRef, useState } from "react";
 import { useImageLoad } from "./ImageLoadProvider";
 
 export default function ImageWrapper({
-  photoAsset,
+  photo,
   altText,
-  className = "transition-opacity duration-500",
+  cover = false,
 }: {
-  photoAsset: any;
+  photo: any; // This can be either a Sanity image object or an asset object
   altText: string;
-  className?: string;
+  cover?: boolean;
 }) {
-  if (!photoAsset) return null;
-  const imageUrl = urlFor(photoAsset).width(2000).quality(85).url();
-  const width = photoAsset?.metadata?.dimensions?.width || 2000;
-  const height = photoAsset?.metadata?.dimensions?.height || 2500;
-  const blurDataURL = photoAsset?.metadata?.lqip || undefined;
+  if (!photo) return null;
+  const asset = photo?.asset ?? photo;
+  const width = asset?.metadata?.dimensions?.width || 2000;
+  const height = asset?.metadata?.dimensions?.height || 2500;
+  const blurDataURL = asset?.metadata?.lqip || undefined;
+  const imageUrl = urlFor(asset).width(width).height(height).quality(85).url();
   // The ref must be on the image so the splash loader can register it as it
   // approaches the viewport
   const imageRef = useRef<HTMLImageElement | null>(null);
@@ -63,7 +64,7 @@ export default function ImageWrapper({
       height={height}
       placeholder={blurDataURL ? "blur" : undefined} // only use blur placeholder if we have a blurDataURL
       blurDataURL={blurDataURL}
-      className={`${className} ${visible ? "opacity-100" : "opacity-0"}`}
+      className={`${cover ? "h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-80" : ""} transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
       ref={imageRef}
       onLoad={() => {
         // flip state so image fades in

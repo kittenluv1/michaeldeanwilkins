@@ -97,13 +97,14 @@ export default function HeroSlider({
         </motion.div>
       </AnimatePresence>
 
+      {/* Navigation buttons and indicators */}
       {heroSlides.length > 1 && (
         <>
           <button
             type="button"
             aria-label="Previous slide"
             onClick={showPrevious}
-            className="absolute left-4 top-1/2 z-10 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70 hover:cursor-pointer"
+            className="absolute left-4 top-1/2 z-9 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70 hover:cursor-pointer"
           >
             <img
               src="/>.svg"
@@ -115,7 +116,7 @@ export default function HeroSlider({
             type="button"
             aria-label="Next slide"
             onClick={showNext}
-            className="absolute right-4 top-1/2 z-10 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70 hover:cursor-pointer"
+            className="absolute right-4 top-1/2 z-9 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70 hover:cursor-pointer"
           >
             <img
               src="/>.svg"
@@ -123,6 +124,26 @@ export default function HeroSlider({
               className="h-8 w-8 drop-shadow-[0_0_10px_rgba(0,0,0,1)]"
             />
           </button>
+          {/* Slide indicators (circles) */}
+          <div className="absolute bottom-6 left-1/2 flex z-9 -translate-x-1/2 gap-3">
+            {heroSlides.map((slide, slideIndex) => (
+              <button
+                key={slide.asset._id}
+                type="button"
+                aria-label={`Go to slide ${slideIndex + 1}`}
+                aria-current={slideIndex === index ? "true" : undefined}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  changeSlide(slideIndex, true);
+                }}
+                className={`h-2 w-2 rounded-full border border-white transition-colors drop-shadow-[0_0_10px_rgba(0,0,0,1)] ${
+                  slideIndex === index
+                    ? "bg-white"
+                    : "bg-transparent hover:bg-white/50 hover:cursor-pointer"
+                }`}
+              />
+            ))}
+          </div>
         </>
       )}
     </div>
@@ -141,10 +162,6 @@ function SlideMedia({ slide }: { slide: HeroSlide }) {
       className="h-full w-full object-cover"
     />
   ) : (
-    <ImageWrapper
-      photoAsset={slide.asset}
-      altText="Selected Works"
-      className="h-full w-full object-cover !opacity-100"
-    />
+    <ImageWrapper photo={slide.asset} altText="Selected Works" cover={true} />
   );
 }

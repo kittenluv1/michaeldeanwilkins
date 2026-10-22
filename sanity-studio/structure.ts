@@ -36,7 +36,8 @@ export const structure: StructureResolver = (S) =>
           id !== undefined &&
           !['selectedWorks'].includes(id) &&
           !['skillsAndServices'].includes(id) &&
-          !['about'].includes(id)
+          !['about'].includes(id) &&
+          !['privatePage'].includes(id)
         )
       }),
     ])

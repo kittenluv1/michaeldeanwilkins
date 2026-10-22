@@ -34,5 +34,9 @@ export default async function SkillsAndServicesGallery({
   const galleryData = await getGallery(gallerySection.title);
   if (!galleryData) notFound();
 
-  return <GridSection photos={galleryData.photos ?? []} photoId={photo} />;
+  return (
+    <div className="px-10">
+      <GridSection photos={galleryData.photos ?? []} photoId={photo} />
+    </div>
+  );
 }

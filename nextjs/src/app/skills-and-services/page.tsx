@@ -17,7 +17,7 @@ export default async function SkillsAndServicesIndex() {
       <div className="grid grid-cols-1 gap-4 p-4 sm:p-6 md:grid-cols-2 lg:gap-4 lg:p-10">
         {page.galleries.map((entry) => {
           const title = entry.gallery?.title;
-          const image = entry.galleryImage?.asset;
+          const image = entry.galleryImage;
 
           if (!title || !image) return null;
 
@@ -27,11 +27,7 @@ export default async function SkillsAndServicesIndex() {
               href={`/skills-and-services/${slugify(title)}`}
               className="group relative aspect-[5/3] overflow-hidden"
             >
-              <ImageWrapper
-                photoAsset={image}
-                altText={title}
-                className="h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-80"
-              />
+              <ImageWrapper photo={image} altText={title} cover={true} />
               <span className="pointer-events-none absolute inset-0 flex items-center justify-center px-6 text-center font-medium text-3xl text-white sm:text-4xl lg:text-5xl xl:text-6xl">
                 {title.toUpperCase()}
               </span>

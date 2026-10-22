@@ -95,6 +95,9 @@ export type SkillsAndServicesPage = {
   galleries: {
     gallery?: { _id: string; title: string };
     galleryImage?: {
+      _type?: string;
+      crop?: any;
+      hotspot?: any;
       asset?: {
         _id: string;
         url: string;

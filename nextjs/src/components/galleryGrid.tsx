@@ -7,9 +7,11 @@ import ImageModal from "./imageModal";
 
 export default function GridSection({
   photos,
+  display = "masonry",
   photoId,
 }: {
   photos: any;
+  display?: "masonry" | "square";
   photoId?: string;
 }) {
   const router = useRouter();
@@ -22,13 +24,15 @@ export default function GridSection({
     <>
       {/* Display the image modal if a photo ID is provided from the search params */}
       {photoId && <ImageModal photoId={photoId} photos={photos} />}
-      <div className="w-full columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-8 px-8">
+      <div
+        className={`w-full gap-8 ${display === "square" ? "grid md:grid-cols-4 grid-cols-2" : "columns-1 sm:columns-2 md:columns-3 lg:columns-4"}`}
+      >
         {photos.map((photo: any) => {
           if (!photo || !photo._id) return null;
           return (
             <div
               key={photo?._id}
-              className="cursor-pointer"
+              className="group/photo cursor-pointer"
               onClick={() => {
                 const params = new URLSearchParams(window.location.search);
                 params.set("photo", photo?._id); // only updates photo param
@@ -40,12 +44,22 @@ export default function GridSection({
                 );
               }}
             >
-              <div className="w-full mb-8 break-inside-avoid hover:opacity-75 transition-opacity duration-200">
+              <div
+                className={`w-full hover:opacity-75 transition-opacity duration-200 ${display === "square" ? "aspect-[2/3] border-2 border-red-700" : "mb-8 break-inside-avoid"}`}
+              >
                 <ImageWrapper
-                  photoAsset={photo?.mainImage?.asset}
+                  photo={photo?.mainImage?.asset}
                   altText={photo?.altText}
+                  {...(display === "square" && {
+                    cover: true,
+                  })}
                 />
               </div>
+              {display === "square" && (
+                <div className="m-2 text-center text-lg transition-opacity duration-200 group-hover/photo:opacity-75">
+                  {photo?.title}
+                </div>
+              )}
             </div>
           );
         })}

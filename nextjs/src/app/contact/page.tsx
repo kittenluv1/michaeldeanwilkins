@@ -5,7 +5,7 @@ import ImageWrapper from "@/components/image";
 
 export default async function ContactPage() {
   const about = await getAboutSection();
-  if (!about) notFound(); 
+  if (!about) notFound();
 
   const PortableTextWrapper = ({ value }) => (
     <PortableText
@@ -13,10 +13,14 @@ export default async function ContactPage() {
       components={{
         block: {
           h1: ({ children }) => (
-            <h1 className="text-4xl font-medium mb-4 text-center">{children}</h1>
+            <h1 className="text-4xl font-medium mb-4 text-center">
+              {children}
+            </h1>
           ),
           h2: ({ children }) => (
-            <h2 className="text-3xl font-medium mb-4 text-center">{children}</h2>
+            <h2 className="text-3xl font-medium mb-4 text-center">
+              {children}
+            </h2>
           ),
           normal: ({ children }) => <p className="text-center">{children}</p>,
         },
@@ -50,7 +54,10 @@ export default async function ContactPage() {
         </div>
 
         {about.image && (
-          <ImageWrapper photoAsset={about.image.asset} altText="Picture of the photographer" />
+          <ImageWrapper
+            photo={about.image.asset}
+            altText="Picture of the photographer"
+          />
         )}
       </div>
     </div>

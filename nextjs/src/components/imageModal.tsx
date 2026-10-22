@@ -61,10 +61,7 @@ export default function ImageModal({ photoId, photos }) {
           className="max-w-5/6 lg:max-w-lg"
           onClick={(event) => event.stopPropagation()}
         >
-          <ImageWrapper
-            photoAsset={photo.mainImage.asset}
-            altText={photo.altText}
-          />
+          <ImageWrapper photo={photo.mainImage.asset} altText={photo.altText} />
         </div>
         {photo.relatedPhotos?.map((relatedPhoto, index) => (
           <div
@@ -72,10 +69,7 @@ export default function ImageModal({ photoId, photos }) {
             className="max-w-5/6 lg:max-w-lg"
             onClick={(event) => event.stopPropagation()}
           >
-            <ImageWrapper
-              photoAsset={relatedPhoto?.asset}
-              altText={photo.altText}
-            />
+            <ImageWrapper photo={relatedPhoto?.asset} altText={photo.altText} />
           </div>
         ))}
       </div>

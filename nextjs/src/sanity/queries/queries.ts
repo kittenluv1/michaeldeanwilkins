@@ -97,6 +97,7 @@ export const SKILLS_AND_SERVICES_QUERY = defineQuery(`
     galleries[]{
       gallery->{_id, title},
       galleryImage{
+        ...,
         asset->{
           _id,
           url,
