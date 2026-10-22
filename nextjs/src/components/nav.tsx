@@ -80,15 +80,23 @@ export default function Nav({
     },
   ];
 
-  function Logo({ color = "white" }) {
+  function colorChangeSvg({
+    url = "/logo.svg",
+    color = "white",
+    className = "h-6 w-full",
+  }: {
+    url?: string;
+    color?: string;
+    className?: string;
+  }) {
     return (
       <div
-        className="w-full h-6 pointer-events-none transition-colors duration-1000"
+        className={`pointer-events-none transition-colors duration-1000 ${className}`}
         style={{
-          maskImage: "url(/logo.svg)",
+          maskImage: `url(${url})`,
           maskSize: "contain",
           maskRepeat: "no-repeat",
-          WebkitMaskImage: "url(/logo.svg)",
+          WebkitMaskImage: `url(${url})`,
           WebkitMaskSize: "contain",
           WebkitMaskRepeat: "no-repeat",
           backgroundColor: color,
@@ -116,8 +124,10 @@ export default function Nav({
             "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0) 100%)",
         }}
       />
-      <Link className="relative z-10 max-w-3/4 w-80 p-4" href={`/`} id="#top">
-        <Logo color={isLandingPage && !hasScrolled ? "white" : "black"} />
+      <Link className="relative z-10 max-w-3/4 w-80 p-4" href="/" id="#top">
+        {colorChangeSvg({
+          color: isLandingPage && !hasScrolled ? "white" : "black",
+        })}
       </Link>
       <nav className="relative z-10 flex w-full flex-wrap justify-center gap-x-7 gap-y-2 px-6 font-light transition-colors duration-1000">
         {navigation.map((item) => {
@@ -131,7 +141,7 @@ export default function Nav({
               onMouseEnter={() => setOpenMenu(item.href)}
               onMouseLeave={() => setOpenMenu(null)}
             >
-              <div className="flex items-center gap-1">
+              <div className="flex items-end gap-2">
                 <Link
                   href={item.href}
                   className={`text-base ${navTextColor} transition-colors duration-1000 ease-in-out hover:underline ${isSectionActive ? "font-bold" : ""}`}
@@ -143,16 +153,16 @@ export default function Nav({
                     type="button"
                     aria-expanded={openMenu === item.href}
                     aria-label={`Toggle ${item.label} menu`}
-                    className="p-2 inline-flex items-center justify-center"
+                    className="inline-flex items-center justify-center"
                     onClick={() =>
                       setOpenMenu(openMenu === item.href ? null : item.href)
                     }
                   >
-                    <img
-                      src="/>.svg"
-                      alt=""
-                      className="rotate-90 block h-3 w-3 align-bottom"
-                    />
+                    {colorChangeSvg({
+                      url: "/>.svg",
+                      color: isLandingPage && !hasScrolled ? "white" : "black",
+                      className: "block h-3 w-3 rotate-90",
+                    })}
                   </button>
                 )}
               </div>
