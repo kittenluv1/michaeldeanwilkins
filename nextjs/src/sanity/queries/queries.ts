@@ -73,42 +73,6 @@ export const SELECTED_WORKS_QUERY = defineQuery(`
   }
 `);
 
-export const SKILLS_AND_SERVICES_QUERY = defineQuery(`
-  *[_type == "skillsAndServices"][0]{
-    hero->{
-      _id,
-      title,
-      hero[]{
-        _type,
-        _type == "image" => {
-          asset->{
-            _id,
-            url,
-            metadata{lqip, dimensions}
-          }
-        },
-        _type == "file" => {
-          asset->{
-            _id,
-            url,
-          }
-        }
-      }
-    },
-    galleries[]{
-      gallery->{_id, title},
-      galleryImage{
-        ...,
-        asset->{
-          _id,
-          url,
-          metadata{lqip,dimensions}
-        }
-      }
-    }
-  }
-`);
-
 export const PORTAL_PAGE_QUERY = defineQuery(`
   *[_type == "portalPage"]{
     _id,

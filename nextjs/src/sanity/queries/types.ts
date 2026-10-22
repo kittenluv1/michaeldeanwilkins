@@ -86,30 +86,6 @@ export type Photo = {
   }[];
 };
 
-export type SkillsAndServicesPage = {
-  hero: {
-    _id: string;
-    title: string;
-    hero: HeroSlider[];
-  };
-  galleries: {
-    gallery?: { _id: string; title: string };
-    galleryImage?: {
-      _type?: string;
-      crop?: any;
-      hotspot?: any;
-      asset?: {
-        _id: string;
-        url: string;
-        metadata?: {
-          lqip?: string;
-          dimensions?: { width: number; height: number };
-        };
-      };
-    };
-  }[];
-};
-
 export type PortalPage = {
   _id: string;
   title: string;

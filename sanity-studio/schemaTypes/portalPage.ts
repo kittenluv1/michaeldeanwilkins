@@ -1,9 +1,11 @@
 import {defineField, defineType} from 'sanity'
+import {LuLayoutPanelTop} from 'react-icons/lu'
 
 export const portalPage = defineType({
   name: 'portalPage',
   title: 'Portal Pages',
   type: 'document',
+  icon: LuLayoutPanelTop,
   fields: [
     defineField({
       name: 'title',

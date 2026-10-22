@@ -1,17 +1,17 @@
-import { defineType, defineField } from 'sanity'
-import { RiLayoutGrid2Fill } from "react-icons/ri";
+import {defineType, defineField} from 'sanity'
+import {RiLayoutMasonryLine} from 'react-icons/ri'
 
 export const gridSection = defineType({
   name: 'gridSection',
   title: 'Galleries',
   type: 'document',
-  icon: RiLayoutGrid2Fill,
+  icon: RiLayoutMasonryLine,
   fields: [
     defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
-      description: 'title of the section; appears as a clickable link in the nav bar', 
+      description: 'title of the section; appears as a clickable link in the nav bar',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -21,7 +21,7 @@ export const gridSection = defineType({
       of: [
         {
           type: 'reference',
-          to: [{ type: 'photo' }],
+          to: [{type: 'photo'}],
         },
       ],
       validation: (rule) => rule.required(),

@@ -22,10 +22,6 @@ export default defineConfig({
             filter: `_type == "homepage"`,
           },
           {
-            route: '/skills-and-services',
-            filter: `_type == "skillsAndServices"`,
-          },
-          {
             route: '/contact',
             filter: `_type == "about"`,
           },

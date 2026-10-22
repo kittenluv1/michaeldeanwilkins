@@ -4,13 +4,11 @@ import { sanityFetch } from "../live";
 import type {
   AboutSection,
   Gallery,
-  SkillsAndServicesPage,
   SelectedWorksPage,
   PortalPage,
 } from "./types";
 import {
   GALLERY_QUERY,
-  SKILLS_AND_SERVICES_QUERY,
   SELECTED_WORKS_QUERY,
   PORTAL_PAGE_QUERY,
 } from "./queries";
@@ -18,19 +16,14 @@ import {
 export const getSectionTitles = cache(
   async (): Promise<{
     selectedWorks: { title: string }[];
-    skillsAndServices: { title: string }[];
     portals: { title: string; galleries: { title: string }[] }[];
   }> => {
     return await client.fetch<{
       selectedWorks: { title: string }[];
-      skillsAndServices: { title: string }[];
       portals: { title: string; galleries: { title: string }[] }[];
     }>(
       `{
 			"selectedWorks": coalesce(*[_type == "homepage"][0].galleries[]->{ title }, []),
-			"skillsAndServices": *[_type == "skillsAndServices"][0].galleries[]{
-				"title": gallery->title
-			},
       "portals": *[_type == "portalPage"]{
         title,
         "galleries": galleries[]{
@@ -86,16 +79,5 @@ export const getSelectedWorksPage = cache(
     });
 
     return page as SelectedWorksPage | null;
-  },
-);
-
-export const getSkillsAndServicesPage = cache(
-  async (): Promise<SkillsAndServicesPage | null> => {
-    const { data: page } = await sanityFetch({
-      query: SKILLS_AND_SERVICES_QUERY,
-      stega: true,
-    });
-
-    return page as SkillsAndServicesPage | null;
   },
 );

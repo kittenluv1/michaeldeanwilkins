@@ -8,11 +8,10 @@ import { slugify } from "@/lib/utils";
 const SCROLL_THRESHOLD = 50;
 
 export default function Nav({
-  sections: { selectedWorks, skillsAndServices, portals },
+  sections: { selectedWorks, portals },
 }: {
   sections: {
     selectedWorks: { title: string }[];
-    skillsAndServices: { title: string }[];
     portals: { title: string; galleries: { title: string }[] }[];
   };
 }) {
@@ -23,9 +22,7 @@ export default function Nav({
   const portalPaths = portals.map((portal) => `/${slugify(portal.title)}`);
   // reusable classes for nav text color based on scroll position and page type
   const isLandingPage =
-    pathname === "/selected-works" ||
-    pathname === "/skills-and-services" ||
-    portalPaths.includes(pathname);
+    pathname === "/selected-works" || portalPaths.includes(pathname);
   const navTextColor =
     isLandingPage && !hasScrolled ? "text-white" : "text-black";
 
@@ -70,14 +67,6 @@ export default function Nav({
       label: "Selected Works",
       href: "/selected-works",
       items: selectedWorks.map((gallery) => ({
-        label: gallery.title,
-        slug: slugify(gallery.title),
-      })),
-    },
-    {
-      label: "Skills & Services",
-      href: "/skills-and-services",
-      items: skillsAndServices.map((gallery) => ({
         label: gallery.title,
         slug: slugify(gallery.title),
       })),
