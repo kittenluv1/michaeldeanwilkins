@@ -138,21 +138,27 @@ export default function Nav({
                 >
                   {item.label}
                 </Link>
-                <button
-                  type="button"
-                  aria-expanded={openMenu === item.href}
-                  aria-label={`Toggle ${item.label} menu`}
-                  className="p-1 text-sm md:hidden"
-                  onClick={() =>
-                    setOpenMenu(openMenu === item.href ? null : item.href)
-                  }
-                >
-                  &#x2304;
-                </button>
+                {item.items.length > 0 && (
+                  <button
+                    type="button"
+                    aria-expanded={openMenu === item.href}
+                    aria-label={`Toggle ${item.label} menu`}
+                    className="p-2 inline-flex items-center justify-center"
+                    onClick={() =>
+                      setOpenMenu(openMenu === item.href ? null : item.href)
+                    }
+                  >
+                    <img
+                      src="/>.svg"
+                      alt=""
+                      className="rotate-90 block h-3 w-3 align-bottom"
+                    />
+                  </button>
+                )}
               </div>
               {/* DROPDOWN MENU */}
               <div
-                className={`absolute left-0 top-full z-20 min-w-36 bg-white px-2 py-2 shadow-sm ${
+                className={`absolute left-1/2 -translate-x-1/2 min-w-full top-full z-20 bg-white px-2 py-2 shadow-sm ${
                   openMenu === item.href ? "block" : "hidden"
                 } group-hover:block`}
               >
