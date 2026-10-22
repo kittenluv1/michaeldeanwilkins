@@ -6,29 +6,50 @@ import type {
   Gallery,
   SkillsAndServicesPage,
   SelectedWorksPage,
+  PortalPage,
 } from "./types";
 import {
   GALLERY_QUERY,
   SKILLS_AND_SERVICES_QUERY,
   SELECTED_WORKS_QUERY,
+  PORTAL_PAGE_QUERY,
 } from "./queries";
 
 export const getSectionTitles = cache(
   async (): Promise<{
     selectedWorks: { title: string }[];
     skillsAndServices: { title: string }[];
+    portals: { title: string; galleries: { title: string }[] }[];
   }> => {
     return await client.fetch<{
       selectedWorks: { title: string }[];
       skillsAndServices: { title: string }[];
+      portals: { title: string; galleries: { title: string }[] }[];
     }>(
       `{
 			"selectedWorks": coalesce(*[_type == "homepage"][0].galleries[]->{ title }, []),
 			"skillsAndServices": *[_type == "skillsAndServices"][0].galleries[]{
 				"title": gallery->title
-			}
+			},
+      "portals": *[_type == "portalPage"]{
+        title,
+        "galleries": galleries[]{
+          "title": gallery->title
+        }
+      }
 		}`,
     );
+  },
+);
+
+export const getPortalPages = cache(async (): Promise<PortalPage[]> => {
+  return await client.fetch<PortalPage[]>(PORTAL_PAGE_QUERY);
+});
+
+export const getPortalPage = cache(
+  async (title: string): Promise<PortalPage | null> => {
+    const pages = await getPortalPages();
+    return pages.find((page) => page.title === title) ?? null;
   },
 );
 

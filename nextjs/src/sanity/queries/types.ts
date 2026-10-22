@@ -110,6 +110,32 @@ export type SkillsAndServicesPage = {
   }[];
 };
 
+export type PortalPage = {
+  _id: string;
+  title: string;
+  hero: {
+    _id: string;
+    title: string;
+    hero: HeroSlider[];
+  };
+  galleries: {
+    gallery?: { _id: string; title: string };
+    galleryImage?: {
+      _type?: string;
+      crop?: unknown;
+      hotspot?: unknown;
+      asset?: {
+        _id: string;
+        url: string;
+        metadata?: {
+          lqip?: string;
+          dimensions?: { width: number; height: number };
+        };
+      };
+    };
+  }[];
+};
+
 export type HeroSlider =
   | {
       _type: "image";
