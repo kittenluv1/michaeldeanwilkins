@@ -2,18 +2,15 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {structure} from './structure'
 import {visionTool} from '@sanity/vision'
-import {schemaTypes} from './schemaTypes'
+import {schemaTypes} from './src/schemaTypes'
 import {defineDocuments, presentationTool} from 'sanity/presentation'
-import {slugify} from '../shared/slugify'
+import {slugify} from './src/lib/slugify'
 // import { linkField } from "sanity-plugin-link-field";
 
-const slugPattern = (slug: string) =>
-  slugify(slug)
-    .replace(/-and-/g, '*')
-    .split('-')
-    .filter(Boolean)
-    .join('*')
-    .replace(/[^a-zA-Z0-9_*]/g, '')
+const titleMatch = (value: string) =>
+  slugify(value)
+    .replace(/-and-/g, ' & ')
+    .replace(/-/g, ' ')
 
 export default defineConfig({
   name: 'default',
@@ -31,7 +28,7 @@ export default defineConfig({
             filter: `_type == "homepage"`,
           },
           {
-            route: '/contact',
+            route: '/about',
             filter: `_type == "about"`,
           },
           {
@@ -39,28 +36,24 @@ export default defineConfig({
             filter: `_type == "privatePage"`,
           },
           {
-            route: '/skills-and-services',
-            filter: `_type == "skillsAndServices"`,
-          },
-          {
             route: '/selected-works/:gallery',
             filter: ({params}) =>
-              `_type == "gridSection" && title match "${slugPattern(params.gallery)}"`,
-          },
-          {
-            route: '/:portal',
-            filter: ({params}) =>
-              `_type == "portalPage" && title match "${slugPattern(params.portal)}"`,
-          },
-          {
-            route: '/:portal/:gallery',
-            filter: ({params}) =>
-              `_type == "gridSection" && title match "${slugPattern(params.gallery)}"`,
+              `_type == "gridSection" && title match "${titleMatch(params.gallery)}"`,
           },
           {
             route: '/private/:gallery',
             filter: ({params}) =>
-              `_type == "gridSection" && title match "${slugPattern(params.gallery)}"`,
+              `_type == "gridSection" && title match "${titleMatch(params.gallery)}"`,
+          },
+          {
+            route: '/:portal/:gallery',
+            filter: ({params}) =>
+              `_type == "gridSection" && title match "${titleMatch(params.gallery)}"`,
+          },
+          {
+            route: '/:portal',
+            filter: ({params}) =>
+              `_type == "portalPage" && title match "${titleMatch(params.portal)}"`,
           },
         ]),
       },

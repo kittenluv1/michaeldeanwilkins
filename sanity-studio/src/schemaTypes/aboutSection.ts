@@ -1,5 +1,8 @@
 import {defineField, defineType} from 'sanity'
 import {MdFormatColorText} from 'react-icons/md'
+import {slugify} from '../lib/slugify'
+import {HiddenField} from '../components/HiddenField'
+import {AutoSlugInput} from '../components/AutoSlugInput'
 // import { linkField } from 'sanity-plugin-link-field';
 
 export const about = defineType({
@@ -23,6 +26,19 @@ export const about = defineType({
       type: 'string',
       description: 'Title of the about section; appears as a clickable link in the nav bar',
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        slugify,
+      },
+      components: {
+        // field: HiddenField,
+        input: AutoSlugInput,
+      },
     }),
     defineField({
       name: 'image',
