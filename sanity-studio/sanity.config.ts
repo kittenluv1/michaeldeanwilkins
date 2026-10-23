@@ -7,10 +7,7 @@ import {defineDocuments, presentationTool} from 'sanity/presentation'
 import {slugify} from './src/lib/slugify'
 // import { linkField } from "sanity-plugin-link-field";
 
-const titleMatch = (value: string) =>
-  slugify(value)
-    .replace(/-and-/g, ' & ')
-    .replace(/-/g, ' ')
+const titleMatch = (value: string) => slugify(value).replace(/-and-/g, ' & ').replace(/-/g, ' ')
 
 export default defineConfig({
   name: 'default',
@@ -32,8 +29,9 @@ export default defineConfig({
             filter: `_type == "about"`,
           },
           {
-            route: '/private',
-            filter: `_type == "privatePage"`,
+            route: '/:portal',
+            filter: ({params}) =>
+              `_type == "portalPage" && title match "${titleMatch(params.portal)}"`,
           },
           {
             route: '/selected-works/:gallery',
@@ -49,11 +47,6 @@ export default defineConfig({
             route: '/:portal/:gallery',
             filter: ({params}) =>
               `_type == "gridSection" && title match "${titleMatch(params.gallery)}"`,
-          },
-          {
-            route: '/:portal',
-            filter: ({params}) =>
-              `_type == "portalPage" && title match "${titleMatch(params.portal)}"`,
           },
         ]),
       },
