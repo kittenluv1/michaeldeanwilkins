@@ -4,22 +4,20 @@ import { sanityFetch } from "../live";
 import type {
   AboutSection,
   Gallery,
-  SelectedWorksPage,
   PortalPage,
   SectionTitles,
+  HomePage,
 } from "./types";
 import {
   GALLERY_QUERY,
   SECTION_TITLES_QUERY,
-  SELECTED_WORKS_QUERY,
+  HOMEPAGE_QUERY,
   PORTAL_PAGE_QUERY,
 } from "./queries";
 
-export const getSectionTitles = cache(
-  async (): Promise<SectionTitles> => {
-    return await client.fetch<SectionTitles>(SECTION_TITLES_QUERY);
-  },
-);
+export const getSectionTitles = cache(async (): Promise<SectionTitles> => {
+  return await client.fetch<SectionTitles>(SECTION_TITLES_QUERY);
+});
 
 export const getPortalPages = cache(async (): Promise<PortalPage[]> => {
   return await client.fetch<PortalPage[]>(PORTAL_PAGE_QUERY);
@@ -57,13 +55,11 @@ export const getGallery = cache(
   },
 );
 
-export const getSelectedWorksPage = cache(
-  async (): Promise<SelectedWorksPage | null> => {
-    const { data: page } = await sanityFetch({
-      query: SELECTED_WORKS_QUERY,
-      stega: true,
-    });
+export const getHomepage = cache(async (): Promise<HomePage | null> => {
+  const { data: page } = await sanityFetch({
+    query: HOMEPAGE_QUERY,
+    stega: true,
+  });
 
-    return page as SelectedWorksPage | null;
-  },
-);
+  return page as HomePage | null;
+});

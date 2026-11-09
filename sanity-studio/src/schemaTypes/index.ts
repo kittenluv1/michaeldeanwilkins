@@ -1,5 +1,5 @@
 import {gridSection} from './gridSection'
-import {selectedWorks} from './homePage'
+import {homePage} from './homePage'
 import {about} from './aboutSection'
 import {photoType} from './photoType'
 import {privatePage} from './privatePage'
@@ -7,7 +7,7 @@ import {heroSlider} from './heroSlider'
 import {portalPage} from './portalPage'
 
 export const schemaTypes = [
-  selectedWorks,
+  homePage,
   gridSection,
   privatePage,
   about,

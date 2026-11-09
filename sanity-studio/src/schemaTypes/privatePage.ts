@@ -3,7 +3,7 @@ import {FaLock} from 'react-icons/fa'
 
 export const privatePage = defineType({
   name: 'privatePage',
-  title: 'Private Pages',
+  title: 'Private Galleries',
   type: 'document',
   icon: FaLock,
   fields: [
@@ -25,7 +25,7 @@ export const privatePage = defineType({
   preview: {
     prepare() {
       return {
-        title: 'Private Pages',
+        title: 'Private Galleries',
       }
     },
   },

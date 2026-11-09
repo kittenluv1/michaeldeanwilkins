@@ -1,11 +1,17 @@
 import {defineField, defineType} from 'sanity'
 
-// the _type of this document is still 'homepage' in the studio because it was initially registered that way. the name is now 'selectedWorks' to reflect the purpose of this document type
-export const selectedWorks = defineType({
+export const homePage = defineType({
   name: 'homepage',
-  title: 'Selected Works',
+  title: 'Home Page',
   type: 'document',
   fields: [
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      description: 'Title of the landing page; appears as a clickable link in the navigation bar.',
+      validation: (rule) => rule.required(),
+    }),
     defineField({
       name: 'homepageSections',
       title: 'Homepage Sections',
@@ -56,7 +62,8 @@ export const selectedWorks = defineType({
     defineField({
       name: 'galleries',
       title: 'Galleries',
-      description: 'These galleries will be displayed under the "Selected Works" dropdown menu',
+      description:
+        'These galleries will be displayed under the dropdown menu for the home page in the navigation bar.',
       type: 'array',
       of: [
         {
@@ -70,7 +77,7 @@ export const selectedWorks = defineType({
   preview: {
     prepare() {
       return {
-        title: 'Selected Works',
+        title: 'Home Page',
       }
     },
   },

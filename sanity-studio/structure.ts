@@ -5,7 +5,7 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
-      S.listItem().title('Selected Works').icon(FaHome).child(
+      S.listItem().title('Home').icon(FaHome).child(
         S.document().schemaType('homepage').documentId('27b8827a-7dba-4c47-b9d3-86af75c01064'), // fixed ID for singleton
       ),
       S.listItem()
@@ -13,7 +13,7 @@ export const structure: StructureResolver = (S) =>
         .icon(FaJenkins)
         .child(S.document().schemaType('about').documentId('68c59428-be74-4649-b9b6-096bbc09d3de')),
       S.listItem()
-        .title('Private Pages')
+        .title('Private Galleries')
         .icon(FaLock)
         .child(
           S.document().schemaType('privatePage').documentId('12345678-90ab-cdef-1234-567890abcdef'),

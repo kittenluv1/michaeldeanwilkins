@@ -7,10 +7,11 @@ import ImageWrapper from "@/components/image";
 
 export async function generateStaticParams() {
   const pages = await getPortalPages();
-
-  return pages.map((page) => ({
-    portal: slugify(page.title),
-  }));
+  return [
+    ...pages.map((page) => ({
+      portal: slugify(page.title),
+    })),
+  ];
 }
 
 export default async function PortalPage({

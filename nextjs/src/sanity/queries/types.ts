@@ -9,7 +9,10 @@ export type SectionTitle = {
 };
 
 export type SectionTitles = {
-  selectedWorks: SectionTitle[];
+  homePage: {
+    title: string;
+    galleries: SectionTitle[];
+  };
   portals: (SectionTitle & {
     galleries: SectionTitle[];
   })[];
@@ -53,11 +56,14 @@ export type Gallery = {
   }[];
 };
 
-export type SelectedWorksPage = {
-  homepageSections: SelectedWorksSection[];
+export type HomePage = {
+  _type: "homepage";
+  title: string;
+  galleries: SectionTitle[];
+  homepageSections: HomepageSection[];
 };
 
-export type SelectedWorksSection = {
+export type HomepageSection = {
   heroSlider: {
     _id: string;
     title: string;

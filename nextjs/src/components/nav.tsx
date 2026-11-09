@@ -9,7 +9,7 @@ import type { SectionTitles } from "@/sanity/queries/types";
 const SCROLL_THRESHOLD = 50;
 
 export default function Nav({
-  sections: { selectedWorks, portals, about },
+  sections: { homePage, portals, about },
 }: {
   sections: SectionTitles;
 }) {
@@ -18,9 +18,12 @@ export default function Nav({
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
   const portalPaths = portals.map((portal) => `/${slugify(portal.title)}`);
+  const homeGalleryPath = `/${slugify(homePage.title)}/`;
   // reusable classes for nav text color based on scroll position and page type
   const isLandingPage =
-    pathname === "/selected-works" || portalPaths.includes(pathname);
+    pathname === "/" ||
+    pathname === homeGalleryPath.slice(0, -1) ||
+    portalPaths.includes(pathname);
   const navTextColor =
     isLandingPage && !hasScrolled ? "text-white" : "text-black";
 
@@ -62,9 +65,9 @@ export default function Nav({
 
   const navigation = [
     {
-      label: "Selected Works",
-      href: "/selected-works",
-      items: selectedWorks.map((gallery) => ({
+      label: homePage.title,
+      href: "/",
+      items: homePage.galleries.map((gallery) => ({
         label: gallery.title,
         slug: slugify(gallery.title),
       })),
@@ -131,7 +134,9 @@ export default function Nav({
       <nav className="relative z-10 flex w-full flex-wrap justify-center gap-x-7 gap-y-2 px-6 font-light transition-colors duration-1000">
         {navigation.map((item) => {
           const isSectionActive =
-            pathname === item.href || pathname.startsWith(`${item.href}/`);
+            item.href === "/"
+              ? pathname === "/" || pathname.startsWith(homeGalleryPath)
+              : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
           return (
             <div
@@ -172,7 +177,7 @@ export default function Nav({
                 } group-hover:block`}
               >
                 {item.items.map((subsection) => {
-                  const href = `${item.href}/${subsection.slug}`;
+                  const href = `${item.href === "/" ? `/${slugify(homePage.title)}` : item.href}/${subsection.slug}`;
                   const isActive = pathname === href;
 
                   return (
