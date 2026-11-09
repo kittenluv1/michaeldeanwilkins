@@ -19,41 +19,22 @@ export type SectionTitles = {
   about: SectionTitle;
 };
 
-export type Gallery = {
+export type Gallery = PhotoGallery | ObjectGallery;
+
+export type PhotoGallery = {
   _id: string;
-  _type: string;
+  _type: "gridSection";
   title: string;
-  photos: {
-    _id: string;
-    title: string;
-    mainImage: {
-      asset: {
-        _id: string;
-        url: string;
-        metadata: {
-          lqip: string;
-          dimensions: {
-            width: number;
-            height: number;
-          };
-        };
-      };
-    }[];
-    altText: string;
-    relatedPhotos: {
-      asset: {
-        _id: string;
-        url: string;
-        metadata: {
-          lqip: string;
-          dimensions: {
-            width: number;
-            height: number;
-          };
-        };
-      };
-    }[];
-  }[];
+  galleryType: "photo";
+  items: Photo[];
+};
+
+export type ObjectGallery = {
+  _id: string;
+  _type: "gridSection";
+  title: string;
+  galleryType: "object";
+  items: ObjectType[];
 };
 
 export type HomePage = {

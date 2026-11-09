@@ -1,6 +1,6 @@
 import { defineQuery } from "next-sanity";
 
-export const GALLERY_QUERY = defineQuery(`*[_type == "gridSection"]{
+export const GALLERY_QUERY = defineQuery(`*[_type == "gridSection" && title == $title][0]{
   _id,
   title,
   galleryType,

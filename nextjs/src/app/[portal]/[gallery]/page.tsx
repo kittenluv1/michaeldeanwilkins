@@ -8,6 +8,7 @@ import {
   getSectionTitles,
 } from "@/sanity/queries/fetch";
 import { slugify } from "@/lib/utils";
+import ObjectGrid from "@/components/objectGrid";
 
 export async function generateStaticParams() {
   const pages = await getPortalPages();
@@ -41,10 +42,10 @@ export default async function PortalGallery({
   searchParams,
 }: {
   params: Promise<{ portal: string; gallery: string }>;
-  searchParams: Promise<{ photo?: string }>;
+  searchParams: Promise<{ photo?: string; object?: string }>;
 }) {
   const { portal, gallery } = await params;
-  const { photo } = await searchParams;
+  const { photo, object } = await searchParams;
   const pages = await getPortalPages();
   const pageSummary = pages.find((page) => slugify(page.title) === portal);
 
@@ -58,9 +59,20 @@ export default async function PortalGallery({
     const galleryData = await getGallery(gallerySummary.title);
     if (!galleryData) notFound();
 
+    if (galleryData.galleryType === "object") {
+      return (
+        <div className="px-10">
+          <ObjectGrid
+            objects={galleryData.items}
+            objectId={object}
+          />
+        </div>
+      );
+    }
+
     return (
       <div className="px-10">
-        <GridSection photos={galleryData.photos ?? []} photoId={photo} />
+        <GridSection photos={galleryData.items ?? []} photoId={photo} />
       </div>
     );
   }
@@ -77,9 +89,20 @@ export default async function PortalGallery({
   const galleryData = await getGallery(gallerySummary.gallery.title);
   if (!galleryData) notFound();
 
+  if (galleryData.galleryType === "object") {
+    return (
+      <div className="px-10">
+        <ObjectGrid
+          objects={galleryData.items}
+          objectId={object}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="px-10">
-      <GridSection photos={galleryData.photos ?? []} photoId={photo} />
+      <GridSection photos={galleryData.items ?? []} photoId={photo} />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getPrivateSectionTitles } from "@/sanity/queries/fetch";
 import { getGallery } from "@/sanity/queries/fetch";
 import GridSection from "@/components/galleryGrid";
+import ObjectGrid from "@/components/objectGrid";
 import { slugify } from "@/lib/utils";
 
 export async function generateStaticParams() {
@@ -17,10 +18,10 @@ export default async function privateGallery({
   searchParams,
 }: {
   params: Promise<{ gallery: string }>;
-  searchParams: Promise<{ photo?: string }>;
+  searchParams: Promise<{ photo?: string; object?: string }>;
 }) {
   const { gallery } = await params;
-  const { photo } = await searchParams;
+  const { photo, object } = await searchParams;
   const privatePages = await getPrivateSectionTitles();
   const allowedGalleries = privatePages.map((section) =>
     slugify(section.title),
@@ -34,5 +35,9 @@ export default async function privateGallery({
   const galleryData = await getGallery(gallerySection.title);
   if (!galleryData) notFound();
 
-  return <GridSection photos={galleryData.photos ?? []} photoId={photo} />;
+  if (galleryData.galleryType === "object") {
+    return <ObjectGrid objects={galleryData.items} objectId={object} />;
+  }
+
+  return <GridSection photos={galleryData.items} photoId={photo} />;
 }
