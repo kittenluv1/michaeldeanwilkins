@@ -1,5 +1,5 @@
 import { getObjects } from "@/sanity/queries/fetch";
-import ObjectViewer from "./objectViewer";
+import ObjectViewer from "../../components/objectViewer";
 
 export default async function ObjectDemo() {
   const objects = await getObjects();

@@ -7,11 +7,13 @@ export default function Modal({
   queryParam,
   title,
   children,
+  openKey,
   className = "",
 }: {
   queryParam: string;
   title: string;
   children: ReactNode;
+  openKey?: string;
   className?: string;
 }) {
   const router = useRouter();
@@ -20,7 +22,7 @@ export default function Modal({
   useEffect(() => {
     const dialog = dialogRef.current;
     if (dialog && !dialog.open) dialog.showModal();
-  }, []);
+  }, [openKey]);
 
   const closeModal = () => dialogRef.current?.close();
 
