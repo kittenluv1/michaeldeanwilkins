@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { getPrivateSectionTitles } from "@/sanity/queries/fetch";
 import { getGallery } from "@/sanity/queries/fetch";
 import GridSection from "@/components/galleryGrid";
-import ObjectGrid from "@/components/objectGrid";
 import { slugify } from "@/lib/utils";
 
 export async function generateStaticParams() {
@@ -36,8 +35,16 @@ export default async function privateGallery({
   if (!galleryData) notFound();
 
   if (galleryData.galleryType === "object") {
-    return <ObjectGrid objects={galleryData.items} objectId={object} />;
+    return (
+      <GridSection
+        items={galleryData.items}
+        galleryType="object"
+        objectId={object}
+      />
+    );
   }
 
-  return <GridSection photos={galleryData.items} photoId={photo} />;
+  return (
+    <GridSection items={galleryData.items} galleryType="photo" photoId={photo} />
+  );
 }

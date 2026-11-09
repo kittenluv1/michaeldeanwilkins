@@ -29,7 +29,8 @@ export default async function HomePage({
           <HeroSlider slides={section.heroSlider.hero} />
           <div className="p-10">
             <GridSection
-              photos={section.photos}
+              items={section.photos}
+              galleryType="photo"
               display="square"
               photoId={
                 photo && section.photos.some((item) => item?._id === photo)

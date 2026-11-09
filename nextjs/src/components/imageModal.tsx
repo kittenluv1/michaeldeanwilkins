@@ -57,7 +57,7 @@ export default function ImageModal({ photoId, photos }) {
     >
       <button
         type="button"
-        aria-label="Close image gallery"
+        aria-label="Close image modal"
         className="sticky top-0 z-[10000] ml-auto block cursor-pointer"
         onClick={closeModal}
       >

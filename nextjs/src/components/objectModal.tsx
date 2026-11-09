@@ -37,13 +37,11 @@ export default function ObjectModal({ object }: { object?: ObjectType }) {
     >
       <button
         type="button"
-        aria-label="Close 3D object viewer"
-        className="sticky right-4 top-4 z-10 ml-auto mr-4 block cursor-pointer"
+        aria-label="Close object modal"
+        className="sticky top-0 z-[10000] ml-auto block cursor-pointer"
         onClick={closeModal}
       >
-        <span aria-hidden="true" className="text-3xl leading-none">
-          &times;
-        </span>
+        <img src="/X.svg" alt="" className="h-4 w-4 md:h-6 md:w-6" />
       </button>
       <ObjectViewer object={object} />
     </dialog>

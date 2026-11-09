@@ -8,7 +8,6 @@ import {
   getSectionTitles,
 } from "@/sanity/queries/fetch";
 import { slugify } from "@/lib/utils";
-import ObjectGrid from "@/components/objectGrid";
 
 export async function generateStaticParams() {
   const pages = await getPortalPages();
@@ -62,8 +61,9 @@ export default async function PortalGallery({
     if (galleryData.galleryType === "object") {
       return (
         <div className="px-10">
-          <ObjectGrid
-            objects={galleryData.items}
+          <GridSection
+            items={galleryData.items}
+            galleryType="object"
             objectId={object}
           />
         </div>
@@ -72,7 +72,11 @@ export default async function PortalGallery({
 
     return (
       <div className="px-10">
-        <GridSection photos={galleryData.items ?? []} photoId={photo} />
+        <GridSection
+          items={galleryData.items}
+          galleryType="photo"
+          photoId={photo}
+        />
       </div>
     );
   }
@@ -92,8 +96,9 @@ export default async function PortalGallery({
   if (galleryData.galleryType === "object") {
     return (
       <div className="px-10">
-        <ObjectGrid
-          objects={galleryData.items}
+        <GridSection
+          items={galleryData.items}
+          galleryType="object"
           objectId={object}
         />
       </div>
@@ -102,7 +107,11 @@ export default async function PortalGallery({
 
   return (
     <div className="px-10">
-      <GridSection photos={galleryData.items ?? []} photoId={photo} />
+      <GridSection
+        items={galleryData.items}
+        galleryType="photo"
+        photoId={photo}
+      />
     </div>
   );
 }
