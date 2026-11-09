@@ -1,49 +1,88 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import ObjectViewer from "@/app/object-demo/objectViewer";
 import type { ObjectType } from "@/sanity/queries/types";
+import Modal from "./modal";
+import { createElement, useEffect, useRef, useState } from "react";
+
+const MODEL_VIEWER_SCRIPT =
+  "https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js";
 
 export default function ObjectModal({ object }: { object?: ObjectType }) {
-  const router = useRouter();
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const viewerRef = useRef<HTMLElement>(null);
+  const [loadingState, setLoadingState] = useState<
+    "loading" | "ready" | "error"
+  >("loading");
 
   useEffect(() => {
-    if (object && !dialogRef.current?.open) dialogRef.current?.showModal();
-  }, [object]);
+    const viewer = viewerRef.current;
 
-  if (!object) return null;
+    if (!viewer) {
+      return;
+    }
 
-  const closeModal = () => dialogRef.current?.close();
-  const handleClose = () => {
-    const params = new URLSearchParams(window.location.search);
-    params.delete("object");
-    const query = params.toString();
-    router.push(`${window.location.pathname}${query ? `?${query}` : ""}`, {
-      scroll: false,
-    });
-  };
+    const handleLoad = () => setLoadingState("ready");
+    const handleError = () => setLoadingState("error");
+
+    viewer.addEventListener("load", handleLoad);
+    viewer.addEventListener("error", handleError);
+
+    let script = document.querySelector<HTMLScriptElement>(
+      `script[src="${MODEL_VIEWER_SCRIPT}"]`,
+    );
+
+    if (!script) {
+      script = document.createElement("script");
+      script.type = "module";
+      script.src = MODEL_VIEWER_SCRIPT;
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      viewer.removeEventListener("load", handleLoad);
+      viewer.removeEventListener("error", handleError);
+    };
+  }, []);
 
   return (
-    <dialog
-      ref={dialogRef}
-      className="fixed left-0 top-[var(--site-header-height,0px)] z-[9999] m-0 h-[calc(100dvh-var(--site-header-height,0px))] max-h-none w-full max-w-none overflow-y-auto bg-white/97 p-0 backdrop:bg-transparent"
-      onClick={(event) => {
-        if (event.target === event.currentTarget) closeModal();
-      }}
-      onClose={handleClose}
-      aria-label={`${object.title} 3D viewer`}
+    <Modal
+      queryParam="object"
+      title={`${object.title} 3D viewer`}
+      className="p-0"
     >
-      <button
-        type="button"
-        aria-label="Close object modal"
-        className="sticky top-0 z-[10000] ml-auto block cursor-pointer"
-        onClick={closeModal}
-      >
-        <img src="/X.svg" alt="" className="h-4 w-4 md:h-6 md:w-6" />
-      </button>
-      <ObjectViewer object={object} />
-    </dialog>
+      <section className="mx-auto flex min-h-[70vh] w-full max-w-6xl flex-col gap-5 px-6 py-12 md:px-10">
+        <div>
+          <h1 className="text-3xl">{object.title}</h1>
+          <p className="mt-2 text-lg whitespace-pre-line">
+            {object.description}
+          </p>
+        </div>
+        <div
+          className="relative h-[60vh] min-h-[400px] w-full overflow-hidden rounded-sm bg-[#f5f3ef]"
+          aria-label="Interactive 3D model viewer"
+        >
+          {createElement("model-viewer", {
+            ref: viewerRef,
+            src: object.objectFile.asset.url,
+            alt: object.altText,
+            "camera-controls": true,
+            "auto-rotate": true,
+            "shadow-intensity": "1",
+            "camera-orbit": "0deg 90deg auto",
+            className: "h-full w-full",
+          })}
+          {loadingState === "loading" && (
+            <p className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+              Loading model...
+            </p>
+          )}
+          {loadingState === "error" && (
+            <p className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+              Unable to load the model.
+            </p>
+          )}
+        </div>
+      </section>
+    </Modal>
   );
 }
