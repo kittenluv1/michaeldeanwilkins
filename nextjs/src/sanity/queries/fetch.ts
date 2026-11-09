@@ -7,12 +7,14 @@ import type {
   PortalPage,
   SectionTitles,
   HomePage,
+  ObjectType,
 } from "./types";
 import {
   GALLERY_QUERY,
   SECTION_TITLES_QUERY,
   HOMEPAGE_QUERY,
   PORTAL_PAGE_QUERY,
+  OBJECT_QUERY,
 } from "./queries";
 
 export const getSectionTitles = cache(async (): Promise<SectionTitles> => {
@@ -62,4 +64,8 @@ export const getHomepage = cache(async (): Promise<HomePage | null> => {
   });
 
   return page as HomePage | null;
+});
+
+export const getObjects = cache(async (): Promise<ObjectType[]> => {
+  return await client.fetch<ObjectType[]>(OBJECT_QUERY);
 });

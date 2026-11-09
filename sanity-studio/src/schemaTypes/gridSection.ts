@@ -15,16 +15,32 @@ export const gridSection = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'photos',
-      title: 'Photos',
-      type: 'array',
-      of: [
-        {
-          type: 'reference',
-          to: [{type: 'photo'}],
-        },
-      ],
+      name: 'galleryType',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Photos', value: 'photo'},
+          {title: '3D Objects', value: 'object'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'photo',
       validation: (rule) => rule.required(),
+      // lock once content exists so the type can't be flipped under it
+      // readOnly: ({document}) =>
+      //   Boolean((document?.photos as any[])?.length || (document?.objects as any[])?.length),
+    }),
+    defineField({
+      name: 'photos',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'photo'}]}],
+      hidden: ({document}) => document?.galleryType !== 'photo',
+    }),
+    defineField({
+      name: 'objects',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'objectType'}]}],
+      hidden: ({document}) => document?.galleryType !== 'object',
     }),
   ],
 })

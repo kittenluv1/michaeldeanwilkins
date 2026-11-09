@@ -1,11 +1,11 @@
 import { defineQuery } from "next-sanity";
 
-export const GALLERY_QUERY = defineQuery(`
-	*[_type == "gridSection" && title == $title][0]{
+export const GALLERY_QUERY = defineQuery(`*[_type == "gridSection"]{
   _id,
-  _type,
   title,
-  photos[]->{
+  galleryType,
+  "items": select(
+    galleryType == "photo" => photos[]->{
     _id,
     title,
     mainImage{
@@ -23,9 +23,33 @@ export const GALLERY_QUERY = defineQuery(`
         metadata{lqip,dimensions}
       }
     }
-  }
-}`);
-
+  },
+    galleryType == "object" => objects[]->{
+      _id,
+      title,
+      altText,
+      description,
+      objectFile{
+        asset->{
+          _id,
+          url,
+          originalFilename,
+          mimeType,
+          size
+        }
+      },
+      relatedPhotos[]{
+        ...,
+        asset->{
+          _id,
+          url,
+          metadata{lqip, dimensions}
+        }
+      }
+    }
+  )
+}
+`);
 export const SECTION_TITLES_QUERY = defineQuery(`
   {
     "homePage": *[_type == "homepage"][0]{
@@ -151,4 +175,28 @@ export const HEADSHOTS_QUERY = defineQuery(`*[_type == "headshotsPage"][0]
         }
       }
     }
+}`);
+
+export const OBJECT_QUERY = defineQuery(`*[_type == "objectType"] {
+  _id,
+  title,
+  altText,
+  description,
+  objectFile{
+    asset->{
+      _id,
+      url,
+      originalFilename,
+      mimeType,
+      size
+    }
+  },
+  relatedPhotos[]{
+    ...,
+    asset->{
+      _id,
+      url,
+      metadata{lqip, dimensions}
+    }
+  }
 }`);

@@ -149,3 +149,33 @@ export type HeroSlider =
         url: string;
       };
     };
+
+export type ObjectType = {
+  _id: string;
+  _type: "objectType";
+  title: string;
+  altText: string;
+  description?: string;
+  objectFile: {
+    asset: {
+      _id: string;
+      url: string;
+      originalFilename?: string;
+      mimeType?: string;
+      size?: number;
+    };
+  };
+  relatedPhotos?: {
+    asset: {
+      _id: string;
+      url: string;
+      metadata?: {
+        lqip?: string;
+        dimensions?: {
+          width: number;
+          height: number;
+        };
+      };
+    };
+  }[];
+};

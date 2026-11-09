@@ -5,6 +5,7 @@ import {photoType} from './photoType'
 import {privatePage} from './privatePage'
 import {heroSlider} from './heroSlider'
 import {portalPage} from './portalPage'
+import {objectType} from './objectType'
 
 export const schemaTypes = [
   homePage,
@@ -14,4 +15,5 @@ export const schemaTypes = [
   photoType,
   heroSlider,
   portalPage,
+  objectType,
 ]
