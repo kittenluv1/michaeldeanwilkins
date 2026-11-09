@@ -6,7 +6,12 @@ import Link from "next/link";
 import { slugify } from "@/lib/utils";
 import { notFound } from "next/navigation";
 
-export default async function HomePage({ photo }: { photo?: string }) {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ photo?: string }>;
+}) {
+  const { photo } = await searchParams;
   const page = await getHomepage();
 
   if (!page) return notFound();

@@ -15,7 +15,7 @@ export default function ImageModal({ photoId, photos }) {
     if (!dialog) return;
 
     if (!dialog.open) dialog.showModal();
-  }, []);
+  }, [photoId]);
 
   const closeModal = () => {
     dialogRef.current?.close();
@@ -35,10 +35,18 @@ export default function ImageModal({ photoId, photos }) {
     return <ErrorMessage>Photo not found.</ErrorMessage>;
   }
 
+  const imageCount = 1 + (photo.relatedPhotos?.length ?? 0);
+  const largeGridColumns =
+    imageCount === 1
+      ? "lg:grid-cols-1"
+      : imageCount === 2
+        ? "lg:grid-cols-2"
+        : "lg:grid-cols-3";
+
   return (
     <dialog
       ref={dialogRef}
-      className="fixed top-[var(--site-header-height,0px)] left-0 z-[9999] m-0 h-[calc(100dvh-var(--site-header-height,0px))] max-h-none w-full max-w-none overflow-y-auto overscroll-contain bg-white/97 pt-2 px-15 pb-15 backdrop:bg-transparent"
+      className="fixed top-[var(--site-header-height,0px)] left-0 z-[9999] m-0 h-[calc(100dvh-var(--site-header-height,0px))] max-h-none w-full max-w-none overflow-x-hidden overflow-y-auto overscroll-contain bg-white/97 px-4 pb-6 pt-2 sm:px-6 sm:pb-10 lg:px-15 lg:pb-15 backdrop:bg-transparent"
       onClick={(event) => {
         if (event.target === event.currentTarget) closeModal();
       }}
@@ -53,25 +61,35 @@ export default function ImageModal({ photoId, photos }) {
         className="sticky top-0 z-[10000] ml-auto block cursor-pointer"
         onClick={closeModal}
       >
-        <img src="/X.svg" alt="" className="h-6 w-6" />
+        <img src="/X.svg" alt="" className="h-4 w-4 md:h-6 md:w-6" />
       </button>
 
-      <div className="flex min-h-full flex-col items-center space-y-15">
+      <div className="flex w-full flex-col items-center justify-center">
         <div
-          className="max-w-5/6 lg:max-w-lg"
-          onClick={(event) => event.stopPropagation()}
+          className={`grid grid-cols-1 justify-items-center gap-6 auto-rows-auto sm:gap-8 md:grid-cols-2 lg:gap-20 px-6 md:px-8 lg:px-15 ${largeGridColumns}`}
         >
-          <ImageWrapper photo={photo.mainImage.asset} altText={photo.altText} />
-        </div>
-        {photo.relatedPhotos?.map((relatedPhoto, index) => (
           <div
-            key={index}
-            className="max-w-5/6 lg:max-w-lg"
+            className="w-full max-w-full sm:max-w-5/6 lg:max-w-lg"
             onClick={(event) => event.stopPropagation()}
           >
-            <ImageWrapper photo={relatedPhoto?.asset} altText={photo.altText} />
+            <ImageWrapper
+              photo={photo.mainImage.asset}
+              altText={photo.altText}
+            />
           </div>
-        ))}
+          {photo.relatedPhotos?.map((relatedPhoto, index) => (
+            <div
+              key={index}
+              className="w-full max-w-full sm:max-w-5/6 lg:max-w-lg"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <ImageWrapper
+                photo={relatedPhoto?.asset}
+                altText={photo.altText}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </dialog>
   );

@@ -18,11 +18,12 @@ export default function Nav({
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
   const portalPaths = portals.map((portal) => `/${slugify(portal.title)}`);
-  const homeGalleryPath = `/${slugify(homePage.title)}/`;
+  const homePath = `/${slugify(homePage.title)}`;
+  const homeGalleryPath = `${homePath}/`;
   // reusable classes for nav text color based on scroll position and page type
   const isLandingPage =
     pathname === "/" ||
-    pathname === homeGalleryPath.slice(0, -1) ||
+    pathname === homePath ||
     portalPaths.includes(pathname);
   const navTextColor =
     isLandingPage && !hasScrolled ? "text-white" : "text-black";
