@@ -32,6 +32,7 @@ export default async function RootLayout({
   // get sections data to pass to nav
   const sections = await getSectionTitles();
   const currentYear = new Date().getFullYear();
+  const isDraftMode = (await draftMode()).isEnabled;
 
   return (
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth">
@@ -72,13 +73,13 @@ export default async function RootLayout({
         </footer>
         {/* vercel and sanity tools */}
         <Analytics />
-        <SanityLive />
-        {(await draftMode()).isEnabled && (
+        {/* <SanityLive />
+        {isDraftMode && (
           <>
             <VisualEditing />
             <DisableDraftMode />
           </>
-        )}
+        )} */}
       </body>
     </html>
   );
