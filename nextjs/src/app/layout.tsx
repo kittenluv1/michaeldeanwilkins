@@ -41,9 +41,7 @@ export default async function RootLayout({
       >
         <ImageLoadProvider>
           <Splash />
-          <Suspense>
-            <Nav sections={sections} />
-          </Suspense>
+          <Suspense>{sections && <Nav sections={sections} />}</Suspense>
           <main className="flex-1 w-full">{children}</main>
         </ImageLoadProvider>
         <footer className="w-full flex justify-between items-end py-10 px-8">

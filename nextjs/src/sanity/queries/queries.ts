@@ -68,6 +68,18 @@ export const SECTION_TITLES_QUERY = defineQuery(`
     }
   }`);
 
+export const SECTION_TITLES_STATIC_QUERY = defineQuery(`
+  {
+    "homePage": *[_type == "homepage"][0]{
+      "title": coalesce(title, "Home"),
+      "galleries": coalesce(galleries[defined(@->)]->{ title }, [])
+    },
+    "portals": *[_type == "portalPage"]{
+      title,
+      "galleries": galleries[defined(gallery) && defined(gallery->)]{"title": gallery->title}
+    }
+  }`);
+
 export const HOMEPAGE_QUERY = defineQuery(`
   *[_type == "homepage"][0]{
     _type,

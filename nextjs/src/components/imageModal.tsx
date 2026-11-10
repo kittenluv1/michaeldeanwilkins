@@ -3,9 +3,10 @@
 import ImageWrapper from "./image";
 import ErrorMessage from "./ErrorMessage";
 import Modal from "./modal";
+import { stegaClean } from "next-sanity";
 
 export default function ImageModal({ photoId, photos }) {
-  const photo = photos.find((item) => item?._id === photoId);
+  const photo = photos.find((item) => stegaClean(item?._id) === stegaClean(photoId));
   if (!photo) return <ErrorMessage>Photo not found.</ErrorMessage>;
 
   const imageCount = 1 + (photo.relatedPhotos?.length ?? 0);

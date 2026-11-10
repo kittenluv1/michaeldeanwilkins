@@ -3,14 +3,16 @@ import GridSection from "@/components/galleryGrid";
 import {
   getPortalPage,
   getPortalPages,
+  getPortalPagesForStaticParams,
   getGallery,
   getHomepage,
-  getSectionTitles,
+  getSectionTitlesForStaticParams,
 } from "@/sanity/queries/fetch";
 import { slugify } from "@/lib/utils";
+import { stegaClean } from "next-sanity";
 
 export async function generateStaticParams() {
-  const pages = (await getPortalPages()) ?? [];
+  const pages = (await getPortalPagesForStaticParams()) ?? [];
 
   const portalParams = pages.flatMap((page) =>
     page.galleries.flatMap((entry) =>
@@ -25,7 +27,7 @@ export async function generateStaticParams() {
     ),
   );
   // homepage galleries are not included on portal pages, but are also displayed here at /[homepageTitle]/[gallery]
-  const sections = await getSectionTitles();
+  const sections = await getSectionTitlesForStaticParams();
   const homePage = sections?.homePage;
   const homePageParams = homePage
     ? homePage.galleries.map((entry) => ({
@@ -47,19 +49,19 @@ export default async function PortalGallery({
   const { portal, gallery } = await params;
   const { photo, object } = await searchParams;
   const pages = (await getPortalPages()) ?? [];
-  const pageSummary = pages.find((page) => slugify(page.title) === portal);
+  const pageSummary = pages.find((page) => slugify(stegaClean(page.title)) === portal);
 
   const homePage = await getHomepage();
-  if (homePage && slugify(homePage.title) === portal) {
+  if (homePage && slugify(stegaClean(homePage.title)) === portal) {
     const gallerySummary = homePage.galleries.find(
-      (entry) => slugify(entry.title) === gallery,
+      (entry) => slugify(stegaClean(entry.title)) === gallery,
     );
     if (!gallerySummary) notFound();
 
-    const galleryData = await getGallery(gallerySummary.title);
+    const galleryData = await getGallery(stegaClean(gallerySummary.title));
     if (!galleryData) notFound();
 
-    if (galleryData.galleryType === "object") {
+    if (stegaClean(galleryData.galleryType) === "object") {
       return (
         <div className="px-10">
           <GridSection
@@ -86,15 +88,15 @@ export default async function PortalGallery({
 
   const page = await getPortalPage(pageSummary.title);
   const gallerySummary = page?.galleries.find(
-    (entry) => entry.gallery && slugify(entry.gallery.title) === gallery,
+    (entry) => entry.gallery && slugify(stegaClean(entry.gallery.title)) === gallery,
   );
 
   if (!gallerySummary?.gallery?.title) notFound();
 
-  const galleryData = await getGallery(gallerySummary.gallery.title);
+  const galleryData = await getGallery(stegaClean(gallerySummary.gallery.title));
   if (!galleryData) notFound();
 
-  if (galleryData.galleryType === "object") {
+  if (stegaClean(galleryData.galleryType) === "object") {
     return (
       <div className="px-10">
         <GridSection

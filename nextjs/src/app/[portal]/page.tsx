@@ -1,12 +1,17 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPortalPage, getPortalPages } from "@/sanity/queries/fetch";
+import {
+  getPortalPage,
+  getPortalPages,
+  getPortalPagesForStaticParams,
+} from "@/sanity/queries/fetch";
 import { slugify } from "@/lib/utils";
 import HeroSlider from "@/components/heroSlider";
 import ImageWrapper from "@/components/image";
+import { stegaClean } from "next-sanity";
 
 export async function generateStaticParams() {
-  const pages = (await getPortalPages()) ?? [];
+  const pages = (await getPortalPagesForStaticParams()) ?? [];
   return [
     ...pages.map((page) => ({
       portal: slugify(page.title),
@@ -21,11 +26,11 @@ export default async function PortalPage({
 }) {
   const { portal } = await params;
   const pages = (await getPortalPages()) ?? [];
-  const pageSummary = pages.find((page) => slugify(page.title) === portal);
+  const pageSummary = pages.find((page) => slugify(stegaClean(page.title)) === portal);
 
   if (!pageSummary) notFound();
 
-  const page = await getPortalPage(pageSummary.title);
+  const page = await getPortalPage(stegaClean(pageSummary.title));
   if (!page) notFound();
 
   return (
@@ -40,8 +45,8 @@ export default async function PortalPage({
 
           return (
             <Link
-              key={entry.gallery?._id}
-              href={`/${portal}/${slugify(title)}`}
+              key={entry.gallery?._id ? stegaClean(entry.gallery._id) : title}
+              href={`/${portal}/${slugify(stegaClean(title))}`}
               className="group relative aspect-[5/3] overflow-hidden"
             >
               <ImageWrapper photo={image} altText={title} cover />

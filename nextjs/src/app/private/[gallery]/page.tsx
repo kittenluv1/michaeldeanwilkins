@@ -1,11 +1,15 @@
 import { notFound } from "next/navigation";
-import { getPrivateSectionTitles } from "@/sanity/queries/fetch";
-import { getGallery } from "@/sanity/queries/fetch";
+import {
+  getPrivateSectionTitles,
+  getPrivateSectionTitlesForStaticParams,
+  getGallery,
+} from "@/sanity/queries/fetch";
 import GridSection from "@/components/galleryGrid";
 import { slugify } from "@/lib/utils";
+import { stegaClean } from "next-sanity";
 
 export async function generateStaticParams() {
-  const privatePages = (await getPrivateSectionTitles()) ?? [];
+  const privatePages = await getPrivateSectionTitlesForStaticParams();
 
   return privatePages.map((section) => ({
     gallery: slugify(section.title),
@@ -23,10 +27,10 @@ export default async function privateGallery({
   const { photo, object } = await searchParams;
   const privatePages = (await getPrivateSectionTitles()) ?? [];
   const allowedGalleries = privatePages.map((section) =>
-    slugify(section.title),
+    slugify(stegaClean(section.title)),
   );
   const gallerySection = privatePages.find(
-    (section) => slugify(section.title) === gallery,
+    (section) => slugify(stegaClean(section.title)) === gallery,
   );
 
   if (!allowedGalleries.includes(gallery) || !gallerySection) notFound();
@@ -34,7 +38,7 @@ export default async function privateGallery({
   const galleryData = await getGallery(gallerySection.title);
   if (!galleryData) notFound();
 
-  if (galleryData.galleryType === "object") {
+  if (stegaClean(galleryData.galleryType) === "object") {
     return (
       <GridSection
         items={galleryData.items}

@@ -4,6 +4,7 @@ import { getSectionTitles, getHomepage } from "@/sanity/queries/fetch";
 import ErrorMessage from "@/components/ErrorMessage";
 import Link from "next/link";
 import { slugify } from "@/lib/utils";
+import { stegaClean } from "next-sanity";
 import { notFound } from "next/navigation";
 
 export default async function HomePage({
@@ -53,8 +54,8 @@ export default async function HomePage({
         <div className="flex flex-wrap items-center justify-center gap-20">
           {homePage.galleries.map((section) => (
             <Link
-              key={section.title}
-              href={`/${slugify(page.title)}/${slugify(section.title)}`}
+              key={stegaClean(section.title)}
+              href={`/${slugify(stegaClean(page.title))}/${slugify(stegaClean(section.title))}`}
               className="mb-4 text-lg hover:underline"
             >
               [ {section.title.toUpperCase()} ]

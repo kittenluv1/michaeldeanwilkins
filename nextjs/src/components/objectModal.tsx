@@ -4,6 +4,7 @@ import ObjectViewer from "@/components/objectViewer";
 import type { ObjectType } from "@/sanity/queries/types";
 import ImageWrapper from "./image";
 import Modal from "./modal";
+import { stegaClean } from "next-sanity";
 
 export default function ObjectModal({ object }: { object?: ObjectType }) {
   if (!object) return null;
@@ -13,8 +14,8 @@ export default function ObjectModal({ object }: { object?: ObjectType }) {
   return (
     <Modal
       queryParam="object"
-      title={`${object.title} 3D viewer`}
-      openKey={object._id}
+      title={`${stegaClean(object.title)} 3D viewer`}
+      openKey={stegaClean(object._id)}
       className="p-0"
     >
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-12 md:px-10">
