@@ -74,14 +74,12 @@ export default async function RootLayout({
         {/* vercel and sanity tools */}
         <Analytics />
         <SanityLive />
-        <VisualEditing />
-        {/* 
         {isDraftMode && (
           <>
             <VisualEditing />
             <DisableDraftMode />
           </>
-        )} */}
+        )}
       </body>
     </html>
   );
