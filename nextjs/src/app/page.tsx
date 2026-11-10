@@ -27,6 +27,7 @@ export default async function HomePage({
   }
   const { homePage } = sections;
 
+  // test change
   return (
     <section className="w-full">
       {page.homepageSections.map((section) => (
