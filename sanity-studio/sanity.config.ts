@@ -20,7 +20,7 @@ export default defineConfig({
       resolve: {
         mainDocuments: defineDocuments([
           {
-            route: '/selected-works',
+            route: '/',
             filter: `_type == "homepage"`,
           },
           {
@@ -33,17 +33,12 @@ export default defineConfig({
               `_type == "portalPage" && title match "${slugToTitle(params.portal)}"`,
           },
           {
-            route: '/selected-works/:gallery',
+            route: '/:portal/:gallery',
             filter: ({params}) =>
               `_type == "gridSection" && title match "${slugToTitle(params.gallery)}"`,
           },
           {
             route: '/private/:gallery',
-            filter: ({params}) =>
-              `_type == "gridSection" && title match "${slugToTitle(params.gallery)}"`,
-          },
-          {
-            route: '/:portal/:gallery',
             filter: ({params}) =>
               `_type == "gridSection" && title match "${slugToTitle(params.gallery)}"`,
           },

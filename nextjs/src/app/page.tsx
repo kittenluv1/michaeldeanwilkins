@@ -15,8 +15,6 @@ export default async function HomePage({
   const { photo } = await searchParams;
   const page = await getHomepage();
 
-  console.log("page:", page);
-
   if (!page) return notFound();
 
   if (!page.homepageSections || page.homepageSections.length === 0) {
