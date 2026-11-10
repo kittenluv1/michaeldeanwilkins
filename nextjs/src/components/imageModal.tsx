@@ -18,9 +18,9 @@ export default function ImageModal({ photoId, photos }) {
 
   return (
     <Modal queryParam="photo" title="Image gallery" openKey={photoId}>
-      <div className="flex w-full flex-col items-center justify-center">
+      <div className="flex w-full flex-col items-center">
         <div
-          className={`grid auto-rows-auto grid-cols-1 justify-items-center gap-6 px-6 sm:gap-8 md:grid-cols-2 md:px-8 lg:gap-20 lg:px-15 ${largeGridColumns}`}
+          className={`grid auto-rows-auto grid-cols-1 gap-6 px-6 sm:gap-8 md:grid-cols-2 md:px-8 lg:gap-20 lg:px-15 mx-auto ${largeGridColumns}`}
         >
           {[photo.mainImage, ...(photo.relatedPhotos ?? [])].map(
             (image, index) => (
