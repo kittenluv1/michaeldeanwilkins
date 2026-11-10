@@ -73,7 +73,8 @@ export default async function RootLayout({
         </footer>
         {/* vercel and sanity tools */}
         <Analytics />
-        {/* <SanityLive />
+        <SanityLive />
+        {/* 
         {isDraftMode && (
           <>
             <VisualEditing />
