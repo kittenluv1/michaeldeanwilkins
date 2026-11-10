@@ -1,6 +1,7 @@
 import { defineQuery } from "next-sanity";
 
-export const GALLERY_QUERY = defineQuery(`*[_type == "gridSection" && title == $title][0]{
+export const GALLERY_QUERY =
+  defineQuery(`*[_type == "gridSection" && title == $title][0]{
   _id,
   title,
   galleryType,
@@ -53,7 +54,7 @@ export const GALLERY_QUERY = defineQuery(`*[_type == "gridSection" && title == $
 export const SECTION_TITLES_QUERY = defineQuery(`
   {
     "homePage": *[_type == "homepage"][0]{
-      "title": coalesce(title, "Home Page"),
+      "title": coalesce(title, "Home"),
       "galleries": coalesce(galleries[]->{ title }, [])
     },
     "portals": *[_type == "portalPage"]{
@@ -70,7 +71,7 @@ export const SECTION_TITLES_QUERY = defineQuery(`
 export const HOMEPAGE_QUERY = defineQuery(`
   *[_type == "homepage"][0]{
     _type,
-    "title": coalesce(title, "Home Page"),
+    "title": coalesce(title, "Home"),
     "galleries": coalesce(galleries[]->{ title }, []),
     homepageSections[]{
       heroSlider->{

@@ -17,24 +17,24 @@ import {
   OBJECT_QUERY,
 } from "./queries";
 
-export const getSectionTitles = cache(async (): Promise<SectionTitles> => {
+export const getSectionTitles = cache(async (): Promise<SectionTitles | null> => {
   return await client.fetch<SectionTitles>(SECTION_TITLES_QUERY);
 });
 
-export const getPortalPages = cache(async (): Promise<PortalPage[]> => {
-  return await client.fetch<PortalPage[]>(PORTAL_PAGE_QUERY);
+export const getPortalPages = cache(async (): Promise<PortalPage[] | null> => {
+  return await client.fetch<PortalPage[] | null>(PORTAL_PAGE_QUERY);
 });
 
 export const getPortalPage = cache(
   async (title: string): Promise<PortalPage | null> => {
     const pages = await getPortalPages();
-    return pages.find((page) => page.title === title) ?? null;
+    return pages?.find((page) => page.title === title) ?? null;
   },
 );
 
 export const getPrivateSectionTitles = cache(
   async (): Promise<{ title: string }[]> => {
-    return await client.fetch<{ title: string }[]>(
+    return await client.fetch<{ title: string }[] | null>(
       `*[_type == "privatePage"][0].galleries[]->{ title }`,
     );
   },
@@ -66,6 +66,6 @@ export const getHomepage = cache(async (): Promise<HomePage | null> => {
   return page as HomePage | null;
 });
 
-export const getObjects = cache(async (): Promise<ObjectType[]> => {
-  return await client.fetch<ObjectType[]>(OBJECT_QUERY);
+export const getObjects = cache(async (): Promise<ObjectType[] | null> => {
+  return await client.fetch<ObjectType[] | null>(OBJECT_QUERY);
 });
