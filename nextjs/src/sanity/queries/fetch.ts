@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { draftMode } from "next/headers";
 import { client } from "../client";
 import { sanityFetch } from "../live";
 import type {
@@ -18,11 +19,19 @@ import {
 } from "./queries";
 
 export const getSectionTitles = cache(async (): Promise<SectionTitles | null> => {
-  return await client.fetch<SectionTitles>(SECTION_TITLES_QUERY);
+  return await client.fetch<SectionTitles | null>(
+    SECTION_TITLES_QUERY,
+    {},
+    { cache: "no-store" },
+  );
 });
 
 export const getPortalPages = cache(async (): Promise<PortalPage[] | null> => {
-  return await client.fetch<PortalPage[] | null>(PORTAL_PAGE_QUERY);
+  return await client.fetch<PortalPage[] | null>(
+    PORTAL_PAGE_QUERY,
+    {},
+    { cache: "no-store" },
+  );
 });
 
 export const getPortalPage = cache(
@@ -36,6 +45,8 @@ export const getPrivateSectionTitles = cache(
   async (): Promise<{ title: string }[]> => {
     return await client.fetch<{ title: string }[] | null>(
       `*[_type == "privatePage"][0].galleries[]->{ title }`,
+      {},
+      { cache: "no-store" },
     );
   },
 );
@@ -43,6 +54,8 @@ export const getPrivateSectionTitles = cache(
 export const getAboutSection = cache(async (): Promise<AboutSection | null> => {
   return await client.fetch<AboutSection | null>(
     `*[_type == "about"	][0]{contact, image, content}`,
+    {},
+    { cache: "no-store" },
   );
 });
 
@@ -58,6 +71,14 @@ export const getGallery = cache(
 );
 
 export const getHomepage = cache(async (): Promise<HomePage | null> => {
+  if (!(await draftMode()).isEnabled) {
+    return await client.fetch<HomePage | null>(
+      HOMEPAGE_QUERY,
+      {},
+      { cache: "no-store" },
+    );
+  }
+
   const { data: page } = await sanityFetch({
     query: HOMEPAGE_QUERY,
     stega: true,
