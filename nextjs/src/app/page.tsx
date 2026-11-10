@@ -14,6 +14,8 @@ export default async function HomePage({
   const { photo } = await searchParams;
   const page = await getHomepage();
 
+  console.log(page);
+
   if (!page) return notFound();
 
   if (!page.homepageSections || page.homepageSections.length === 0) {
@@ -27,7 +29,6 @@ export default async function HomePage({
   }
   const { homePage } = sections;
 
-  // test change
   return (
     <section className="w-full">
       {page.homepageSections.map((section) => (
