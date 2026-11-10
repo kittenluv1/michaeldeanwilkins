@@ -5,7 +5,7 @@ import GridSection from "@/components/galleryGrid";
 import { slugify } from "@/lib/utils";
 
 export async function generateStaticParams() {
-  const privatePages = await getPrivateSectionTitles();
+  const privatePages = (await getPrivateSectionTitles()) ?? [];
 
   return privatePages.map((section) => ({
     gallery: slugify(section.title),
@@ -21,7 +21,7 @@ export default async function privateGallery({
 }) {
   const { gallery } = await params;
   const { photo, object } = await searchParams;
-  const privatePages = await getPrivateSectionTitles();
+  const privatePages = (await getPrivateSectionTitles()) ?? [];
   const allowedGalleries = privatePages.map((section) =>
     slugify(section.title),
   );

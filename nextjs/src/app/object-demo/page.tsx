@@ -2,7 +2,7 @@ import { getObjects } from "@/sanity/queries/fetch";
 import ObjectViewer from "../../components/objectViewer";
 
 export default async function ObjectDemo() {
-  const objects = await getObjects();
+  const objects = (await getObjects()) ?? [];
   const object = objects[0];
 
   if (!object) {

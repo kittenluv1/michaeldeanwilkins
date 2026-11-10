@@ -20,7 +20,12 @@ export default async function HomePage({
     return <ErrorMessage>No homepage sections found.</ErrorMessage>;
   }
 
-  const { homePage } = await getSectionTitles();
+  // get homepage gallery titles to display galleries at the bottom of the page
+  const sections = await getSectionTitles();
+  if (!sections?.homePage) {
+    return <ErrorMessage>Homepage navigation is unavailable.</ErrorMessage>;
+  }
+  const { homePage } = sections;
 
   return (
     <section className="w-full">

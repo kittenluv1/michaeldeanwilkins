@@ -10,7 +10,7 @@ import {
 import { slugify } from "@/lib/utils";
 
 export async function generateStaticParams() {
-  const pages = await getPortalPages();
+  const pages = (await getPortalPages()) ?? [];
 
   const portalParams = pages.flatMap((page) =>
     page.galleries.flatMap((entry) =>
@@ -25,7 +25,8 @@ export async function generateStaticParams() {
     ),
   );
   // homepage galleries are not included on portal pages, but are also displayed here at /[homepageTitle]/[gallery]
-  const { homePage } = await getSectionTitles();
+  const sections = await getSectionTitles();
+  const homePage = sections?.homePage;
   const homePageParams = homePage
     ? homePage.galleries.map((entry) => ({
         portal: slugify(homePage.title),
@@ -45,7 +46,7 @@ export default async function PortalGallery({
 }) {
   const { portal, gallery } = await params;
   const { photo, object } = await searchParams;
-  const pages = await getPortalPages();
+  const pages = (await getPortalPages()) ?? [];
   const pageSummary = pages.find((page) => slugify(page.title) === portal);
 
   const homePage = await getHomepage();

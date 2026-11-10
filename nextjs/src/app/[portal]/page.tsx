@@ -6,7 +6,7 @@ import HeroSlider from "@/components/heroSlider";
 import ImageWrapper from "@/components/image";
 
 export async function generateStaticParams() {
-  const pages = await getPortalPages();
+  const pages = (await getPortalPages()) ?? [];
   return [
     ...pages.map((page) => ({
       portal: slugify(page.title),
@@ -20,7 +20,7 @@ export default async function PortalPage({
   params: Promise<{ portal: string }>;
 }) {
   const { portal } = await params;
-  const pages = await getPortalPages();
+  const pages = (await getPortalPages()) ?? [];
   const pageSummary = pages.find((page) => slugify(page.title) === portal);
 
   if (!pageSummary) notFound();
