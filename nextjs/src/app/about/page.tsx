@@ -1,17 +1,26 @@
+import { getAboutSection } from "@/sanity/queries/fetch";
+import { notFound } from "next/navigation";
 import { PortableText } from "@portabletext/react";
-import ImageWrapper from "./image";
+import ImageWrapper from "@/components/image";
 
-export default function AboutSection({ contact, image, content }) {
+export default async function AboutPage() {
+  const about = await getAboutSection();
+  if (!about) notFound();
+
   const PortableTextWrapper = ({ value }) => (
     <PortableText
       value={value}
       components={{
         block: {
           h1: ({ children }) => (
-            <h1 className="text-4xl font-medium mb-4 text-center">{children}</h1>
+            <h1 className="text-4xl font-medium mb-4 text-center">
+              {children}
+            </h1>
           ),
           h2: ({ children }) => (
-            <h2 className="text-3xl font-medium mb-4 text-center">{children}</h2>
+            <h2 className="text-3xl font-medium mb-4 text-center">
+              {children}
+            </h2>
           ),
           normal: ({ children }) => <p className="text-center">{children}</p>,
         },
@@ -34,18 +43,21 @@ export default function AboutSection({ contact, image, content }) {
   );
 
   return (
-    <div className="w-full pt-0 p-20">
+    <div className="w-full p-10">
       <div className="flex flex-col w-full items-center justify-center mb-10">
-        <PortableTextWrapper value={contact} />
+        <PortableTextWrapper value={about.contact} />
       </div>
 
       <div className="grid align-top grid-cols-1 lg:grid-cols-2 gap-10">
         <div>
-          <PortableTextWrapper value={content} />
+          <PortableTextWrapper value={about.content} />
         </div>
 
-        {image && (
-          <ImageWrapper photoAsset={image.asset} altText="Picture of the photographer" />
+        {about.image && (
+          <ImageWrapper
+            photo={about.image.asset}
+            altText="Picture of the photographer"
+          />
         )}
       </div>
     </div>

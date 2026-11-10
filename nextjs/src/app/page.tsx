@@ -1,64 +1,60 @@
-import { redirect } from "next/navigation";
-import { sanityFetch } from "@/sanity/live";
-import GridSection from "@/components/gridSection";
-import ImagePopup from "@/components/imagePopup";
-import AboutSection from "@/components/aboutSection";
-import { HOMEPAGE_QUERY } from "@/sanity/queries";
+import HeroSlider from "@/components/heroSlider";
+import GridSection from "@/components/galleryGrid";
+import { getSectionTitles, getHomepage } from "@/sanity/queries/fetch";
+import ErrorMessage from "@/components/ErrorMessage";
+import Link from "next/link";
 import { slugify } from "@/lib/utils";
-import { connection } from "next/server";
+import { notFound } from "next/navigation";
 
-export default async function Home({
+export default async function HomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ section?: string; photo?: string }>;
+  searchParams: Promise<{ photo?: string }>;
 }) {
-  await connection(); // in the future, switch to revalidatePath + Sanity webhooks for more efficient updates instead of full page revalidation on every change
-  const { section, photo } = await searchParams;
-  const { data: homepage } = await sanityFetch({
-    query: HOMEPAGE_QUERY,
-    stega: true,
-  });
-  const sections = homepage?.sections ?? [];
+  const { photo } = await searchParams;
+  const page = await getHomepage();
 
-  // If no section is found, redirect to the first section
-  if (!section) {
-    redirect(`/?section=${slugify(sections[0].title)}`);
+  if (!page) return notFound();
+
+  if (!page.homepageSections || page.homepageSections.length === 0) {
+    return <ErrorMessage>No homepage sections found.</ErrorMessage>;
   }
 
-  // Determine the active section based on the slug from the query parameters
-  const activeSection =
-    (section
-      ? sections.find((s: any) => slugify(s.title) === section)
-      : null) || sections[0];
+  const { homePage } = await getSectionTitles();
 
   return (
-    <>
-      <section className="relative w-full min-h-screen">
-        {photo && <ImagePopup photoId={photo} photos={activeSection.photos} />}
-
-        {
-          /* grid section stays mounted and only hides conditionally to prevent full reloads of all images */
-          activeSection?._type === "gridSection" && (
-            <div
-              className={
-                photo
-                  ? "absolute inset-0 w-full overflow-hidden z-0 pointer-events-none"
-                  : "relative"
+    <section className="w-full">
+      {page.homepageSections.map((section) => (
+        <div key={section.heroSlider._id}>
+          <HeroSlider slides={section.heroSlider.hero} />
+          <div className="p-10">
+            <GridSection
+              items={section.photos}
+              galleryType="photo"
+              display="square"
+              photoId={
+                photo && section.photos.some((item) => item?._id === photo)
+                  ? photo
+                  : undefined
               }
+            />
+          </div>
+        </div>
+      ))}
+      <div className="flex flex-col text-2xl items-center justify-center gap-4 text-center m-10">
+        <p className="pb-6">EXPLORE GALLERIES:</p>
+        <div className="flex flex-wrap items-center justify-center gap-20">
+          {homePage.galleries.map((section) => (
+            <Link
+              key={section.title}
+              href={`/${slugify(page.title)}/${slugify(section.title)}`}
+              className="mb-4 text-lg hover:underline"
             >
-              <GridSection photos={activeSection.photos} />
-            </div>
-          )
-        }
-
-        {activeSection?._type === "about" && (
-          <AboutSection
-            contact={activeSection.contact}
-            image={activeSection.image}
-            content={activeSection.content}
-          />
-        )}
-      </section>
-    </>
+              [ {section.title.toUpperCase()} ]
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
