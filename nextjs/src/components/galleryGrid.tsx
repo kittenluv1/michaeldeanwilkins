@@ -23,6 +23,16 @@ function ObjectThumbnail({ object }: { object: ObjectType }) {
     }
   }, []);
 
+  if (!object.objectFile?.asset?.url) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-[#f5f3ef] text-center text-lg">
+        {object.altText
+          ? object.altText
+          : "No 3D model available for this object."}
+      </div>
+    );
+  }
+
   return createElement("model-viewer", {
     ref: viewerRef,
     src: object.objectFile.asset.url,
@@ -68,7 +78,7 @@ export default function GridSection({
       <div
         className={`w-full gap-8 ${
           display === "square" || galleryType === "object"
-            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
             : "columns-1 sm:columns-2 md:columns-3 lg:columns-4"
         }`}
       >

@@ -18,10 +18,10 @@ export default function ObjectModal({ object }: { object?: ObjectType }) {
       openKey={stegaClean(object._id)}
       className="p-0"
     >
-      <section className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-12 md:px-10">
-        <ObjectViewer object={object} />
-        {relatedPhotos.length > 0 && (
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <ObjectViewer object={object} />
+      {relatedPhotos.length > 0 && (
+        <div className="flex justify-center p-10">
+          <div className="grid w-full grid-cols-2 gap-8 sm:grid-cols-4">
             {relatedPhotos.map((photo, index) => (
               <div key={index} className="aspect-[2/3] overflow-hidden">
                 <ImageWrapper
@@ -32,8 +32,8 @@ export default function ObjectModal({ object }: { object?: ObjectType }) {
               </div>
             ))}
           </div>
-        )}
-      </section>
+        </div>
+      )}
     </Modal>
   );
 }
