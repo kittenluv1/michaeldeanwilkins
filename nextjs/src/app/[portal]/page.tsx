@@ -26,11 +26,11 @@ export default async function PortalPage({
 }) {
   const { portal } = await params;
   const pages = (await getPortalPages()) ?? [];
-  const pageSummary = pages.find((page) => slugify(stegaClean(page.title)) === portal);
+  const pageSummary = pages.find((page) => slugify(page.title) === portal);
 
   if (!pageSummary) notFound();
 
-  const page = await getPortalPage(stegaClean(pageSummary.title));
+  const page = await getPortalPage(pageSummary.title);
   if (!page) notFound();
 
   return (
