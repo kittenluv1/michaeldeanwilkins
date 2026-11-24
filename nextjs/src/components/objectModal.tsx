@@ -13,7 +13,6 @@ export default function ObjectModal({ object }: { object?: ObjectType }) {
 
   return (
     <Modal
-      queryParam="object"
       title={`${stegaClean(object.title)} 3D viewer`}
       openKey={stegaClean(object._id)}
       className="p-0"

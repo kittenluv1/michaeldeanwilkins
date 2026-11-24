@@ -46,27 +46,23 @@ function ObjectThumbnail({ object }: { object: ObjectType }) {
   });
 }
 
-export default function GridSection({
+export default function galleryGrid({
   items,
   galleryType,
   display = "masonry",
-  photoId,
-  objectId,
-  retouchId,
+  itemId,
 }: {
   items: Photo[] | ObjectType[] | RetouchType[];
   galleryType: "photo" | "object" | "retouch";
   display?: "masonry" | "square";
-  photoId?: string;
-  objectId?: string;
-  retouchId?: string;
+  itemId?: string;
 }) {
   const router = useRouter();
 
   const layoutClasses =
     display === "square"
       ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-      : "columns-1 sm:columns-2 md:columns-3 lg:columns-4";
+      : "columns-1 sm:columns-2 md:columns-3 lg:columns-4 px-10";
 
   if (!items.length) {
     return <ErrorMessage>No gallery items available.</ErrorMessage>;
@@ -74,23 +70,23 @@ export default function GridSection({
 
   return (
     <>
-      {galleryType === "photo" && photoId && (
+      {galleryType === "photo" && itemId && (
         <GridModal
           galleryType="photo"
-          itemId={photoId}
+          itemId={itemId}
           items={items as Photo[]}
         />
       )}
-      {galleryType === "retouch" && retouchId && (
+      {galleryType === "retouch" && itemId && (
         <GridModal
           galleryType="retouch"
-          itemId={retouchId}
+          itemId={itemId}
           items={items as RetouchType[]}
         />
       )}
-      {galleryType === "object" && objectId && (
+      {galleryType === "object" && itemId && (
         <ObjectModal
-          object={(items as ObjectType[]).find((item) => item._id === objectId)}
+          object={(items as ObjectType[]).find((item) => item._id === itemId)}
         />
       )}
       <div className={`w-full gap-8 ${layoutClasses}`}>
@@ -98,11 +94,6 @@ export default function GridSection({
           if (!item?._id) return null;
           const isObject = galleryType === "object";
           const isRetouch = galleryType === "retouch";
-          const queryParam = isObject
-            ? "object"
-            : isRetouch
-              ? "retouch"
-              : "photo";
           return (
             <button
               type="button"
@@ -112,7 +103,8 @@ export default function GridSection({
               }`}
               onClick={() => {
                 const params = new URLSearchParams(window.location.search);
-                params.set(queryParam, item._id);
+                params.delete("item");
+                params.set("item", item._id);
                 router.push(
                   `${window.location.pathname}?${params.toString()}`,
                   {

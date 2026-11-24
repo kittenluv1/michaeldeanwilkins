@@ -3,7 +3,7 @@ import {MdFaceRetouchingNatural} from 'react-icons/md'
 
 export const retouchType = defineType({
   name: 'retouchType',
-  title: 'Retouch Photos',
+  title: 'Retouch',
   type: 'document',
   icon: MdFaceRetouchingNatural,
   fields: [

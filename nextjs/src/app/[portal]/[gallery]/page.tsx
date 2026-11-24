@@ -45,15 +45,15 @@ export default async function PortalGallery({
 }: {
   params: Promise<{ portal: string; gallery: string }>;
   searchParams: Promise<{
-    photo?: string;
-    object?: string;
-    retouch?: string;
+    item?: string;
   }>;
 }) {
   const { portal, gallery } = await params;
-  const { photo, object, retouch } = await searchParams;
+  const { item } = await searchParams;
   const pages = (await getPortalPages()) ?? [];
-  const pageSummary = pages.find((page) => slugify(stegaClean(page.title)) === portal);
+  const pageSummary = pages.find(
+    (page) => slugify(stegaClean(page.title)) === portal,
+  );
 
   const homePage = await getHomepage();
   if (homePage && slugify(stegaClean(homePage.title)) === portal) {
@@ -65,38 +65,14 @@ export default async function PortalGallery({
     const galleryData = await getGallery(stegaClean(gallerySummary.title));
     if (!galleryData) notFound();
 
-    if (stegaClean(galleryData.galleryType) === "object") {
-      return (
-        <div className="px-10">
-          <GridSection
-            items={galleryData.items}
-            galleryType="object"
-            objectId={object}
-          />
-        </div>
-      );
-    }
-
-    if (stegaClean(galleryData.galleryType) === "retouch") {
-      return (
-        <div className="px-10">
-          <GridSection
-            items={galleryData.items}
-            galleryType="retouch"
-            retouchId={retouch}
-          />
-        </div>
-      );
-    }
-
+    const galleryType = stegaClean(galleryData.galleryType) as
+      "photo" | "object" | "retouch";
     return (
-      <div className="px-10">
-        <GridSection
-          items={galleryData.items}
-          galleryType="photo"
-          photoId={photo}
-        />
-      </div>
+      <GridSection
+        items={galleryData.items}
+        galleryType={galleryType}
+        itemId={item}
+      />
     );
   }
 
@@ -104,45 +80,24 @@ export default async function PortalGallery({
 
   const page = await getPortalPage(pageSummary.title);
   const gallerySummary = page?.galleries.find(
-    (entry) => entry.gallery && slugify(stegaClean(entry.gallery.title)) === gallery,
+    (entry) =>
+      entry.gallery && slugify(stegaClean(entry.gallery.title)) === gallery,
   );
 
   if (!gallerySummary?.gallery?.title) notFound();
 
-  const galleryData = await getGallery(stegaClean(gallerySummary.gallery.title));
+  const galleryData = await getGallery(
+    stegaClean(gallerySummary.gallery.title),
+  );
   if (!galleryData) notFound();
 
-  if (stegaClean(galleryData.galleryType) === "object") {
-    return (
-      <div className="px-10">
-        <GridSection
-          items={galleryData.items}
-          galleryType="object"
-          objectId={object}
-        />
-      </div>
-    );
-  }
-
-  if (stegaClean(galleryData.galleryType) === "retouch") {
-    return (
-      <div className="px-10">
-        <GridSection
-          items={galleryData.items}
-          galleryType="retouch"
-          retouchId={retouch}
-        />
-      </div>
-    );
-  }
-
+  const galleryType = stegaClean(galleryData.galleryType) as
+    "photo" | "object" | "retouch";
   return (
-    <div className="px-10">
-      <GridSection
-        items={galleryData.items}
-        galleryType="photo"
-        photoId={photo}
-      />
-    </div>
+    <GridSection
+      items={galleryData.items}
+      galleryType={galleryType}
+      itemId={item}
+    />
   );
 }

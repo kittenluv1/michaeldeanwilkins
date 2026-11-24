@@ -4,13 +4,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, type ReactNode } from "react";
 
 export default function Modal({
-  queryParam,
   title,
   children,
   openKey,
   className = "",
 }: {
-  queryParam: string;
   title: string;
   children: ReactNode;
   openKey?: string;
@@ -28,7 +26,7 @@ export default function Modal({
 
   const handleClose = () => {
     const params = new URLSearchParams(window.location.search);
-    params.delete(queryParam);
+    params.delete("item");
     const query = params.toString();
     router.push(`${window.location.pathname}${query ? `?${query}` : ""}`, {
       scroll: false,

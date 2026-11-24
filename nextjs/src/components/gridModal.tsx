@@ -42,7 +42,6 @@ export default function GridModal(props: GridModalProps) {
 
   return (
     <Modal
-      queryParam={props.galleryType}
       title={
         (props.galleryType === "retouch" ? "Retouch" : "Photo") + " gallery"
       }

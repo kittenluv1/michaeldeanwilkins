@@ -6,6 +6,8 @@ export const gridSection = defineType({
   title: 'Galleries',
   type: 'document',
   icon: RiLayoutMasonryLine,
+  description:
+    'A section of the website that displays a grid of photos, 3D objects, or retouch work. Add galleries to the homepage or portal pages to display them in the navigation bar.',
   fields: [
     defineField({
       name: 'title',

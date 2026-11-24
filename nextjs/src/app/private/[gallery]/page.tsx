@@ -22,13 +22,11 @@ export default async function privateGallery({
 }: {
   params: Promise<{ gallery: string }>;
   searchParams: Promise<{
-    photo?: string;
-    object?: string;
-    retouch?: string;
+    item?: string;
   }>;
 }) {
   const { gallery } = await params;
-  const { photo, object, retouch } = await searchParams;
+  const { item } = await searchParams;
   const privatePages = (await getPrivateSectionTitles()) ?? [];
   const allowedGalleries = privatePages.map((section) =>
     slugify(stegaClean(section.title)),
@@ -42,27 +40,13 @@ export default async function privateGallery({
   const galleryData = await getGallery(gallerySection.title);
   if (!galleryData) notFound();
 
-  if (stegaClean(galleryData.galleryType) === "object") {
-    return (
-      <GridSection
-        items={galleryData.items}
-        galleryType="object"
-        objectId={object}
-      />
-    );
-  }
-
-  if (stegaClean(galleryData.galleryType) === "retouch") {
-    return (
-      <GridSection
-        items={galleryData.items}
-        galleryType="retouch"
-        retouchId={retouch}
-      />
-    );
-  }
-
+  const galleryType = stegaClean(galleryData.galleryType) as
+    "photo" | "object" | "retouch";
   return (
-    <GridSection items={galleryData.items} galleryType="photo" photoId={photo} />
+    <GridSection
+      items={galleryData.items}
+      galleryType={galleryType}
+      itemId={item}
+    />
   );
 }

@@ -10,9 +10,9 @@ import { notFound } from "next/navigation";
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ photo?: string }>;
+  searchParams: Promise<{ item?: string }>;
 }) {
-  const { photo } = await searchParams;
+  const { item } = await searchParams;
   const page = await getHomepage();
 
   if (!page) return notFound();
@@ -38,9 +38,9 @@ export default async function HomePage({
               items={section.photos}
               galleryType="photo"
               display="square"
-              photoId={
-                photo && section.photos.some((item) => item?._id === photo)
-                  ? photo
+              itemId={
+                item && section.photos.some((photo) => photo?._id === item)
+                  ? item
                   : undefined
               }
             />

@@ -4,19 +4,39 @@ export const homePage = defineType({
   name: 'homepage',
   title: 'Home Page',
   type: 'document',
+  description: 'The home page of the website that users will see when they first visit the site.',
   fields: [
     defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
       description: 'Title of the landing page; appears as a clickable link in the navigation bar.',
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.required().custom(async (title, context) => {
+          if (!title) return true
+
+          const client = context.getClient({apiVersion: '2024-01-01'})
+          const id = (context.document?._id ?? '').replace(/^drafts\./, '')
+
+          const conflicts = await client.fetch(
+            `count(*[
+              _type == "portalPage" &&
+              lower(title) == lower($title) &&
+              !(_id in [$id, "drafts." + $id])
+            ])`,
+            {title, id},
+          )
+
+          return conflicts === 0
+            ? true
+            : 'A portal page already uses this title. Please choose a different title.'
+        }),
     }),
     defineField({
       name: 'homepageSections',
       title: 'Homepage Sections',
       description:
-        'Homepage sections include a hero slider and custom photo galleries. These sections will be displayed on the homepage of the website.',
+        'The homepage consists of one or more homepage sections. Homepage sections include a hero slider and a square grid photo gallery.',
       type: 'array',
       of: [
         {
