@@ -8,30 +8,25 @@ import type { SectionTitles } from "@/sanity/queries/types";
 
 const SCROLL_THRESHOLD = 50;
 
-export default function Nav({
-  sections,
-}: {
-  sections: SectionTitles;
-}) {
+export default function Nav({ sections }: { sections: SectionTitles }) {
   const homePage = sections?.homePage;
-  const portals = (sections?.portals ?? []).filter(
-    (portal) => Boolean(slugify(portal?.title)),
+  const portals = (sections?.portals ?? []).filter((portal) =>
+    Boolean(slugify(portal?.title)),
   );
   const about = sections?.about;
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const portalPaths = portals.map((portal) => `/${slugify(portal.title)}`);
   const homePath = `/${slugify(homePage?.title)}`;
   const homeGalleryPath = `${homePath}/`;
   // reusable classes for nav text color based on scroll position and page type
   const isLandingPage =
-    pathname === "/" ||
-    pathname === homePath ||
-    portalPaths.includes(pathname);
+    pathname === "/" || pathname === homePath || portalPaths.includes(pathname);
   const navTextColor =
-    isLandingPage && !hasScrolled ? "text-white" : "text-black";
+    isLandingPage && !hasScrolled && isDesktop ? "text-white" : "text-black";
 
   useEffect(() => {
     if (!isLandingPage) {
@@ -46,6 +41,33 @@ export default function Nav({
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLandingPage]);
+
+  useEffect(() => {
+    const desktopQuery = window.matchMedia("(min-width: 768px)");
+    const handleDesktopChange = () => setIsDesktop(desktopQuery.matches);
+
+    handleDesktopChange();
+    desktopQuery.addEventListener("change", handleDesktopChange);
+
+    return () =>
+      desktopQuery.removeEventListener("change", handleDesktopChange);
+  }, []);
+
+  useEffect(() => {
+    if (!openMenu) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (
+        event.target instanceof Element &&
+        !event.target.closest("[data-nav-dropdown]")
+      ) {
+        setOpenMenu(null);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [openMenu]);
 
   // Update CSS variable for header height so modal can be positioned below it
   useEffect(() => {
@@ -120,15 +142,15 @@ export default function Nav({
   return (
     <header
       ref={headerRef}
-      className={`${isLandingPage ? "fixed" : "sticky"} top-0 z-10 py-6 flex w-full flex-wrap justify-center transition-[background-color,color] duration-1000 ${
+      className={`${isLandingPage ? "sticky md:fixed" : "sticky"} top-0 z-10 py-6 flex w-full flex-wrap justify-center transition-[background-color,color] duration-1000 ${
         isLandingPage && !hasScrolled
-          ? "left-0 bg-transparent text-white"
+          ? "left-0 bg-white md:bg-transparent md:text-white"
           : "bg-white/95 text-black"
       }`}
     >
       {/* Scrim overlay */}
       <div
-        className={`absolute inset-0 pointer-events-none h-full transition-opacity duration-1000 ${
+        className={`absolute inset-0 pointer-events-none hidden h-full transition-opacity duration-1000 md:block ${
           isLandingPage && !hasScrolled ? "opacity-100" : "opacity-0"
         }`}
         style={{
@@ -138,7 +160,7 @@ export default function Nav({
       />
       <Link className="relative z-10 max-w-3/4 w-80 p-4" href="/" id="#top">
         {colorChangeSvg({
-          color: isLandingPage && !hasScrolled ? "white" : "black",
+          color: isLandingPage && !hasScrolled && isDesktop ? "white" : "black",
         })}
       </Link>
       <nav className="relative z-10 flex w-full flex-wrap justify-center gap-x-7 gap-y-2 px-6 font-light transition-colors duration-1000">
@@ -158,7 +180,7 @@ export default function Nav({
               <div className="flex items-end gap-2">
                 <Link
                   href={item.href}
-                  className={`text-base ${navTextColor} transition-colors duration-1000 ease-in-out hover:underline ${isSectionActive ? "font-bold" : ""}`}
+                  className={`text-base ${navTextColor} transition-colors duration-1000 ease-in-out underline md:no-underline hover:underline ${isSectionActive ? "font-bold" : ""}`}
                 >
                   {item.label}
                 </Link>
@@ -174,7 +196,10 @@ export default function Nav({
                   >
                     {colorChangeSvg({
                       url: "/>.svg",
-                      color: isLandingPage && !hasScrolled ? "white" : "black",
+                      color:
+                        isLandingPage && !hasScrolled && isDesktop
+                          ? "white"
+                          : "black",
                       className: "block h-3 w-3 rotate-90",
                     })}
                   </button>
@@ -182,6 +207,7 @@ export default function Nav({
               </div>
               {/* DROPDOWN MENU */}
               <div
+                data-nav-dropdown
                 className={`absolute left-1/2 -translate-x-1/2 min-w-full top-full z-20 bg-white px-2 py-2 shadow-sm ${
                   openMenu === item.href ? "block" : "hidden"
                 } group-hover:block`}
@@ -209,7 +235,7 @@ export default function Nav({
         })}
         <Link
           href="/about"
-          className={`text-base ${navTextColor} transition-colors duration-1000 ease-in-out hover:underline ${pathname === "/about" ? "font-bold" : ""}`}
+          className={`text-base ${navTextColor} transition-colors duration-1000 ease-in-out underline md:no-underline hover:underline ${pathname === "/about" ? "font-bold" : ""}`}
         >
           {about?.title || "About"}
         </Link>

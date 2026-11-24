@@ -44,7 +44,7 @@ export default async function RootLayout({
           <Suspense>{sections && <Nav sections={sections} />}</Suspense>
           <main className="flex-1 w-full">{children}</main>
         </ImageLoadProvider>
-        <footer className="w-full flex justify-between items-end py-10 px-8">
+        <footer className="relative flex w-full flex-col items-center gap-6 px-6 py-8 text-center md:flex-row md:justify-between md:gap-4 md:px-8 md:py-10 md:text-left">
           <div>
             <p>studio@michaeldeanwilkins.com</p>
             <p>bookings@michaeldeanwilkins.com</p>
@@ -65,7 +65,7 @@ export default async function RootLayout({
               <img src="/circle-arrow.svg" alt="Back to top" className="h-8" />
             </a>
           </div>
-          <span className="absolute left-1/2 -translate-x-1/2 font-semibold">
+          <span className="font-semibold md:absolute md:left-1/2 md:-translate-x-1/2">
             Michael Dean Wilkins &copy; {currentYear}
           </span>
         </footer>

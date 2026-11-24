@@ -7,16 +7,12 @@ import type {
   PortalPage,
   SectionTitles,
   HomePage,
-  ObjectType,
-  RetouchType,
 } from "./types";
 import {
   GALLERY_QUERY,
   SECTION_TITLES_QUERY,
   HOMEPAGE_QUERY,
   PORTAL_PAGE_QUERY,
-  OBJECT_QUERY,
-  RETOUCH_QUERY,
   SECTION_TITLES_STATIC_QUERY,
 } from "./queries";
 
@@ -108,18 +104,4 @@ export const getHomepage = cache(async (): Promise<HomePage | null> => {
     query: HOMEPAGE_QUERY,
   });
   return page as HomePage | null;
-});
-
-export const getObjects = cache(async (): Promise<ObjectType[] | null> => {
-  const { data } = await sanityFetch({
-    query: OBJECT_QUERY,
-  });
-  return data as ObjectType[] | null;
-});
-
-export const getRetouches = cache(async (): Promise<RetouchType[] | null> => {
-  const { data } = await sanityFetch({
-    query: RETOUCH_QUERY,
-  });
-  return data as RetouchType[] | null;
 });

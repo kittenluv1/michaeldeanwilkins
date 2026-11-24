@@ -57,6 +57,12 @@ export default defineConfig({
     //   linkableSchemaTypes: ['homepage'],
     // }) as any,
   ],
+  releases: {
+    enabled: false,
+  },
+  scheduledDrafts: {
+    enabled: false,
+  },
 
   schema: {
     types: schemaTypes,

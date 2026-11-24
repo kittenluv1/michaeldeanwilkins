@@ -60,9 +60,9 @@ export default async function HomePage({
           </div>,
         ];
       })}
-      <div className="flex flex-col text-2xl items-center justify-center gap-4 text-center m-10">
+      <div className="flex flex-col text-2xl items-center justify-center gap-4 text-center m-8 mt-0 lg:m-10">
         <p className="pb-6">EXPLORE GALLERIES:</p>
-        <div className="flex flex-wrap items-center justify-center gap-20">
+        <div className="flex flex-wrap items-center justify-center gap-6 lg:gap-20">
           {homePage.galleries.flatMap((section) => {
             const sectionTitle = stegaClean(section?.title);
             const pageTitle = stegaClean(page?.title);
@@ -72,7 +72,7 @@ export default async function HomePage({
               <Link
                 key={sectionTitle}
                 href={`/${slugify(pageTitle)}/${slugify(sectionTitle)}`}
-                className="mb-4 text-lg hover:underline"
+                className="text-lg underline md:no-underline hover:underline"
               >
                 [ {sectionTitle.toUpperCase()} ]
               </Link>,

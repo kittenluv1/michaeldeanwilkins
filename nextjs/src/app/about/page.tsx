@@ -45,20 +45,21 @@ export default async function AboutPage() {
   );
 
   return (
-    <div className="w-full p-10">
+    <div className="w-full">
       <div className="flex flex-col w-full items-center justify-center mb-10">
-        <PortableTextWrapper value={about.contact} />
+        <PortableTextWrapper value={about?.contact} />
       </div>
 
-      <div className="grid align-top grid-cols-1 lg:grid-cols-2 gap-10">
-        <div>
-          <PortableTextWrapper value={about.content} />
+      <div className="flex flex-col lg:flex-row items-start gap-10 px-10 sm:px-20 md:px-30 lg:px-40">
+        <div className="min-w-1/2">
+          <PortableTextWrapper value={about?.content} />
         </div>
 
         {about.image && (
           <ImageWrapper
             photo={about.image.asset}
             altText="Picture of the photographer"
+            className="min-w-1/2 h-auto object-contain"
           />
         )}
       </div>

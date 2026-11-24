@@ -81,7 +81,7 @@ export default function HeroSlider({
 
   return (
     <div
-      className="relative h-[20vh] md:h-[90vh] min-h-[24rem] w-full overflow-hidden"
+      className="relative h-[40vh] sm:h-[60vh] min-h-[10rem] md:h-[90vh] w-full overflow-hidden"
       onClick={stopAutoFade}
     >
       <AnimatePresence initial={false} mode="sync">
