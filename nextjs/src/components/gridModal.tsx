@@ -40,6 +40,9 @@ export default function GridModal(props: GridModalProps) {
         ? "lg:grid-cols-2"
         : "lg:grid-cols-3";
 
+  const medGridColumns =
+    objects.length === 1 ? "md:grid-cols-1" : "md:grid-cols-2";
+
   return (
     <Modal
       title={
@@ -54,12 +57,12 @@ export default function GridModal(props: GridModalProps) {
           </ErrorMessage>
         ) : (
           <div
-            className={`mx-auto grid w-full grid-cols-1 gap-6 px-4 sm:gap-8 sm:px-6 md:grid-cols-2 md:px-8 lg:gap-12 lg:px-12 justify-items-center place-items-center ${largeGridColumns}`}
+            className={`mx-auto grid w-full grid-cols-1 gap-6 px-4 sm:gap-8 sm:px-6 md:px-8 lg:gap-12 lg:px-12 justify-items-center place-items-center  ${medGridColumns} ${largeGridColumns}`}
           >
             {objects.map((object, index) => (
               <div
                 key={index}
-                className={"w-full max-w-full sm:max-w-5/6 lg:max-w-lg"}
+                className={"w-full sm:max-w-5/6 md:max-w-lg"}
                 onClick={(event) => event.stopPropagation()}
               >
                 {props.galleryType === "photo" ? (

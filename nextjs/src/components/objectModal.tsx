@@ -19,8 +19,8 @@ export default function ObjectModal({ object }: { object?: ObjectType }) {
     >
       <ObjectViewer object={object} />
       {relatedPhotos.length > 0 && (
-        <div className="flex justify-center p-10">
-          <div className="grid w-full grid-cols-2 gap-8 sm:grid-cols-4">
+        <div className="flex justify-center px-4 pb-6 sm:px-6 sm:pb-10 md:px-10 lg:px-12">
+          <div className="grid w-full max-w-6xl grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-6 md:gap-8">
             {relatedPhotos.map((photo, index) => (
               <div key={index} className="aspect-[2/3] overflow-hidden">
                 <ImageWrapper

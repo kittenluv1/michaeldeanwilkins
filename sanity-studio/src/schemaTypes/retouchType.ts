@@ -37,10 +37,10 @@ export const retouchType = defineType({
     }),
     defineField({
       name: 'relatedPhotos',
-      title: 'Related Photos',
+      title: 'Retouch Photos',
       type: 'array',
       description:
-        'Related photos to be shown in the display modal, with a before/after comparison and a text label.',
+        'Retouch photos to be shown in the display modal, with a before/after comparison and a text label.',
       of: [
         {
           type: 'object',

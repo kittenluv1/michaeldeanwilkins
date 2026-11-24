@@ -81,7 +81,7 @@ export default function HeroSlider({
 
   return (
     <div
-      className="relative h-[90vh] min-h-[28rem] w-full overflow-hidden"
+      className="relative h-[20vh] md:h-[90vh] min-h-[24rem] w-full overflow-hidden"
       onClick={stopAutoFade}
     >
       <AnimatePresence initial={false} mode="sync">
@@ -104,24 +104,24 @@ export default function HeroSlider({
             type="button"
             aria-label="Previous slide"
             onClick={showPrevious}
-            className="absolute left-4 top-1/2 z-9 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70 hover:cursor-pointer"
+            className="absolute left-2 md:left-4 top-1/2 z-9 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70 hover:cursor-pointer"
           >
             <img
               src="/>.svg"
               alt="Previous"
-              className="h-8 w-8 -scale-x-100 drop-shadow-[0_0_10px_rgba(0,0,0,1)]"
+              className="h-4 w-4 md:h-8 md:w-8 -scale-x-100 drop-shadow-[0_0_10px_rgba(0,0,0,1)]"
             />
           </button>
           <button
             type="button"
             aria-label="Next slide"
             onClick={showNext}
-            className="absolute right-4 top-1/2 z-9 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70 hover:cursor-pointer"
+            className="absolute right-2 md:right-4 top-1/2 z-9 -translate-y-1/2 px-3 py-2 text-3xl text-white drop-shadow-md transition-opacity hover:opacity-70 hover:cursor-pointer"
           >
             <img
               src="/>.svg"
               alt="Next"
-              className="h-8 w-8 drop-shadow-[0_0_10px_rgba(0,0,0,1)]"
+              className="h-4 w-4 md:h-8 md:w-8 drop-shadow-[0_0_10px_rgba(0,0,0,1)]"
             />
           </button>
           {/* Slide indicators (circles) */}

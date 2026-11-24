@@ -53,7 +53,7 @@ export default function Modal({
       >
         <img src="/X.svg" alt="" className="h-4 w-4 md:h-6 md:w-6" />
       </button>
-      {children}
+      <div className="pr-4">{children}</div>
     </dialog>
   );
 }

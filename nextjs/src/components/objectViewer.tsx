@@ -43,9 +43,9 @@ export default function ObjectViewer({ object }: { object: ObjectType }) {
   }, []);
 
   return (
-    <section className="mx-auto w-full gap-20 px-50 pb-20 pt-12 flex justify-center">
+    <section className="mx-auto flex w-full max-w-6xl flex-col justify-center gap-6 px-4 pb-10 pt-6 sm:px-6 sm:gap-8 md:flex-row md:gap-10 md:px-10 md:pb-16 md:pt-10 lg:gap-16 lg:px-12">
       <div
-        className="relative aspect-[3/4] w-1/2 overflow-hidden border border-[#d9d7d2] bg-[#f5f3ef]"
+        className="relative aspect-[3/4] w-full max-h-[70vh] overflow-hidden border border-[#d9d7d2] bg-[#f5f3ef] md:w-1/2"
         aria-label="Interactive 3D model viewer"
       >
         {createElement("model-viewer", {
@@ -69,9 +69,9 @@ export default function ObjectViewer({ object }: { object: ObjectType }) {
           </p>
         )}
       </div>
-      <div className="w-1/2 py-4">
-        <h1 className="mb-2 text-4xl">{object.title}</h1>
-        <p className="text-lg whitespace-pre-line">{object.description}</p>
+      <div className="w-full py-2 md:w-1/2 md:py-4">
+        <h1 className="mb-2 text-3xl sm:text-4xl">{object.title}</h1>
+        <p className="text-base whitespace-pre-line sm:text-lg">{object.description}</p>
       </div>
     </section>
   );
