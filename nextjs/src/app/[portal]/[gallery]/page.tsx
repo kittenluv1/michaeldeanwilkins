@@ -6,7 +6,7 @@ import {
   getPortalPagesForStaticParams,
   getGallery,
   getHomepage,
-  getSectionTitlesForStaticParams,
+  getHomepageSectionsForStaticParams,
 } from "@/sanity/queries/fetch";
 import { slugify } from "@/lib/utils";
 import { stegaClean } from "next-sanity";
@@ -31,7 +31,7 @@ export async function generateStaticParams() {
     });
   });
   // homepage galleries are not included on portal pages, but are also displayed here at /[homepageTitle]/[gallery]
-  const sections = await getSectionTitlesForStaticParams();
+  const sections = await getHomepageSectionsForStaticParams();
   const homePage = sections?.homePage;
   const homePageTitle = stegaClean(homePage?.title);
   const homePageParams = homePageTitle
@@ -114,9 +114,7 @@ export default async function PortalGallery({
     return <ErrorMessage>Gallery title is unavailable.</ErrorMessage>;
   }
 
-  const galleryData = await getGallery(
-    galleryTitle,
-  );
+  const galleryData = await getGallery(galleryTitle);
   if (!galleryData) {
     return <ErrorMessage>Gallery content is unavailable.</ErrorMessage>;
   }

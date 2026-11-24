@@ -13,7 +13,7 @@ import {
   SECTION_TITLES_QUERY,
   HOMEPAGE_QUERY,
   PORTAL_PAGE_QUERY,
-  SECTION_TITLES_STATIC_QUERY,
+  HOMEPAGE_SECTIONS_STATIC_QUERY,
 } from "./queries";
 
 export const getSectionTitles = cache(
@@ -42,9 +42,9 @@ export const getPortalPagesForStaticParams = cache(
   },
 );
 
-export const getSectionTitlesForStaticParams = cache(
+export const getHomepageSectionsForStaticParams = cache(
   async (): Promise<Pick<SectionTitles, "homePage" | "portals"> | null> => {
-    return await staticClient.fetch(SECTION_TITLES_STATIC_QUERY);
+    return await staticClient.fetch(HOMEPAGE_SECTIONS_STATIC_QUERY);
   },
 );
 
