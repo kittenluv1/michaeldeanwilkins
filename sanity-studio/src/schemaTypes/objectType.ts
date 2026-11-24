@@ -19,9 +19,9 @@ export const objectType = defineType({
       title: 'Object File',
       type: 'file',
       description:
-        'Upload the 3D object as a .glb or .gltf file. This is the main file that will be displayed in the object viewer.',
+        'Upload the 3D object as a .glb file. This is the main file that will be displayed in the object viewer.',
       options: {
-        accept: '.glb,.gltf',
+        accept: '.glb',
       },
       validation: (rule) => rule.required(),
     }),

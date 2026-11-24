@@ -21,6 +21,7 @@ export const gridSection = defineType({
         list: [
           {title: 'Photos', value: 'photo'},
           {title: '3D Objects', value: 'object'},
+          {title: 'Retouch', value: 'retouch'},
         ],
         layout: 'radio',
       },
@@ -41,6 +42,12 @@ export const gridSection = defineType({
       type: 'array',
       of: [{type: 'reference', to: [{type: 'objectType'}]}],
       hidden: ({document}) => document?.galleryType !== 'object',
+    }),
+    defineField({
+      name: 'retouches',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'retouchType'}]}],
+      hidden: ({document}) => document?.galleryType !== 'retouch',
     }),
   ],
 })

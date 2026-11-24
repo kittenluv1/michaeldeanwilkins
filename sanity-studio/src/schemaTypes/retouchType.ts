@@ -1,0 +1,89 @@
+import {defineField, defineType} from 'sanity'
+import {MdFaceRetouchingNatural} from 'react-icons/md'
+
+export const retouchType = defineType({
+  name: 'retouchType',
+  title: 'Retouch Photos',
+  type: 'document',
+  icon: MdFaceRetouchingNatural,
+  fields: [
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      description: 'The title of the retouch photo. This will not be displayed on the website.',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'mainImage',
+      title: 'Image',
+      type: 'image',
+      description: 'This is the thumbnail image, which is displayed in galleries',
+      options: {
+        hotspot: {
+          previews: [{title: 'Portrait', aspectRatio: 2 / 3}],
+        },
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'altText',
+      title: 'Alt Text',
+      type: 'string',
+      description:
+        'Important for SEO and accessibility. Describe the retouch photo for screen readers.',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'relatedPhotos',
+      title: 'Related Photos',
+      type: 'array',
+      description:
+        'Related photos to be shown in the display modal, with a before/after comparison and a text label.',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'beforePhoto',
+              title: 'Before Photo',
+              type: 'image',
+              options: {
+                hotspot: true,
+              },
+              validation: (rule) => rule.required(),
+            },
+            {
+              name: 'afterPhoto',
+              title: 'After Photo',
+              type: 'image',
+              options: {
+                hotspot: true,
+              },
+              validation: (rule) => rule.required(),
+            },
+            {
+              name: 'label',
+              title: 'Label',
+              type: 'string',
+              description:
+                'A label for the before/after comparison. This will be displayed under the comparison in the display modal.',
+            },
+          ],
+        },
+      ],
+    }),
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      media: 'mainImage',
+    },
+    prepare({title, media}) {
+      return {
+        title,
+        media: media,
+      }
+    },
+  },
+})
