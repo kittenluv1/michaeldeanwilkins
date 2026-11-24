@@ -19,7 +19,7 @@ export const photoType = defineType({
     }),
     defineField({
       name: 'mainImage',
-      title: 'Image',
+      title: 'Main Image',
       type: 'image',
       description: 'This is the thumbnail image, which is displayed in galleries',
       options: {

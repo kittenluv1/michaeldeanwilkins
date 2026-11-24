@@ -64,7 +64,7 @@ export type HomepageSection = {
 export type Photo = {
   _id: string;
   title: string;
-  mainImage: {
+  mainImage?: {
     asset: {
       _id: string;
       url: string;
@@ -75,8 +75,8 @@ export type Photo = {
           height: number;
         };
       };
-    };
-  };
+    } | null;
+  } | null;
   altText: string;
   relatedPhotos: {
     asset: {
@@ -143,7 +143,7 @@ export type RetouchType = {
   _id: string;
   _type: "retouchType";
   title: string;
-  mainImage: {
+  mainImage?: {
     asset: {
       _id: string;
       url: string;
@@ -154,8 +154,8 @@ export type RetouchType = {
           height: number;
         };
       };
-    };
-  };
+    } | null;
+  } | null;
   altText: string;
   relatedPhotos?: {
     beforePhoto: {
@@ -192,6 +192,19 @@ export type ObjectType = {
   _id: string;
   _type: "objectType";
   title: string;
+  mainImage?: {
+    asset: {
+      _id: string;
+      url: string;
+      metadata?: {
+        lqip?: string;
+        dimensions?: {
+          width: number;
+          height: number;
+        };
+      };
+    } | null;
+  } | null;
   altText: string;
   description?: string;
   objectFile: {

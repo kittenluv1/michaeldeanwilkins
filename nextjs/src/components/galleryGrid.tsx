@@ -1,50 +1,11 @@
 "use client";
 
-import { createElement, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import ImageWrapper from "./image";
 import ErrorMessage from "./ErrorMessage";
 import GridModal from "./gridModal";
 import ObjectModal from "./objectModal";
 import type { ObjectType, Photo, RetouchType } from "@/sanity/queries/types";
-
-const MODEL_VIEWER_SCRIPT =
-  "https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js";
-
-function ObjectThumbnail({ object }: { object: ObjectType }) {
-  const viewerRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (!document.querySelector(`script[src="${MODEL_VIEWER_SCRIPT}"]`)) {
-      const script = document.createElement("script");
-      script.type = "module";
-      script.src = MODEL_VIEWER_SCRIPT;
-      document.head.appendChild(script);
-    }
-  }, []);
-
-  if (!object.objectFile?.asset?.url) {
-    return (
-      <div className="flex h-full w-full items-center justify-center bg-[#f5f3ef] text-center text-lg">
-        {object.altText
-          ? object.altText
-          : "No 3D model available for this object."}
-      </div>
-    );
-  }
-
-  return createElement("model-viewer", {
-    ref: viewerRef,
-    src: object.objectFile.asset.url,
-    alt: object.altText,
-    "auto-rotate": false,
-    "camera-controls": false,
-    "disable-zoom": true,
-    "interaction-prompt": "none",
-    "shadow-intensity": "1",
-    className: "h-full w-full",
-  });
-}
 
 export default function galleryGrid({
   items,
@@ -94,6 +55,11 @@ export default function galleryGrid({
           if (!item?._id) return null;
           const isObject = galleryType === "object";
           const isRetouch = galleryType === "retouch";
+          const mainImage = isObject
+            ? (item as ObjectType).mainImage
+            : isRetouch
+              ? (item as RetouchType).mainImage
+              : (item as Photo).mainImage;
           return (
             <button
               type="button"
@@ -115,27 +81,21 @@ export default function galleryGrid({
             >
               <div
                 className={`w-full transition-opacity duration-200 group-hover:opacity-75 ${
-                  isObject
-                    ? "aspect-2/3 overflow-hidden"
-                    : display === "square"
-                      ? "aspect-[2/3]"
-                      : "mb-8 break-inside-avoid"
+                  display === "square"
+                    ? "aspect-[2/3]"
+                    : "mb-8 break-inside-avoid"
                 }`}
               >
-                {isObject ? (
-                  <ObjectThumbnail object={item as ObjectType} />
-                ) : isRetouch ? (
+                {mainImage?.asset?.url ? (
                   <ImageWrapper
-                    photo={(item as RetouchType).mainImage}
-                    altText={(item as RetouchType).altText}
-                    cover
+                    photo={mainImage}
+                    altText={item.altText}
+                    cover={display === "square"}
                   />
                 ) : (
-                  <ImageWrapper
-                    photo={(item as Photo).mainImage}
-                    altText={(item as Photo).altText}
-                    {...(display === "square" && { cover: true })}
-                  />
+                  <div className="flex aspect-[2/3] w-full items-center justify-center bg-[#f5f3ef] p-4 text-center text-lg">
+                    Image not found
+                  </div>
                 )}
               </div>
               {display === "square" && (

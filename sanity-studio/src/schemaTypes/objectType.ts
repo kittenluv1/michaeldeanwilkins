@@ -16,6 +16,13 @@ export const objectType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'mainImage',
+      title: 'Thumbnail Image',
+      type: 'image',
+      description: 'This is the thumbnail image, which is displayed in galleries',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'objectFile',
       title: 'Object File',
       type: 'file',

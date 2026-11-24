@@ -17,14 +17,9 @@ export const retouchType = defineType({
     }),
     defineField({
       name: 'mainImage',
-      title: 'Image',
+      title: 'Thumbnail Image',
       type: 'image',
       description: 'This is the thumbnail image, which is displayed in galleries',
-      options: {
-        hotspot: {
-          previews: [{title: 'Portrait', aspectRatio: 2 / 3}],
-        },
-      },
       validation: (rule) => rule.required(),
     }),
     defineField({

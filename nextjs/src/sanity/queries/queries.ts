@@ -28,6 +28,13 @@ export const GALLERY_QUERY =
     galleryType == "object" => objects[]->{
       _id,
       title,
+      mainImage{
+        asset->{
+          _id,
+          url,
+          metadata{lqip, dimensions}
+        }
+      },
       altText,
       description,
       objectFile{
