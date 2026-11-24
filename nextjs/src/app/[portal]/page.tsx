@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import {
   getPortalPage,
   getPortalPages,
@@ -9,14 +8,14 @@ import { slugify } from "@/lib/utils";
 import HeroSlider from "@/components/heroSlider";
 import ImageWrapper from "@/components/image";
 import { stegaClean } from "next-sanity";
+import ErrorMessage from "@/components/ErrorMessage";
 
 export async function generateStaticParams() {
   const pages = (await getPortalPagesForStaticParams()) ?? [];
-  return [
-    ...pages.map((page) => ({
-      portal: slugify(page.title),
-    })),
-  ];
+  return pages.flatMap((page) => {
+    const title = stegaClean(page.title);
+    return title ? [{ portal: slugify(title) }] : [];
+  });
 }
 
 export default async function PortalPage({
@@ -26,12 +25,23 @@ export default async function PortalPage({
 }) {
   const { portal } = await params;
   const pages = (await getPortalPages()) ?? [];
-  const pageSummary = pages.find((page) => slugify(page.title) === portal);
+  const pageSummary = pages.find(
+    (page) => page.title && slugify(stegaClean(page.title)) === portal,
+  );
 
-  if (!pageSummary) notFound();
+  if (!pageSummary) {
+    return <ErrorMessage>Portal page not found.</ErrorMessage>;
+  }
+
+  const portalTitle = stegaClean(pageSummary.title);
+  if (!portalTitle) {
+    return <ErrorMessage>Portal page title is invalid.</ErrorMessage>;
+  }
 
   const page = await getPortalPage(pageSummary.title);
-  if (!page) notFound();
+  if (!page) {
+    return <ErrorMessage>Portal page content is unavailable.</ErrorMessage>;
+  }
 
   return (
     <section className="w-full">

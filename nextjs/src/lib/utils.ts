@@ -1,5 +1,5 @@
-export function slugify(title: string) {
-  return title
+export function slugify(title?: string | null) {
+  return (title ?? "")
     .toLowerCase()
     .replace(/\s+/g, "-") // Replace spaces with -
     .replace(/[&]/g, "-and-") // Replace & with 'and'

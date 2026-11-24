@@ -1,11 +1,13 @@
 import { getAboutSection } from "@/sanity/queries/fetch";
-import { notFound } from "next/navigation";
+import ErrorMessage from "@/components/ErrorMessage";
 import { PortableText } from "@portabletext/react";
 import ImageWrapper from "@/components/image";
 
 export default async function AboutPage() {
   const about = await getAboutSection();
-  if (!about) notFound();
+  if (!about) {
+    return <ErrorMessage>About page content is unavailable.</ErrorMessage>;
+  }
 
   const PortableTextWrapper = ({ value }) => (
     <PortableText

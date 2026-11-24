@@ -5,7 +5,6 @@ import ErrorMessage from "@/components/ErrorMessage";
 import Link from "next/link";
 import { slugify } from "@/lib/utils";
 import { stegaClean } from "next-sanity";
-import { notFound } from "next/navigation";
 
 export default async function HomePage({
   searchParams,
@@ -15,7 +14,8 @@ export default async function HomePage({
   const { item } = await searchParams;
   const page = await getHomepage();
 
-  if (!page) return notFound();
+  if (!page)
+    return <ErrorMessage>Homepage content is unavailable.</ErrorMessage>;
 
   if (!page.homepageSections || page.homepageSections.length === 0) {
     return <ErrorMessage>No homepage sections found.</ErrorMessage>;
@@ -30,35 +30,54 @@ export default async function HomePage({
 
   return (
     <section className="w-full">
-      {page.homepageSections.map((section) => (
-        <div key={section.heroSlider._id}>
-          <HeroSlider slides={section.heroSlider.hero} />
-          <div className="p-10">
-            <GridSection
-              items={section.photos}
-              galleryType="photo"
-              display="square"
-              itemId={
-                item && section.photos.some((photo) => photo?._id === item)
-                  ? item
-                  : undefined
-              }
-            />
-          </div>
-        </div>
-      ))}
+      {page.homepageSections.flatMap((section, index) => {
+        const heroSlides = section?.heroSlider?.hero;
+        const photos = section?.photos ?? [];
+
+        if (!section?.heroSlider || !heroSlides?.length) {
+          return [
+            <div key={section?.heroSlider?._id ?? `homepage-section-${index}`}>
+              <ErrorMessage>Homepage hero slider is unavailable.</ErrorMessage>
+            </div>,
+          ];
+        }
+
+        return [
+          <div key={section.heroSlider._id}>
+            <HeroSlider slides={heroSlides} />
+            <div className="p-10">
+              <GridSection
+                items={photos}
+                galleryType="photo"
+                display="square"
+                itemId={
+                  item && photos.some((photo) => photo?._id === item)
+                    ? item
+                    : undefined
+                }
+              />
+            </div>
+          </div>,
+        ];
+      })}
       <div className="flex flex-col text-2xl items-center justify-center gap-4 text-center m-10">
         <p className="pb-6">EXPLORE GALLERIES:</p>
         <div className="flex flex-wrap items-center justify-center gap-20">
-          {homePage.galleries.map((section) => (
-            <Link
-              key={stegaClean(section.title)}
-              href={`/${slugify(stegaClean(page.title))}/${slugify(stegaClean(section.title))}`}
-              className="mb-4 text-lg hover:underline"
-            >
-              [ {section.title.toUpperCase()} ]
-            </Link>
-          ))}
+          {homePage.galleries.flatMap((section) => {
+            const sectionTitle = stegaClean(section?.title);
+            const pageTitle = stegaClean(page?.title);
+            if (!sectionTitle || !pageTitle) return [];
+
+            return [
+              <Link
+                key={sectionTitle}
+                href={`/${slugify(pageTitle)}/${slugify(sectionTitle)}`}
+                className="mb-4 text-lg hover:underline"
+              >
+                [ {sectionTitle.toUpperCase()} ]
+              </Link>,
+            ];
+          })}
         </div>
       </div>
     </section>

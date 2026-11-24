@@ -39,8 +39,7 @@ export default defineConfig({
           },
           {
             route: '/private/:gallery',
-            filter: ({params}) =>
-              `_type == "gridSection" && title match "${slugToTitle(params.gallery)}"`,
+            filter: ({params}) => `_type == "privatePage"`,
           },
         ]),
       },

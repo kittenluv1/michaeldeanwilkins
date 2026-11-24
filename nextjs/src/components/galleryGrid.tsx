@@ -65,7 +65,7 @@ export default function galleryGrid({
       : "columns-1 sm:columns-2 md:columns-3 lg:columns-4 px-10";
 
   if (!items.length) {
-    return <ErrorMessage>No gallery items available.</ErrorMessage>;
+    return;
   }
 
   return (

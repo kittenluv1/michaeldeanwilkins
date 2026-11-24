@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import ErrorMessage from "@/components/ErrorMessage";
 import GridSection from "@/components/galleryGrid";
 import {
   getPortalPage,
@@ -14,26 +14,38 @@ import { stegaClean } from "next-sanity";
 export async function generateStaticParams() {
   const pages = (await getPortalPagesForStaticParams()) ?? [];
 
-  const portalParams = pages.flatMap((page) =>
-    page.galleries.flatMap((entry) =>
-      entry.gallery?.title
+  const portalParams = pages.flatMap((page) => {
+    const portalTitle = stegaClean(page.title);
+    if (!portalTitle) return [];
+
+    return page.galleries.flatMap((entry) => {
+      const galleryTitle = stegaClean(entry.gallery?.title);
+      return galleryTitle
         ? [
             {
-              portal: slugify(page.title),
-              gallery: slugify(entry.gallery.title),
+              portal: slugify(portalTitle),
+              gallery: slugify(galleryTitle),
             },
           ]
-        : [],
-    ),
-  );
+        : [];
+    });
+  });
   // homepage galleries are not included on portal pages, but are also displayed here at /[homepageTitle]/[gallery]
   const sections = await getSectionTitlesForStaticParams();
   const homePage = sections?.homePage;
-  const homePageParams = homePage
-    ? homePage.galleries.map((entry) => ({
-        portal: slugify(homePage.title),
-        gallery: slugify(entry.title),
-      }))
+  const homePageTitle = stegaClean(homePage?.title);
+  const homePageParams = homePageTitle
+    ? (homePage?.galleries ?? []).flatMap((entry) => {
+        const galleryTitle = stegaClean(entry.title);
+        return galleryTitle
+          ? [
+              {
+                portal: slugify(homePageTitle),
+                gallery: slugify(galleryTitle),
+              },
+            ]
+          : [];
+      })
     : [];
 
   return [...portalParams, ...homePageParams];
@@ -60,10 +72,18 @@ export default async function PortalGallery({
     const gallerySummary = homePage.galleries.find(
       (entry) => slugify(stegaClean(entry.title)) === gallery,
     );
-    if (!gallerySummary) notFound();
+    if (!gallerySummary) {
+      return <ErrorMessage>Gallery not found.</ErrorMessage>;
+    }
 
-    const galleryData = await getGallery(stegaClean(gallerySummary.title));
-    if (!galleryData) notFound();
+    const galleryTitle = stegaClean(gallerySummary.title);
+    if (!galleryTitle) {
+      return <ErrorMessage>Gallery title is unavailable.</ErrorMessage>;
+    }
+    const galleryData = await getGallery(galleryTitle);
+    if (!galleryData) {
+      return <ErrorMessage>Gallery content is unavailable.</ErrorMessage>;
+    }
 
     const galleryType = stegaClean(galleryData.galleryType) as
       "photo" | "object" | "retouch";
@@ -76,7 +96,9 @@ export default async function PortalGallery({
     );
   }
 
-  if (!pageSummary) notFound();
+  if (!pageSummary) {
+    return <ErrorMessage>Portal page not found.</ErrorMessage>;
+  }
 
   const page = await getPortalPage(pageSummary.title);
   const gallerySummary = page?.galleries.find(
@@ -84,12 +106,20 @@ export default async function PortalGallery({
       entry.gallery && slugify(stegaClean(entry.gallery.title)) === gallery,
   );
 
-  if (!gallerySummary?.gallery?.title) notFound();
+  if (!gallerySummary?.gallery?.title) {
+    return <ErrorMessage>Gallery title is unavailable.</ErrorMessage>;
+  }
+  const galleryTitle = stegaClean(gallerySummary.gallery.title);
+  if (!galleryTitle) {
+    return <ErrorMessage>Gallery title is unavailable.</ErrorMessage>;
+  }
 
   const galleryData = await getGallery(
-    stegaClean(gallerySummary.gallery.title),
+    galleryTitle,
   );
-  if (!galleryData) notFound();
+  if (!galleryData) {
+    return <ErrorMessage>Gallery content is unavailable.</ErrorMessage>;
+  }
 
   const galleryType = stegaClean(galleryData.galleryType) as
     "photo" | "object" | "retouch";

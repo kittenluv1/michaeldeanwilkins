@@ -9,16 +9,21 @@ import type { SectionTitles } from "@/sanity/queries/types";
 const SCROLL_THRESHOLD = 50;
 
 export default function Nav({
-  sections: { homePage, portals, about },
+  sections,
 }: {
   sections: SectionTitles;
 }) {
+  const homePage = sections?.homePage;
+  const portals = (sections?.portals ?? []).filter(
+    (portal) => Boolean(slugify(portal?.title)),
+  );
+  const about = sections?.about;
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
   const portalPaths = portals.map((portal) => `/${slugify(portal.title)}`);
-  const homePath = `/${slugify(homePage.title)}`;
+  const homePath = `/${slugify(homePage?.title)}`;
   const homeGalleryPath = `${homePath}/`;
   // reusable classes for nav text color based on scroll position and page type
   const isLandingPage =
@@ -66,20 +71,24 @@ export default function Nav({
 
   const navigation = [
     {
-      label: homePage.title,
+      label: homePage?.title || "Home",
       href: "/",
-      items: homePage.galleries.map((gallery) => ({
-        label: gallery.title,
-        slug: slugify(gallery.title),
-      })),
+      items: (homePage?.galleries ?? [])
+        .filter((gallery) => Boolean(slugify(gallery?.title)))
+        .map((gallery) => ({
+          label: gallery.title,
+          slug: slugify(gallery.title),
+        })),
     },
     ...portals.map((portal) => ({
       label: portal.title,
       href: `/${slugify(portal.title)}`,
-      items: portal.galleries.map((gallery) => ({
-        label: gallery.title,
-        slug: slugify(gallery.title),
-      })),
+      items: (portal.galleries ?? [])
+        .filter((gallery) => Boolean(slugify(gallery?.title)))
+        .map((gallery) => ({
+          label: gallery.title,
+          slug: slugify(gallery.title),
+        })),
     })),
   ];
 
@@ -178,7 +187,7 @@ export default function Nav({
                 } group-hover:block`}
               >
                 {item.items.map((subsection) => {
-                  const href = `${item.href === "/" ? `/${slugify(homePage.title)}` : item.href}/${subsection.slug}`;
+                  const href = `${item.href === "/" ? `/${slugify(homePage?.title)}` : item.href}/${subsection.slug}`;
                   const isActive = pathname === href;
 
                   return (
@@ -202,7 +211,7 @@ export default function Nav({
           href="/about"
           className={`text-base ${navTextColor} transition-colors duration-1000 ease-in-out hover:underline ${pathname === "/about" ? "font-bold" : ""}`}
         >
-          {about.title}
+          {about?.title || "About"}
         </Link>
       </nav>
     </header>
