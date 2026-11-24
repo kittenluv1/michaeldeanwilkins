@@ -19,6 +19,8 @@ export const gridSection = defineType({
     defineField({
       name: 'galleryType',
       type: 'string',
+      description:
+        'Type of gallery to display. Once any content is added, the type cannot be changed.',
       options: {
         list: [
           {title: 'Photos', value: 'photo'},
@@ -30,8 +32,8 @@ export const gridSection = defineType({
       initialValue: 'photo',
       validation: (rule) => rule.required(),
       // lock once content exists so the type can't be flipped under it
-      // readOnly: ({document}) =>
-      //   Boolean((document?.photos as any[])?.length || (document?.objects as any[])?.length),
+      readOnly: ({document}) =>
+        Boolean((document?.photos as any[])?.length || (document?.objects as any[])?.length),
     }),
     defineField({
       name: 'photos',
