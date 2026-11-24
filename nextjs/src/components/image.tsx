@@ -61,6 +61,7 @@ export default function ImageWrapper({
     <Image
       src={imageUrl}
       alt={altText}
+      draggable={false}
       width={width}
       height={height}
       placeholder={blurDataURL ? "blur" : undefined} // only use blur placeholder if we have a blurDataURL

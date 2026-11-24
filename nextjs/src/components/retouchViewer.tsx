@@ -32,6 +32,7 @@ export default function RetouchViewer({
   };
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
     setIsDragging(true);
     setPositionFromPointer(event.clientX);
@@ -59,13 +60,14 @@ export default function RetouchViewer({
         aria-valuemax={100}
         aria-valuenow={Math.round(position)}
         tabIndex={0}
-        className={`relative w-full overflow-hidden select-none bg-[#e8e6e2] ${
+        className={`relative w-full overflow-hidden select-none touch-none bg-[#e8e6e2] ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        onDragStart={(event) => event.preventDefault()}
         onKeyDown={(event) => {
           if (event.key === "ArrowLeft") {
             event.preventDefault();
@@ -89,7 +91,7 @@ export default function RetouchViewer({
           <ImageWrapper
             photo={afterPhoto}
             altText="After retouch"
-            className="block h-auto w-full"
+            className="block h-auto w-full touch-none"
           />
         </div>
         <div
@@ -105,6 +107,7 @@ export default function RetouchViewer({
             photo={beforePhoto}
             altText="Before retouch"
             cover
+            className="touch-none"
           />
         </div>
         <div

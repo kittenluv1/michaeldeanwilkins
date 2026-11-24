@@ -55,7 +55,7 @@ export default function GridModal(props: GridModalProps) {
           </ErrorMessage>
         ) : (
           <div
-            className={`mx-auto grid w-full grid-cols-1 gap-6 px-4 sm:gap-8 sm:px-6 md:grid-cols-2 md:px-8 lg:gap-12 lg:px-12 justify-items-center ${largeGridColumns}`}
+            className={`mx-auto grid w-full grid-cols-1 gap-6 px-4 sm:gap-8 sm:px-6 md:grid-cols-2 md:px-8 lg:gap-12 lg:px-12 justify-items-center place-items-center ${largeGridColumns}`}
           >
             {objects.map((object, index) => (
               <div
