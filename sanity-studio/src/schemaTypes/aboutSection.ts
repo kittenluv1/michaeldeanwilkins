@@ -6,6 +6,7 @@ export const about = defineType({
   title: 'About',
   type: 'document',
   icon: MdFormatColorText,
+  description: 'This page is displayed in the navigation bar and can be accessed via /about route.',
   preview: {
     select: {title: 'title'},
     prepare({title}) {

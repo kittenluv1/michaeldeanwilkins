@@ -6,6 +6,7 @@ export const objectType = defineType({
   title: '3D Objects',
   type: 'document',
   icon: FaCube,
+  description: 'Add 3d objects to galleries to display them on the site.',
   fields: [
     defineField({
       name: 'title',

@@ -6,6 +6,8 @@ export const heroSlider = defineType({
   title: 'Hero Sliders',
   type: 'document',
   icon: MdOutlineViewCarousel,
+  description:
+    'Hero sliders display a series of images or videos in a carousel format. They can be added to hero sections on landing pages.',
   fields: [
     defineField({
       name: 'title',

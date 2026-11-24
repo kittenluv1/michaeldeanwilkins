@@ -6,6 +6,8 @@ export const portalPage = defineType({
   title: 'Portal Pages',
   type: 'document',
   icon: LuLayoutPanelTop,
+  description:
+    'Portal pages are the top-level pages that contain links to other galleries. They are displayed in the navigation bar and can be accessed via /[portal] routes.',
   fields: [
     defineField({
       name: 'title',

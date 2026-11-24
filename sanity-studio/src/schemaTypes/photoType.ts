@@ -6,6 +6,8 @@ export const photoType = defineType({
   title: 'Photos',
   type: 'document',
   icon: IoMdPhotos,
+  description:
+    'Photos are the main content of the site. They can be added to galleries and homepage sections.',
   fields: [
     defineField({
       name: 'title',

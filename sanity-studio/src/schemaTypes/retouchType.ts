@@ -6,6 +6,7 @@ export const retouchType = defineType({
   title: 'Retouch',
   type: 'document',
   icon: MdFaceRetouchingNatural,
+  description: 'Add retouch photos to your galleries to display them on the site.',
   fields: [
     defineField({
       name: 'title',

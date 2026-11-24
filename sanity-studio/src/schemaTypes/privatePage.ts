@@ -6,8 +6,7 @@ export const privatePage = defineType({
   title: 'Private Galleries',
   type: 'document',
   icon: FaLock,
-  description:
-    'Galleries added here are accessible at /private/[gallery] and are not displayed in the main navigation bar.',
+  description: 'This page is used to manage your private galleries.',
   fields: [
     defineField({
       name: 'galleries',
