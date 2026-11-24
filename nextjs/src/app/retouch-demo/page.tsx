@@ -15,8 +15,8 @@ export default async function BeforeAfterDemo() {
         (retouch.relatedPhotos ?? []).map((comparison, index) => (
           <BeforeAfterViewer
             key={`${retouch._id}-${index}`}
-            beforeSrc={comparison.beforePhoto.asset.url}
-            afterSrc={comparison.afterPhoto.asset.url}
+            beforePhoto={comparison.beforePhoto}
+            afterPhoto={comparison.afterPhoto}
             label={comparison.label || retouch.title}
           />
         )),

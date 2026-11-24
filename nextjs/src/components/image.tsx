@@ -9,10 +9,12 @@ export default function ImageWrapper({
   photo,
   altText,
   cover = false,
+  className = "",
 }: {
   photo: any; // This can be either a Sanity image object or an asset object
   altText: string;
   cover?: boolean;
+  className?: string;
 }) {
   if (!photo) return null;
   const asset = photo?.asset ?? photo;
@@ -63,7 +65,7 @@ export default function ImageWrapper({
       height={height}
       placeholder={blurDataURL ? "blur" : undefined} // only use blur placeholder if we have a blurDataURL
       blurDataURL={blurDataURL}
-      className={`${cover ? "h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-80" : ""} transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
+      className={`${cover ? "h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-80" : ""} transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"} ${className}`}
       ref={imageRef}
       onLoad={() => {
         // flip state so image fades in

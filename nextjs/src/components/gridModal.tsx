@@ -70,13 +70,11 @@ export default function GridModal(props: GridModalProps) {
                   />
                 ) : (
                   <RetouchViewer
-                    beforeSrc={
-                      "beforePhoto" in object
-                        ? object.beforePhoto.asset.url
-                        : ""
+                    beforePhoto={
+                      "beforePhoto" in object ? object.beforePhoto : null
                     }
-                    afterSrc={
-                      "afterPhoto" in object ? object.afterPhoto.asset.url : ""
+                    afterPhoto={
+                      "afterPhoto" in object ? object.afterPhoto : null
                     }
                     label={
                       "label" in object

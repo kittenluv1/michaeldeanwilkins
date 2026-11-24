@@ -1,21 +1,26 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import ImageWrapper from "./image";
 
 type RetouchViewerProps = {
-  beforeSrc: string;
-  afterSrc: string;
+  beforePhoto: any;
+  afterPhoto: any;
   label: string;
 };
 
 export default function RetouchViewer({
-  beforeSrc,
-  afterSrc,
+  beforePhoto,
+  afterPhoto,
   label,
 }: RetouchViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    setPosition(50);
+  }, []);
 
   const setPositionFromPointer = (clientX: number) => {
     const container = containerRef.current;
@@ -54,7 +59,7 @@ export default function RetouchViewer({
         aria-valuemax={100}
         aria-valuenow={Math.round(position)}
         tabIndex={0}
-        className={`relative aspect-[3/4] w-full overflow-hidden select-none bg-[#e8e6e2] ${
+        className={`relative w-full overflow-hidden select-none bg-[#e8e6e2] ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
         onPointerDown={handlePointerDown}
@@ -80,27 +85,26 @@ export default function RetouchViewer({
           }
         }}
       >
-        <img
-          src={beforeSrc}
-          alt="Before retouch"
-          draggable={false}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        <div className="block h-auto w-full">
+          <ImageWrapper
+            photo={afterPhoto}
+            altText="After retouch"
+            className="block h-auto w-full"
+          />
+        </div>
         <div
-          className="absolute inset-y-0 left-0 overflow-hidden"
+          className="absolute inset-0"
           style={{
-            width: `${position}%`,
+            clipPath: `inset(0 ${100 - position}% 0 0)`,
             transition: isDragging
               ? "none"
-              : "width 420ms cubic-bezier(0.22, 1, 0.36, 1)",
+              : "clip-path 420ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
-          <img
-            src={afterSrc}
-            alt="After retouch"
-            draggable={false}
-            className="absolute left-0 top-0 h-full max-w-none object-cover"
-            style={{ width: `${10000 / Math.max(position, 0.01)}%` }}
+          <ImageWrapper
+            photo={beforePhoto}
+            altText="Before retouch"
+            cover
           />
         </div>
         <div
