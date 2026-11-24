@@ -44,10 +44,14 @@ export default async function PortalGallery({
   searchParams,
 }: {
   params: Promise<{ portal: string; gallery: string }>;
-  searchParams: Promise<{ photo?: string; object?: string }>;
+  searchParams: Promise<{
+    photo?: string;
+    object?: string;
+    retouch?: string;
+  }>;
 }) {
   const { portal, gallery } = await params;
-  const { photo, object } = await searchParams;
+  const { photo, object, retouch } = await searchParams;
   const pages = (await getPortalPages()) ?? [];
   const pageSummary = pages.find((page) => slugify(stegaClean(page.title)) === portal);
 
@@ -68,6 +72,18 @@ export default async function PortalGallery({
             items={galleryData.items}
             galleryType="object"
             objectId={object}
+          />
+        </div>
+      );
+    }
+
+    if (stegaClean(galleryData.galleryType) === "retouch") {
+      return (
+        <div className="px-10">
+          <GridSection
+            items={galleryData.items}
+            galleryType="retouch"
+            retouchId={retouch}
           />
         </div>
       );
@@ -103,6 +119,18 @@ export default async function PortalGallery({
           items={galleryData.items}
           galleryType="object"
           objectId={object}
+        />
+      </div>
+    );
+  }
+
+  if (stegaClean(galleryData.galleryType) === "retouch") {
+    return (
+      <div className="px-10">
+        <GridSection
+          items={galleryData.items}
+          galleryType="retouch"
+          retouchId={retouch}
         />
       </div>
     );

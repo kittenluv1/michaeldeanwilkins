@@ -2,17 +2,17 @@
 
 import { useRef, useState } from "react";
 
-type BeforeAfterViewerProps = {
+type RetouchViewerProps = {
   beforeSrc: string;
   afterSrc: string;
   label: string;
 };
 
-export default function BeforeAfterViewer({
+export default function RetouchViewer({
   beforeSrc,
   afterSrc,
   label,
-}: BeforeAfterViewerProps) {
+}: RetouchViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
@@ -45,7 +45,7 @@ export default function BeforeAfterViewer({
   };
 
   return (
-    <figure className="mx-auto w-full max-w-[680px] px-5">
+    <figure className="mx-auto w-full">
       <div
         ref={containerRef}
         role="slider"
@@ -54,7 +54,7 @@ export default function BeforeAfterViewer({
         aria-valuemax={100}
         aria-valuenow={Math.round(position)}
         tabIndex={0}
-        className={`relative aspect-[3/4] w-full touch-none overflow-hidden select-none bg-[#e8e6e2] ${
+        className={`relative aspect-[3/4] w-full overflow-hidden select-none bg-[#e8e6e2] ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
         onPointerDown={handlePointerDown}
@@ -90,7 +90,9 @@ export default function BeforeAfterViewer({
           className="absolute inset-y-0 left-0 overflow-hidden"
           style={{
             width: `${position}%`,
-            transition: isDragging ? "none" : "width 420ms cubic-bezier(0.22, 1, 0.36, 1)",
+            transition: isDragging
+              ? "none"
+              : "width 420ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           <img
@@ -106,7 +108,9 @@ export default function BeforeAfterViewer({
           style={{
             left: `${position}%`,
             transform: "translateX(-50%)",
-            transition: isDragging ? "none" : "left 420ms cubic-bezier(0.22, 1, 0.36, 1)",
+            transition: isDragging
+              ? "none"
+              : "left 420ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           <div className="h-full w-[3px] bg-white shadow-[0_0_2px_rgba(0,0,0,0.25)]" />

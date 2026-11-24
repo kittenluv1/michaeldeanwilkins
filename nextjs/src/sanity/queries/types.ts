@@ -19,7 +19,7 @@ export type SectionTitles = {
   about: SectionTitle;
 };
 
-export type Gallery = PhotoGallery | ObjectGallery;
+export type Gallery = PhotoGallery | ObjectGallery | RetouchGallery;
 
 export type PhotoGallery = {
   _id: string;
@@ -35,6 +35,14 @@ export type ObjectGallery = {
   title: string;
   galleryType: "object";
   items: ObjectType[];
+};
+
+export type RetouchGallery = {
+  _id: string;
+  _type: "gridSection";
+  title: string;
+  galleryType: "retouch";
+  items: RetouchType[];
 };
 
 export type HomePage = {

@@ -4,9 +4,9 @@ import { createElement, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import ImageWrapper from "./image";
 import ErrorMessage from "./ErrorMessage";
-import ImageModal from "./imageModal";
+import GridModal from "./gridModal";
 import ObjectModal from "./objectModal";
-import type { ObjectType, Photo } from "@/sanity/queries/types";
+import type { ObjectType, Photo, RetouchType } from "@/sanity/queries/types";
 
 const MODEL_VIEWER_SCRIPT =
   "https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js";
@@ -52,14 +52,21 @@ export default function GridSection({
   display = "masonry",
   photoId,
   objectId,
+  retouchId,
 }: {
-  items: Photo[] | ObjectType[];
-  galleryType: "photo" | "object";
+  items: Photo[] | ObjectType[] | RetouchType[];
+  galleryType: "photo" | "object" | "retouch";
   display?: "masonry" | "square";
   photoId?: string;
   objectId?: string;
+  retouchId?: string;
 }) {
   const router = useRouter();
+
+  const layoutClasses =
+    display === "square"
+      ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+      : "columns-1 sm:columns-2 md:columns-3 lg:columns-4";
 
   if (!items.length) {
     return <ErrorMessage>No gallery items available.</ErrorMessage>;
@@ -68,23 +75,34 @@ export default function GridSection({
   return (
     <>
       {galleryType === "photo" && photoId && (
-        <ImageModal photoId={photoId} photos={items as Photo[]} />
+        <GridModal
+          galleryType="photo"
+          itemId={photoId}
+          items={items as Photo[]}
+        />
+      )}
+      {galleryType === "retouch" && retouchId && (
+        <GridModal
+          galleryType="retouch"
+          itemId={retouchId}
+          items={items as RetouchType[]}
+        />
       )}
       {galleryType === "object" && objectId && (
         <ObjectModal
           object={(items as ObjectType[]).find((item) => item._id === objectId)}
         />
       )}
-      <div
-        className={`w-full gap-8 ${
-          display === "square" || galleryType === "object"
-            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
-            : "columns-1 sm:columns-2 md:columns-3 lg:columns-4"
-        }`}
-      >
+      <div className={`w-full gap-8 ${layoutClasses}`}>
         {items.map((item) => {
           if (!item?._id) return null;
           const isObject = galleryType === "object";
+          const isRetouch = galleryType === "retouch";
+          const queryParam = isObject
+            ? "object"
+            : isRetouch
+              ? "retouch"
+              : "photo";
           return (
             <button
               type="button"
@@ -94,7 +112,7 @@ export default function GridSection({
               }`}
               onClick={() => {
                 const params = new URLSearchParams(window.location.search);
-                params.set(isObject ? "object" : "photo", item._id);
+                params.set(queryParam, item._id);
                 router.push(
                   `${window.location.pathname}?${params.toString()}`,
                   {
@@ -106,7 +124,7 @@ export default function GridSection({
               <div
                 className={`w-full transition-opacity duration-200 group-hover:opacity-75 ${
                   isObject
-                    ? "aspect-square overflow-hidden"
+                    ? "aspect-2/3 overflow-hidden"
                     : display === "square"
                       ? "aspect-[2/3]"
                       : "mb-8 break-inside-avoid"
@@ -114,6 +132,12 @@ export default function GridSection({
               >
                 {isObject ? (
                   <ObjectThumbnail object={item as ObjectType} />
+                ) : isRetouch ? (
+                  <ImageWrapper
+                    photo={(item as RetouchType).mainImage}
+                    altText={(item as RetouchType).altText}
+                    cover
+                  />
                 ) : (
                   <ImageWrapper
                     photo={(item as Photo).mainImage}
@@ -122,7 +146,7 @@ export default function GridSection({
                   />
                 )}
               </div>
-              {(display === "square" || isObject) && (
+              {display === "square" && (
                 <div className="m-2 text-center text-lg group-hover:underline">
                   {item.title}
                 </div>
