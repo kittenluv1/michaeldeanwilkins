@@ -33,7 +33,11 @@ export const gridSection = defineType({
       validation: (rule) => rule.required(),
       // lock once content exists so the type can't be flipped under it
       readOnly: ({document}) =>
-        Boolean((document?.photos as any[])?.length || (document?.objects as any[])?.length),
+        Boolean(
+          (document?.photos as any[])?.length ||
+          (document?.objects as any[])?.length ||
+          (document?.retouches as any[])?.length,
+        ),
     }),
     defineField({
       name: 'photos',
