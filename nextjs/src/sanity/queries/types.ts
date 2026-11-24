@@ -131,6 +131,55 @@ export type HeroSlider =
       };
     };
 
+export type RetouchType = {
+  _id: string;
+  _type: "retouchType";
+  title: string;
+  mainImage: {
+    asset: {
+      _id: string;
+      url: string;
+      metadata?: {
+        lqip: string;
+        dimensions: {
+          width: number;
+          height: number;
+        };
+      };
+    };
+  };
+  altText: string;
+  relatedPhotos?: {
+    beforePhoto: {
+      asset: {
+        _id: string;
+        url: string;
+        metadata?: {
+          lqip: string;
+          dimensions: {
+            width: number;
+            height: number;
+          };
+        };
+      };
+    };
+    afterPhoto: {
+      asset: {
+        _id: string;
+        url: string;
+        metadata?: {
+          lqip: string;
+          dimensions: {
+            width: number;
+            height: number;
+          };
+        };
+      };
+    };
+    label?: string;
+  }[];
+};
+
 export type ObjectType = {
   _id: string;
   _type: "objectType";

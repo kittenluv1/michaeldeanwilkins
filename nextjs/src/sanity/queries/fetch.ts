@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { staticClient, client } from "../client";
+import { staticClient } from "../client";
 import { sanityFetch } from "../live";
 import type {
   AboutSection,
@@ -8,6 +8,7 @@ import type {
   SectionTitles,
   HomePage,
   ObjectType,
+  RetouchType,
 } from "./types";
 import {
   GALLERY_QUERY,
@@ -15,9 +16,9 @@ import {
   HOMEPAGE_QUERY,
   PORTAL_PAGE_QUERY,
   OBJECT_QUERY,
+  RETOUCH_QUERY,
   SECTION_TITLES_STATIC_QUERY,
 } from "./queries";
-import { draftMode } from "next/headers";
 
 export const getSectionTitles = cache(
   async (): Promise<SectionTitles | null> => {
@@ -114,4 +115,11 @@ export const getObjects = cache(async (): Promise<ObjectType[] | null> => {
     query: OBJECT_QUERY,
   });
   return data as ObjectType[] | null;
+});
+
+export const getRetouches = cache(async (): Promise<RetouchType[] | null> => {
+  const { data } = await sanityFetch({
+    query: RETOUCH_QUERY,
+  });
+  return data as RetouchType[] | null;
 });

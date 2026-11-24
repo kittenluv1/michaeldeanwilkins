@@ -213,3 +213,34 @@ export const OBJECT_QUERY = defineQuery(`*[_type == "objectType"] {
     }
   }
 }`);
+
+export const RETOUCH_QUERY = defineQuery(`*[_type == "retouchType"] {
+  _id,
+  _type,
+  title,
+  mainImage{
+    asset->{
+      _id,
+      url,
+      metadata{lqip, dimensions}
+    }
+  },
+  altText,
+  relatedPhotos[]{
+    beforePhoto{
+      asset->{
+        _id,
+        url,
+        metadata{lqip, dimensions}
+      }
+    },
+    afterPhoto{
+      asset->{
+        _id,
+        url,
+        metadata{lqip, dimensions}
+      }
+    },
+    label
+  }
+}`);
